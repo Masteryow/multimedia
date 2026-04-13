@@ -72,18 +72,14 @@
       }
 
       .profile-avatar {
-        width: 72px;
-        height: 72px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        font-weight: 800;
-        color: #0a0c12;
+        object-fit: cover;
+        border: 2px solid var(--accent);
         margin-bottom: 0.4rem;
         flex-shrink: 0;
+        display: block;
       }
 
       .profile-name {
@@ -322,7 +318,7 @@
 
         <!-- Profile card -->
         <div class="profile-card reveal">
-          <div class="profile-avatar">KR</div>
+          <img class="profile-avatar" src="images/profile.jpg" alt="Kelly Laurence Q. Roduta" />
           <p class="profile-name">Kelly Laurence Q. Roduta</p>
           <p class="profile-sub">BSIT — Bachelor of Science in Information Technology</p>
           <hr class="profile-divider" />
