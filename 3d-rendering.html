@@ -910,10 +910,9 @@
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: var(--radius-lg);
-        padding: 1.3rem 1.4rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         transition: border-color 0.2s, transform 0.2s;
         animation: fadeUp 600ms ease both;
       }
@@ -930,24 +929,35 @@
 
       .encyc-card.is-earth:hover { border-color: var(--accent-strong); }
 
-      .encyc-card-head {
+      /* Left emoji panel */
+      .encyc-left {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 0.75rem;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1.4rem 1rem;
+        background: rgba(121, 167, 255, 0.05);
+        border-right: 1px solid var(--line);
       }
 
-      .encyc-emoji { font-size: 2rem; line-height: 1; }
+      .encyc-card.is-earth .encyc-left {
+        background: rgba(124, 224, 195, 0.05);
+      }
+
+      .encyc-emoji { font-size: 3rem; line-height: 1; display: block; }
 
       .encyc-name {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: var(--text);
         margin: 0;
+        text-align: center;
       }
 
       .encyc-type {
         display: inline-block;
-        font-size: 0.68rem;
+        font-size: 0.62rem;
         font-weight: 700;
         letter-spacing: 0.07em;
         text-transform: uppercase;
@@ -956,6 +966,7 @@
         border: 1px solid rgba(121, 167, 255, 0.22);
         border-radius: 99px;
         padding: 0.1rem 0.55rem;
+        text-align: center;
       }
 
       .encyc-card.is-earth .encyc-type {
@@ -964,13 +975,18 @@
         border-color: rgba(124, 224, 195, 0.22);
       }
 
+      /* Right description panel */
+      .encyc-right {
+        padding: 1.2rem 1.3rem;
+        display: flex;
+        align-items: center;
+      }
+
       .encyc-desc {
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         color: var(--muted);
-        line-height: 1.7;
+        line-height: 1.75;
         margin: 0;
-        border-top: 1px solid var(--line);
-        padding-top: 0.6rem;
       }
 
       @media (max-width: 960px) {
@@ -1165,14 +1181,14 @@
           card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '');
           card.style.animationDelay = (i * 70) + 'ms';
           card.innerHTML = `
-            <div class="encyc-card-head">
+            <div class="encyc-left">
               <span class="encyc-emoji">${p.emoji}</span>
-              <div>
-                <p class="encyc-name">${p.name}</p>
-                <span class="encyc-type">${p.type}</span>
-              </div>
+              <p class="encyc-name">${p.name}</p>
+              <span class="encyc-type">${p.type}</span>
             </div>
-            <p class="encyc-desc">${p.desc}</p>
+            <div class="encyc-right">
+              <p class="encyc-desc">${p.desc}</p>
+            </div>
           `;
           grid.appendChild(card);
         });
