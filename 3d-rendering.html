@@ -425,6 +425,9 @@
           <a class="scroll-pill" href="#age-calc">
             <span class="scroll-pill-icon">🪐</span> Planet Age Calculator
           </a>
+          <a class="scroll-pill" href="#planet-encyc">
+            <span class="scroll-pill-icon">🌌</span> Planet Encyclopedia
+          </a>
         </div>
 
       </section>
@@ -618,6 +621,16 @@
         <div class="planet-grid" id="planet-grid">
           <!-- filled by JS -->
         </div>
+      </section>
+
+      <!-- ── PLANET ENCYCLOPEDIA ── -->
+      <section class="encyc-section" id="planet-encyc">
+        <div class="encyc-header reveal">
+          <p class="eyebrow">🌌 Planet Encyclopedia</p>
+          <h2>About Each Planet</h2>
+          <p>A quick-reference guide to every world in our Solar System and what makes each one unique.</p>
+        </div>
+        <div class="encyc-grid" id="encyc-grid"><!-- filled by JS --></div>
       </section>
 
     </main>
@@ -857,6 +870,111 @@
         .planet-grid { grid-template-columns: 1fr; }
         .planet-card { grid-template-columns: 64px 1fr; }
         .planet-emoji { font-size: 2rem; }
+        .encyc-grid { grid-template-columns: 1fr; }
+      }
+
+      /* ── Planet Encyclopedia ── */
+      .encyc-section {
+        padding: 0 2rem 4rem;
+        max-width: 1280px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .encyc-header {
+        padding-top: 2rem;
+        border-top: 1px solid var(--line);
+        margin-bottom: 2rem;
+      }
+
+      .encyc-header h2 {
+        font-size: clamp(1.3rem, 3vw, 1.9rem);
+        font-weight: 700;
+        margin: 0 0 0.4rem;
+      }
+
+      .encyc-header p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        max-width: 55ch;
+        margin: 0;
+      }
+
+      .encyc-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .encyc-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 1.3rem 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        transition: border-color 0.2s, transform 0.2s;
+        animation: fadeUp 600ms ease both;
+      }
+
+      .encyc-card:hover {
+        border-color: var(--accent-2);
+        transform: translateY(-3px);
+      }
+
+      .encyc-card.is-earth {
+        border-color: var(--accent);
+        background: rgba(124, 224, 195, 0.04);
+      }
+
+      .encyc-card.is-earth:hover { border-color: var(--accent-strong); }
+
+      .encyc-card-head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .encyc-emoji { font-size: 2rem; line-height: 1; }
+
+      .encyc-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .encyc-type {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+        background: rgba(121, 167, 255, 0.1);
+        border: 1px solid rgba(121, 167, 255, 0.22);
+        border-radius: 99px;
+        padding: 0.1rem 0.55rem;
+      }
+
+      .encyc-card.is-earth .encyc-type {
+        color: var(--accent);
+        background: rgba(124, 224, 195, 0.1);
+        border-color: rgba(124, 224, 195, 0.22);
+      }
+
+      .encyc-desc {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin: 0;
+        border-top: 1px solid var(--line);
+        padding-top: 0.6rem;
+      }
+
+      @media (max-width: 960px) {
+        .encyc-grid { grid-template-columns: repeat(2, 1fr); }
       }
     </style>
 
@@ -876,7 +994,8 @@
           distanceKm: '57.9 million km',
           dayLength: '58.6 Earth days',
           gravity: '0.38g',
-          isEarth: false
+          isEarth: false,
+          desc: 'The smallest planet and closest to the Sun. With no atmosphere to retain heat, Mercury swings from -180°C at night to 430°C during the day — the most extreme temperature range in the Solar System.'
         },
         {
           name: 'Venus', emoji: '🌕', type: 'Terrestrial',
@@ -886,7 +1005,8 @@
           distanceKm: '108.2 million km',
           dayLength: '243 Earth days',
           gravity: '0.91g',
-          isEarth: false
+          isEarth: false,
+          desc: 'The hottest planet despite not being the closest to the Sun. A thick CO₂ atmosphere traps heat in a runaway greenhouse effect. A day on Venus is longer than its year, and it rotates backwards.'
         },
         {
           name: 'Earth', emoji: '🌍', type: 'Terrestrial',
@@ -896,7 +1016,8 @@
           distanceKm: '149.6 million km',
           dayLength: '24 hours',
           gravity: '1.00g',
-          isEarth: true
+          isEarth: true,
+          desc: 'The only known planet to harbor life. Earth has liquid water, a protective magnetic field, and a nitrogen-oxygen atmosphere that makes complex life possible. It is the densest planet in the Solar System.'
         },
         {
           name: 'Mars', emoji: '🔴', type: 'Terrestrial',
@@ -906,7 +1027,8 @@
           distanceKm: '227.9 million km',
           dayLength: '24 hrs 37 min',
           gravity: '0.38g',
-          isEarth: false
+          isEarth: false,
+          desc: 'Known as the Red Planet due to iron oxide on its surface. Mars is home to Olympus Mons, the tallest volcano in the Solar System at 22 km high. Evidence suggests it once had liquid water.'
         },
         {
           name: 'Jupiter', emoji: '🟠', type: 'Gas Giant',
@@ -916,7 +1038,8 @@
           distanceKm: '778.5 million km',
           dayLength: '9 hrs 56 min',
           gravity: '2.53g',
-          isEarth: false
+          isEarth: false,
+          desc: 'The largest planet — more than twice the mass of all other planets combined. Its Great Red Spot is a storm wider than Earth that has been raging for over 350 years. Jupiter has 95 known moons.'
         },
         {
           name: 'Saturn', emoji: '🪐', type: 'Gas Giant',
@@ -926,7 +1049,8 @@
           distanceKm: '1.43 billion km',
           dayLength: '10 hrs 42 min',
           gravity: '1.07g',
-          isEarth: false
+          isEarth: false,
+          desc: 'Famous for its iconic ring system made of ice and rock particles spanning 282,000 km. Saturn is the least dense planet — it would float on water. It has 146 known moons, including Titan with a thick atmosphere.'
         },
         {
           name: 'Uranus', emoji: '🔵', type: 'Ice Giant',
@@ -936,7 +1060,8 @@
           distanceKm: '2.87 billion km',
           dayLength: '17 hrs 14 min',
           gravity: '0.89g',
-          isEarth: false
+          isEarth: false,
+          desc: 'An ice giant that rotates on its side with an axial tilt of 98° — likely caused by a massive collision long ago. It is the coldest planetary atmosphere in the Solar System at -224°C.'
         },
         {
           name: 'Neptune', emoji: '🌀', type: 'Ice Giant',
@@ -946,7 +1071,8 @@
           distanceKm: '4.50 billion km',
           dayLength: '16 hrs 6 min',
           gravity: '1.14g',
-          isEarth: false
+          isEarth: false,
+          desc: 'The windiest planet, with supersonic storms reaching 2,100 km/h. Neptune was the first planet predicted mathematically before being directly observed. Its largest moon Triton orbits in the opposite direction.'
         },
         {
           name: 'Pluto', emoji: '🌑', type: 'Dwarf Planet',
@@ -956,7 +1082,8 @@
           distanceKm: '5.91 billion km',
           dayLength: '6.4 Earth days',
           gravity: '0.063g',
-          isEarth: false
+          isEarth: false,
+          desc: 'A dwarf planet in the Kuiper Belt, reclassified from a planet in 2006. It has a heart-shaped nitrogen ice plain called Tombaugh Regio. Pluto has five moons, with Charon being so large the two form a binary system.'
         }
       ];
 
@@ -1029,8 +1156,31 @@
         if (e.key === 'Enter') calcAndRender();
       });
 
-      // Auto-calculate on load
+      function renderEncyclopedia() {
+        const grid = document.getElementById('encyc-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        PLANETS.forEach((p, i) => {
+          const card = document.createElement('div');
+          card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '');
+          card.style.animationDelay = (i * 70) + 'ms';
+          card.innerHTML = `
+            <div class="encyc-card-head">
+              <span class="encyc-emoji">${p.emoji}</span>
+              <div>
+                <p class="encyc-name">${p.name}</p>
+                <span class="encyc-type">${p.type}</span>
+              </div>
+            </div>
+            <p class="encyc-desc">${p.desc}</p>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      // Run on load
       calcAndRender();
+      renderEncyclopedia();
     </script>
   </body>
 </html>
