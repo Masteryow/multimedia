@@ -290,10 +290,52 @@
         color: var(--text);
       }
 
+      /* ── Scroll nav pills ── */
+      .scroll-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.8rem auto 0;
+        max-width: 960px;
+        position: relative;
+      }
+
+      .scroll-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.45rem 1rem;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--muted);
+        text-decoration: none;
+        cursor: pointer;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+        letter-spacing: 0.02em;
+      }
+
+      .scroll-pill:hover,
+      .scroll-pill:focus {
+        border-color: var(--accent-2);
+        color: var(--accent-2);
+        background: rgba(121, 167, 255, 0.07);
+      }
+
+      .scroll-pill-icon {
+        font-size: 0.9rem;
+        line-height: 1;
+      }
+
       /* Responsive */
       @media (max-width: 720px) {
         .render-hero { padding: 2.5rem 1rem 2rem; }
         .spec-item { flex: 1 1 100px; }
+        .scroll-nav { gap: 0.4rem; }
+        .scroll-pill { font-size: 0.76rem; padding: 0.38rem 0.8rem; }
         .steps-section,
         .info-section { padding-left: 1rem; padding-right: 1rem; }
         .info-card { grid-template-columns: 1fr; }
@@ -346,7 +388,7 @@
         </div>
 
         <!-- Specs bar -->
-        <div class="specs-bar">
+        <div class="specs-bar" id="specs">
           <div class="spec-item">
             <span class="spec-label">Software</span>
             <span class="spec-value">Blender</span>
@@ -368,10 +410,27 @@
             <span class="spec-value">~4 min/frame</span>
           </div>
         </div>
+
+        <!-- Scroll nav pills -->
+        <div class="scroll-nav">
+          <a class="scroll-pill" href="#specs">
+            <span class="scroll-pill-icon">⚙️</span> Render Specs
+          </a>
+          <a class="scroll-pill" href="#steps">
+            <span class="scroll-pill-icon">📋</span> Production Breakdown
+          </a>
+          <a class="scroll-pill" href="#render-info">
+            <span class="scroll-pill-icon">🖥️</span> Tech Info
+          </a>
+          <a class="scroll-pill" href="#project-notes">
+            <span class="scroll-pill-icon">📝</span> Project Notes
+          </a>
+        </div>
+
       </section>
 
       <!-- ── STEP BY STEP ── -->
-      <section class="steps-section">
+      <section class="steps-section" id="steps">
         <div class="steps-header reveal">
           <p class="eyebrow">Production Breakdown</p>
           <h2>How it was made — step by step</h2>
@@ -474,7 +533,7 @@
       </section>
 
       <!-- ── RENDER INFO ── -->
-      <section class="info-section">
+      <section class="info-section" id="render-info">
         <hr class="info-divider" />
         <div class="info-card">
 
@@ -524,7 +583,7 @@
           </div>
 
           <!-- Project Notes -->
-          <div class="info-panel reveal">
+          <div class="info-panel reveal" id="project-notes">
             <h3>Project Notes</h3>
             <p class="info-note">
               <strong>Project goal:</strong> Recreate a visually accurate Solar System in 3D as a multimedia project, covering modelling, texturing, lighting, animation, and rendering fundamentals.<br><br>
