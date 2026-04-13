@@ -93,12 +93,16 @@
       }
 
       .qa-pill-primary {
-        background: var(--accent-2);
-        color: #0a0c12;
-        border: 1px solid transparent;
+        background: var(--panel);
+        color: var(--muted);
+        border: 1px solid var(--line);
       }
 
-      .qa-pill-primary:hover { opacity: 0.85; }
+      .qa-pill-primary:hover {
+        border-color: var(--accent-2);
+        color: var(--accent-2);
+        background: rgba(121,167,255,0.07);
+      }
 
       .qa-pill-outline {
         background: var(--panel);
