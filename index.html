@@ -3,12 +3,348 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A GitHub Pages-ready portfolio site for 3D rendering and rotoscope work with direct video playback." />
+    <meta name="description" content="Multimedia Studio — a TUP-Taguig BSIT portfolio showcasing 3D rendering and rotoscope projects by Kelly Laurence Q. Roduta." />
     <title>Multimedia Studio | Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ── Home page specific ── */
+
+      .home-hero {
+        padding: 5rem 2rem 3.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .home-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 70% 60% at 30% 50%, rgba(124,224,195,0.06) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 50% at 70% 40%, rgba(121,167,255,0.06) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      .home-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: rgba(124, 224, 195, 0.08);
+        border: 1px solid rgba(124, 224, 195, 0.2);
+        border-radius: 99px;
+        padding: 0.3rem 0.9rem;
+        margin-bottom: 1.4rem;
+        position: relative;
+      }
+
+      .home-hero h1 {
+        font-size: clamp(2.4rem, 7vw, 5rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.06;
+        margin: 0 auto 1rem;
+        max-width: 820px;
+        background: linear-gradient(135deg, #fff 30%, var(--accent-2) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+      }
+
+      .home-hero .lede {
+        color: var(--muted);
+        font-size: 1.08rem;
+        max-width: 56ch;
+        margin: 0 auto 2.2rem;
+        line-height: 1.7;
+        position: relative;
+      }
+
+      /* Quick action pills */
+      .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-bottom: 3.5rem;
+        position: relative;
+      }
+
+      .qa-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.55rem 1.2rem;
+        border-radius: 99px;
+        text-decoration: none;
+        transition: all 0.15s;
+        letter-spacing: 0.01em;
+      }
+
+      .qa-pill-primary {
+        background: var(--accent-2);
+        color: #0a0c12;
+        border: 1px solid transparent;
+      }
+
+      .qa-pill-primary:hover { opacity: 0.85; }
+
+      .qa-pill-outline {
+        background: var(--panel);
+        color: var(--muted);
+        border: 1px solid var(--line);
+      }
+
+      .qa-pill-outline:hover {
+        border-color: var(--accent-2);
+        color: var(--accent-2);
+        background: rgba(121,167,255,0.07);
+      }
+
+      /* Stats strip */
+      .stats-strip {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0;
+        max-width: 700px;
+        margin: 0 auto 4rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .stat-block {
+        flex: 1 1 140px;
+        padding: 1rem 1.5rem;
+        text-align: center;
+        border-right: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .stat-block:last-child { border-right: none; }
+
+      .stat-val {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--accent-2);
+        display: block;
+        line-height: 1;
+        margin-bottom: 0.2rem;
+      }
+
+      .stat-key {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* Featured projects */
+      .home-section {
+        padding: 0 2rem 4rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .home-section-head {
+        margin-bottom: 2rem;
+      }
+
+      .home-section-head h2 {
+        font-size: clamp(1.3rem, 3vw, 1.9rem);
+        font-weight: 700;
+        margin: 0 0 0.4rem;
+      }
+
+      .home-section-head p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        max-width: 55ch;
+        margin: 0;
+      }
+
+      .featured-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+        margin-bottom: 4rem;
+      }
+
+      .featured-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        padding: 2rem 2rem 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.2s, transform 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .featured-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .featured-card.card-3d::before {
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(121,167,255,0.07), transparent);
+      }
+
+      .featured-card.card-roto::before {
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,224,195,0.07), transparent);
+      }
+
+      .featured-card:hover { border-color: var(--accent-2); transform: translateY(-4px); }
+      .featured-card:hover::before { opacity: 1; }
+      .featured-card.card-roto:hover { border-color: var(--accent); }
+
+      .fc-icon {
+        font-size: 2.8rem;
+        margin-bottom: 1.2rem;
+        display: block;
+      }
+
+      .fc-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .featured-card.card-roto .fc-tag { color: var(--accent); }
+
+      .fc-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0 0 0.6rem;
+      }
+
+      .fc-desc {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.65;
+        margin: 0 0 1.5rem;
+        flex: 1;
+      }
+
+      .fc-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .fc-chip {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 99px;
+        background: rgba(121, 167, 255, 0.08);
+        border: 1px solid rgba(121, 167, 255, 0.18);
+        color: var(--muted);
+      }
+
+      .featured-card.card-roto .fc-chip {
+        background: rgba(124, 224, 195, 0.08);
+        border-color: rgba(124, 224, 195, 0.18);
+      }
+
+      /* Quick links section */
+      .nav-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 4rem;
+      }
+
+      .nav-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 1.2rem;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        transition: border-color 0.15s, transform 0.15s;
+      }
+
+      .nav-card:hover {
+        border-color: var(--accent-2);
+        transform: translateY(-2px);
+      }
+
+      .nc-icon { font-size: 1.6rem; }
+
+      .nc-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .nc-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .nc-sub {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      /* Divider */
+      .home-divider {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 0 0 2.5rem;
+      }
+
+      @media (max-width: 800px) {
+        .featured-grid { grid-template-columns: 1fr; }
+        .nav-cards { grid-template-columns: repeat(2, 1fr); }
+        .home-hero { padding: 3.5rem 1rem 2.5rem; }
+        .home-section { padding-left: 1rem; padding-right: 1rem; }
+      }
+
+      @media (max-width: 480px) {
+        .nav-cards { grid-template-columns: 1fr; }
+        .stats-strip { flex-direction: column; }
+        .stat-block { border-right: none; border-bottom: 1px solid var(--line); }
+        .stat-block:last-child { border-bottom: none; }
+      }
+    </style>
   </head>
   <body>
     <div class="ambient ambient-one"></div>
@@ -17,17 +353,12 @@
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="Multimedia Studio home">
         <span class="brand-mark">M</span>
-        <span class="brand-text">
-          <strong>Multimedia</strong>
-          <small>3D Rendering / Rotoscope</small>
-        </span>
+        <span class="brand-text"><strong>Multimedia</strong><small>3D Rendering / Rotoscope</small></span>
       </a>
-
       <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
         <span></span><span></span><span></span>
         <span class="sr-only">Toggle navigation menu</span>
       </button>
-
       <nav id="primary-nav" class="nav">
         <a class="active" href="index.html">Home</a>
         <a href="3d-rendering.html">3D Rendering</a>
@@ -37,124 +368,120 @@
     </header>
 
     <main>
-      <section class="page-hero hero">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">Featured Videos</p>
-          <h1>3D rendering and rotoscope tutorials you can publish on GitHub.</h1>
-          <p class="lede">A static HTML hub with featured clips, category sections, and direct video playback, built to feel like a tutorial portal instead of a plain landing page.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#player">Play a video</a>
-            <a class="button button-secondary" href="#links">Quick links</a>
-          </div>
+
+      <!-- ── HERO ── -->
+      <section class="home-hero">
+        <div class="home-badge">🎓 TUP-Taguig &nbsp;·&nbsp; BSIT-S-2A</div>
+        <h1>Multimedia Studio Portfolio</h1>
+        <p class="lede">A showcase of 3D rendering and rotoscope work — featuring a Solar System render in Blender and a 12-week rotoscope animation series.</p>
+
+        <!-- Quick action pills -->
+        <div class="quick-actions">
+          <a class="qa-pill qa-pill-primary" href="3d-rendering.html">🪐 View 3D Rendering</a>
+          <a class="qa-pill qa-pill-outline" href="rotoscope.html">🎬 View Rotoscope</a>
+          <a class="qa-pill qa-pill-outline" href="#featured">✨ Featured Projects</a>
+          <a class="qa-pill qa-pill-outline" href="about.html">👤 About Me</a>
         </div>
 
-        <div class="hero-card reveal">
-          <div class="status-row"><span class="status-dot"></span>Ready to play</div>
-          <h2>Direct playback</h2>
-          <p>Paste a video URL or upload a file, then press play. The player below is designed for demo reels, breakdowns, and motion tests.</p>
-          <div class="stats">
-            <div><strong>4K</strong><span>Display-ready</span></div>
-            <div><strong>MP4</strong><span>Best compatibility</span></div>
-            <div><strong>Web</strong><span>GitHub Pages friendly</span></div>
+        <!-- Stats strip -->
+        <div class="stats-strip">
+          <div class="stat-block">
+            <span class="stat-val">2</span>
+            <span class="stat-key">Projects</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">12</span>
+            <span class="stat-key">Roto Weeks</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">10</span>
+            <span class="stat-key">Blender Steps</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">RTX</span>
+            <span class="stat-key">3050 Ti</span>
           </div>
         </div>
       </section>
 
-      <section id="featured" class="section">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Featured Videos</p>
-          <h2>Highlighted clips for 3D rendering and rotoscope work</h2>
-          <p class="lead-tight">Start with the featured clips below, or load your own file in the player. This section mirrors the reference site’s front-page showcase pattern.</p>
+      <!-- ── FEATURED PROJECTS ── -->
+      <section class="home-section" id="featured">
+        <div class="home-section-head reveal">
+          <p class="eyebrow">Featured Projects</p>
+          <h2>What's inside this portfolio</h2>
+          <p>Two multimedia projects completed as part of the BSIT curriculum at TUP-Taguig.</p>
         </div>
 
-        <div class="portal-grid">
-          <article class="portal-card reveal">
-            <span class="card-label">3D Rendering</span>
-            <h3>Lighting pass walkthrough</h3>
-            <p>A compact reel card for showing ambient lighting, reflections, and final composition.</p>
-            <div class="card-foot">
-              <span>Featured clip</span>
-              <button class="button button-secondary" type="button" data-video-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">Play</button>
-            </div>
-          </article>
+        <div class="featured-grid">
 
-          <article class="portal-card reveal">
-            <span class="card-label">Rotoscope</span>
-            <h3>Frame-by-frame cleanup</h3>
-            <p>Use this slot for a traced motion study, line cleanup, or a before-and-after comparison.</p>
-            <div class="card-foot">
-              <span>Featured clip</span>
-              <button class="button button-secondary" type="button" data-video-url="https://media.w3.org/2010/05/sintel/trailer_hd.mp4">Play</button>
+          <!-- 3D Rendering card -->
+          <a class="featured-card card-3d reveal" href="3d-rendering.html">
+            <span class="fc-icon">🪐</span>
+            <span class="fc-tag">3D Rendering</span>
+            <h2 class="fc-title">Solar System</h2>
+            <p class="fc-desc">A fully modelled Solar System built in Blender using the Cycles render engine. Includes planetary textures, emission lighting from the Sun, Saturn's rings, a star field, and a cinematic camera path — rendered on an RTX 3050 Ti.</p>
+            <div class="fc-meta">
+              <span class="fc-chip">Blender</span>
+              <span class="fc-chip">Cycles</span>
+              <span class="fc-chip">RTX 3050 Ti</span>
+              <span class="fc-chip">10-step breakdown</span>
+              <span class="fc-chip">Planet Age Calculator</span>
             </div>
-          </article>
+          </a>
 
-          <article class="portal-card reveal">
-            <span class="card-label">Behind the scenes</span>
-            <h3>Render breakdown</h3>
-            <p>Show passes, timing, and workflow details in a way people can browse quickly.</p>
-            <div class="card-foot">
-              <span>Featured clip</span>
-              <button class="button button-secondary" type="button" data-video-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">Play</button>
+          <!-- Rotoscope card -->
+          <a class="featured-card card-roto reveal" href="rotoscope.html">
+            <span class="fc-icon">🎬</span>
+            <span class="fc-tag">Rotoscope</span>
+            <h2 class="fc-title">Rotoscope Animation Series</h2>
+            <p class="fc-desc">A 12-week rotoscope animation series tracing real footage frame-by-frame. Each week's output is embedded as a YouTube video, with a reference video and proper production credits included at the bottom.</p>
+            <div class="fc-meta">
+              <span class="fc-chip">12 Weeks</span>
+              <span class="fc-chip">Frame-by-Frame</span>
+              <span class="fc-chip">Reference Video</span>
+              <span class="fc-chip">YouTube Embed</span>
             </div>
-          </article>
+          </a>
+
         </div>
 
-        <div id="player" class="section-heading section-gap-top reveal">
-          <p class="eyebrow">Video playback</p>
-          <h2>Load a clip and watch it inline</h2>
-          <p class="lead-tight">Use a direct video link, or upload a local file while editing the site on your machine.</p>
+        <hr class="home-divider" />
+
+        <!-- Quick nav cards -->
+        <div class="home-section-head reveal">
+          <p class="eyebrow">Quick Actions</p>
+          <h2>Jump to a section</h2>
         </div>
 
-        <div class="player-grid">
-          <div class="player-panel reveal">
-            <video id="video-player" class="video-frame" controls poster="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?auto=format&fit=crop&w=1200&q=80">
-              <source src="" type="video/mp4" />
-              Your browser does not support the video element.
-            </video>
-
-            <div class="player-form">
-              <label class="field"><span>Video URL</span><input id="video-url" type="url" placeholder="https://example.com/video.mp4" autocomplete="off" /></label>
-              <label class="field"><span>Upload file</span><input id="video-file" type="file" accept="video/*" /></label>
-              <div class="player-actions">
-                <button id="load-url" class="button button-primary" type="button">Load URL</button>
-                <button id="clear-video" class="button button-secondary" type="button">Clear</button>
-              </div>
-            </div>
-          </div>
-
-          <aside class="sidebar reveal">
-            <div class="note-card">
-              <h3>Publishing note</h3>
-              <p>GitHub Pages can host this as a static site. If you want a hosted reel, use a direct MP4 link or place the file in the repository.</p>
-            </div>
-
-            <div class="note-card accent">
-              <h3>Recommended formats</h3>
-              <ul>
-                <li>MP4 with H.264</li>
-                <li>WebM for lightweight previews</li>
-                <li>Short, loopable reel clips</li>
-              </ul>
-            </div>
-          </aside>
+        <div class="nav-cards">
+          <a class="nav-card reveal" href="3d-rendering.html#steps">
+            <span class="nc-icon">📋</span>
+            <span class="nc-label">3D Rendering</span>
+            <p class="nc-title">Production Breakdown</p>
+            <span class="nc-sub">10-step Blender workflow</span>
+          </a>
+          <a class="nav-card reveal" href="3d-rendering.html#render-info">
+            <span class="nc-icon">🖥️</span>
+            <span class="nc-label">3D Rendering</span>
+            <p class="nc-title">Render Specs</p>
+            <span class="nc-sub">GPU, samples, export settings</span>
+          </a>
+          <a class="nav-card reveal" href="3d-rendering.html#age-calc">
+            <span class="nc-icon">🪐</span>
+            <span class="nc-label">Interactive Tool</span>
+            <p class="nc-title">Planet Age Calculator</p>
+            <span class="nc-sub">How old are you on each planet?</span>
+          </a>
+          <a class="nav-card reveal" href="rotoscope.html">
+            <span class="nc-icon">🎬</span>
+            <span class="nc-label">Rotoscope</span>
+            <p class="nc-title">Week 1 – 12 Gallery</p>
+            <span class="nc-sub">All 12 weekly video embeds</span>
+          </a>
         </div>
+
       </section>
 
-      <section id="links" class="section">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Quick Links</p>
-          <h2>Browse the site like a tutorial library</h2>
-          <p class="lead-tight">These links mirror the reference page’s shortcut section. They give visitors a fast path to each area of the site.</p>
-        </div>
-
-        <div class="quick-links quick-links-spaced">
-          <a href="index.html">Home</a>
-          <a href="3d-rendering.html">3D Rendering</a>
-          <a href="rotoscope.html">Rotoscope</a>
-          <a href="about.html">About</a>
-          <a href="#featured">Featured Videos</a>
-        </div>
-      </section>
     </main>
 
     <footer class="footer">
