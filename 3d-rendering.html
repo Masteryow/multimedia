@@ -413,9 +413,6 @@
 
         <!-- Scroll nav pills -->
         <div class="scroll-nav">
-          <a class="scroll-pill" href="#specs">
-            <span class="scroll-pill-icon">⚙️</span> Render Specs
-          </a>
           <a class="scroll-pill" href="#steps">
             <span class="scroll-pill-icon">📋</span> Production Breakdown
           </a>
@@ -424,6 +421,9 @@
           </a>
           <a class="scroll-pill" href="#project-notes">
             <span class="scroll-pill-icon">📝</span> Project Notes
+          </a>
+          <a class="scroll-pill" href="#age-calc">
+            <span class="scroll-pill-icon">🪐</span> Planet Age Calculator
           </a>
         </div>
 
@@ -596,7 +596,242 @@
         </div>
       </section>
 
+      <!-- ── PLANET AGE CALCULATOR ── -->
+      <section class="age-calc-section" id="age-calc">
+        <hr class="info-divider" />
+        <div class="age-calc-header reveal">
+          <p class="eyebrow">🪐 Interactive Tool</p>
+          <h2>Planet Age Calculator</h2>
+          <p>Enter your age in Earth years and see how old you would be on every planet in the Solar System.</p>
+        </div>
+
+        <!-- Input -->
+        <div class="age-input-row reveal">
+          <label class="age-label" for="earth-age">Your age on Earth</label>
+          <div class="age-input-wrap">
+            <input id="earth-age" class="age-input" type="number" min="1" max="150" value="25" placeholder="25" />
+            <button id="calc-btn" class="age-calc-btn">Calculate</button>
+          </div>
+        </div>
+
+        <!-- Planet cards grid -->
+        <div class="planet-grid" id="planet-grid">
+          <!-- filled by JS -->
+        </div>
+      </section>
+
     </main>
+
+    <style>
+      /* ── Age Calculator ── */
+      .age-calc-section {
+        padding: 0 2rem 4rem;
+        max-width: 1100px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .age-calc-header {
+        margin-bottom: 2rem;
+      }
+
+      .age-calc-header h2 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+      }
+
+      .age-calc-header p {
+        color: var(--muted);
+        font-size: 0.97rem;
+        max-width: 55ch;
+        margin: 0;
+      }
+
+      .age-input-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .age-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .age-input-wrap {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+      }
+
+      .age-input {
+        width: 130px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 0.6rem 0.9rem;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 1.1rem;
+        font-weight: 700;
+        transition: border-color 0.15s;
+        -moz-appearance: textfield;
+      }
+
+      .age-input:focus {
+        outline: none;
+        border-color: var(--accent-2);
+      }
+
+      .age-input::-webkit-inner-spin-button,
+      .age-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+      .age-calc-btn {
+        background: var(--accent-2);
+        color: #0a0c12;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 0.6rem 1.4rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: opacity 0.15s, transform 0.1s;
+      }
+
+      .age-calc-btn:hover { opacity: 0.85; }
+      .age-calc-btn:active { transform: scale(0.97); }
+
+      /* Planet grid */
+      .planet-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.2rem;
+      }
+
+      .planet-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 1.3rem 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        transition: border-color 0.2s, transform 0.2s;
+        animation: fadeUp 500ms ease both;
+      }
+
+      .planet-card:hover {
+        transform: translateY(-3px);
+      }
+
+      .planet-card.is-earth {
+        border-color: var(--accent);
+        background: rgba(124, 224, 195, 0.04);
+      }
+
+      .planet-card-top {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+
+      .planet-emoji {
+        font-size: 2.2rem;
+        line-height: 1;
+      }
+
+      .planet-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .planet-type {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* Highlighted age badge */
+      .planet-age-badge {
+        background: rgba(121, 167, 255, 0.12);
+        border: 1px solid rgba(121, 167, 255, 0.3);
+        border-radius: var(--radius-md);
+        padding: 0.55rem 0.9rem;
+        text-align: center;
+      }
+
+      .planet-card.is-earth .planet-age-badge {
+        background: rgba(124, 224, 195, 0.12);
+        border-color: rgba(124, 224, 195, 0.35);
+      }
+
+      .planet-age-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+
+      .planet-age-value {
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: var(--accent-2);
+        line-height: 1;
+        display: block;
+      }
+
+      .planet-card.is-earth .planet-age-value {
+        color: var(--accent);
+      }
+
+      .planet-age-unit {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 0.1rem;
+        display: block;
+      }
+
+      /* Info rows */
+      .planet-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        border-top: 1px solid var(--line);
+        padding-top: 0.7rem;
+      }
+
+      .planet-info-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.82rem;
+        gap: 0.5rem;
+      }
+
+      .pi-key { color: var(--muted); flex-shrink: 0; }
+      .pi-val { color: var(--text); font-weight: 600; text-align: right; }
+
+      @media (max-width: 720px) {
+        .age-calc-section { padding-left: 1rem; padding-right: 1rem; }
+        .planet-grid { grid-template-columns: 1fr 1fr; }
+      }
+
+      @media (max-width: 480px) {
+        .planet-grid { grid-template-columns: 1fr; }
+      }
+    </style>
 
     <footer class="footer">
       <span class="footer-school">Technological University of the Philippines – Taguig</span>
@@ -604,5 +839,158 @@
       <span class="footer-copy">&copy; 2026 All rights reserved.</span>
     </footer>
     <script src="script.js"></script>
+    <script>
+      const PLANETS = [
+        {
+          name: 'Mercury', emoji: '🪨', type: 'Terrestrial',
+          orbitalYears: 0.2408,
+          orbitalDays: 87.97,
+          tempRange: '-180°C to 430°C',
+          distanceKm: '57.9 million km',
+          dayLength: '58.6 Earth days',
+          gravity: '0.38g',
+          isEarth: false
+        },
+        {
+          name: 'Venus', emoji: '🌕', type: 'Terrestrial',
+          orbitalYears: 0.6152,
+          orbitalDays: 224.7,
+          tempRange: '~465°C (avg)',
+          distanceKm: '108.2 million km',
+          dayLength: '243 Earth days',
+          gravity: '0.91g',
+          isEarth: false
+        },
+        {
+          name: 'Earth', emoji: '🌍', type: 'Terrestrial',
+          orbitalYears: 1,
+          orbitalDays: 365.25,
+          tempRange: '-89°C to 57°C',
+          distanceKm: '149.6 million km',
+          dayLength: '24 hours',
+          gravity: '1.00g',
+          isEarth: true
+        },
+        {
+          name: 'Mars', emoji: '🔴', type: 'Terrestrial',
+          orbitalYears: 1.8808,
+          orbitalDays: 686.97,
+          tempRange: '-125°C to 20°C',
+          distanceKm: '227.9 million km',
+          dayLength: '24 hrs 37 min',
+          gravity: '0.38g',
+          isEarth: false
+        },
+        {
+          name: 'Jupiter', emoji: '🟠', type: 'Gas Giant',
+          orbitalYears: 11.862,
+          orbitalDays: 4331,
+          tempRange: '~-110°C (cloud top)',
+          distanceKm: '778.5 million km',
+          dayLength: '9 hrs 56 min',
+          gravity: '2.53g',
+          isEarth: false
+        },
+        {
+          name: 'Saturn', emoji: '🪐', type: 'Gas Giant',
+          orbitalYears: 29.457,
+          orbitalDays: 10747,
+          tempRange: '~-140°C (cloud top)',
+          distanceKm: '1.43 billion km',
+          dayLength: '10 hrs 42 min',
+          gravity: '1.07g',
+          isEarth: false
+        },
+        {
+          name: 'Uranus', emoji: '🔵', type: 'Ice Giant',
+          orbitalYears: 84.011,
+          orbitalDays: 30589,
+          tempRange: '~-195°C (cloud top)',
+          distanceKm: '2.87 billion km',
+          dayLength: '17 hrs 14 min',
+          gravity: '0.89g',
+          isEarth: false
+        },
+        {
+          name: 'Neptune', emoji: '🌀', type: 'Ice Giant',
+          orbitalYears: 164.8,
+          orbitalDays: 60182,
+          tempRange: '~-200°C (cloud top)',
+          distanceKm: '4.50 billion km',
+          dayLength: '16 hrs 6 min',
+          gravity: '1.14g',
+          isEarth: false
+        }
+      ];
+
+      function calcAndRender() {
+        const earthAge = parseFloat(document.getElementById('earth-age').value);
+        if (isNaN(earthAge) || earthAge <= 0) return;
+
+        const grid = document.getElementById('planet-grid');
+        grid.innerHTML = '';
+
+        PLANETS.forEach((p, i) => {
+          const age = earthAge / p.orbitalYears;
+          const ageDisplay = age >= 1000
+            ? age.toFixed(0)
+            : age < 10
+              ? age.toFixed(2)
+              : age.toFixed(1);
+
+          const card = document.createElement('div');
+          card.className = 'planet-card' + (p.isEarth ? ' is-earth' : '');
+          card.style.animationDelay = (i * 60) + 'ms';
+
+          card.innerHTML = `
+            <div class="planet-card-top">
+              <span class="planet-emoji">${p.emoji}</span>
+              <div>
+                <p class="planet-name">${p.name}</p>
+                <span class="planet-type">${p.type}</span>
+              </div>
+            </div>
+
+            <div class="planet-age-badge">
+              <span class="planet-age-label">Your age on ${p.name}</span>
+              <span class="planet-age-value">${ageDisplay}</span>
+              <span class="planet-age-unit">${p.name} years</span>
+            </div>
+
+            <div class="planet-info">
+              <div class="planet-info-row">
+                <span class="pi-key">Orbital period</span>
+                <span class="pi-val">${p.orbitalDays.toLocaleString()} Earth days</span>
+              </div>
+              <div class="planet-info-row">
+                <span class="pi-key">Temperature</span>
+                <span class="pi-val">${p.tempRange}</span>
+              </div>
+              <div class="planet-info-row">
+                <span class="pi-key">Distance from Sun</span>
+                <span class="pi-val">${p.distanceKm}</span>
+              </div>
+              <div class="planet-info-row">
+                <span class="pi-key">Day length</span>
+                <span class="pi-val">${p.dayLength}</span>
+              </div>
+              <div class="planet-info-row">
+                <span class="pi-key">Gravity</span>
+                <span class="pi-val">${p.gravity}</span>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      document.getElementById('calc-btn').addEventListener('click', calcAndRender);
+      document.getElementById('earth-age').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') calcAndRender();
+      });
+
+      // Auto-calculate on load
+      calcAndRender();
+    </script>
   </body>
 </html>
