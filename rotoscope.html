@@ -3,19 +3,195 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Rotoscope tutorials and workflow page for Multimedia Studio." />
+    <meta name="description" content="Rotoscope video gallery — watch frame-by-frame rotoscope tutorials and motion studies directly on Multimedia Studio." />
     <title>Multimedia Studio | Rotoscope</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ── Page-specific styles ── */
+      .roto-hero {
+        width: 100%;
+        background: #0a0c12;
+        padding: 3.5rem 2rem 2.5rem;
+        text-align: center;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .roto-hero-label {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.6rem;
+      }
+
+      .roto-hero h1 {
+        font-size: clamp(2.4rem, 7vw, 4.5rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0 auto 0.5rem;
+        line-height: 1.1;
+      }
+
+      .roto-hero-sub {
+        color: var(--muted);
+        font-size: 1.05rem;
+        margin: 0 auto 2.2rem;
+        max-width: 52ch;
+      }
+
+      /* Featured video embed */
+      .featured-embed-wrap {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        box-shadow: 0 0 60px rgba(124, 224, 195, 0.08);
+        aspect-ratio: 16 / 9;
+        position: relative;
+      }
+
+      .featured-embed-wrap iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border: none;
+      }
+
+      /* Video grid section */
+      .video-gallery-section {
+        padding: 3rem 2rem;
+        max-width: 1280px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .gallery-header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .gallery-header h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .gallery-header .count-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--accent);
+        background: rgba(124, 224, 195, 0.1);
+        border: 1px solid rgba(124, 224, 195, 0.25);
+        border-radius: 99px;
+        padding: 0.15rem 0.65rem;
+      }
+
+      /* 12-card grid */
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.4rem;
+      }
+
+      .video-card {
+        background: var(--panel);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.2s, transform 0.2s;
+      }
+
+      .video-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      .video-card-embed {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        position: relative;
+        background: #0a0c12;
+      }
+
+      .video-card-embed iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+
+      .video-card-body {
+        padding: 0.85rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+      }
+
+      .video-card-tag {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+      }
+
+      .video-card-title {
+        font-size: 0.97rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+        line-height: 1.35;
+      }
+
+      .video-card-desc {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      /* Responsive */
+      @media (max-width: 720px) {
+        .roto-hero { padding: 2.5rem 1rem 2rem; }
+        .video-gallery-section { padding: 2rem 1rem; }
+        .video-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 920px) {
+        .video-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
   </head>
   <body>
     <div class="ambient ambient-one"></div>
     <div class="ambient ambient-two"></div>
+
     <header class="topbar">
-      <a class="brand" href="index.html"><span class="brand-mark">M</span><span class="brand-text"><strong>Multimedia</strong><small>3D Rendering / Rotoscope</small></span></a>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Toggle navigation menu</span></button>
+      <a class="brand" href="index.html" aria-label="Multimedia Studio home">
+        <span class="brand-mark">M</span>
+        <span class="brand-text"><strong>Multimedia</strong><small>3D Rendering / Rotoscope</small></span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Toggle navigation menu</span>
+      </button>
       <nav id="primary-nav" class="nav">
         <a href="index.html">Home</a>
         <a href="3d-rendering.html">3D Rendering</a>
@@ -23,49 +199,255 @@
         <a href="about.html">About</a>
       </nav>
     </header>
+
     <main>
-      <section class="page-hero hero">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">Rotoscope Tutorials</p>
-          <h1>Hand-traced workflow, cleanup, and polish.</h1>
-          <p class="lede">A page for process notes, frame-by-frame cleanup, and final motion studies.</p>
-        </div>
-        <div class="hero-card reveal">
-          <div class="status-row"><span class="status-dot"></span>Workflow path</div>
-          <h2>Trace, clean, finish</h2>
-          <p>Use this page to show rough passes, reference frames, cleanup steps, and color timing.</p>
-          <div class="stats">
-            <div><strong>01</strong><span>Trace</span></div>
-            <div><strong>02</strong><span>Cleanup</span></div>
-            <div><strong>03</strong><span>Polish</span></div>
-          </div>
+      <!-- ── HERO: Featured Video ── -->
+      <section class="roto-hero">
+        <span class="roto-hero-label">Multimedia Studio</span>
+        <h1>ROTOSCOPE</h1>
+        <p class="roto-hero-sub">Frame-by-frame trace, cleanup, and motion studies — watch them play directly below.</p>
+
+        <div class="featured-embed-wrap">
+          <iframe
+            id="featured-video"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+            title="Featured Rotoscope Showcase"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Case Study</p>
-          <h2>Workflow steps</h2>
+      <!-- ── 12-Card Video Gallery ── -->
+      <section class="video-gallery-section">
+        <div class="gallery-header">
+          <h2>Rotoscope Videos</h2>
+          <span class="count-badge">12 clips</span>
         </div>
-        <div class="case-study">
-          <div class="case-panel reveal"><h3>Production notes</h3><p>Rotoscope work benefits from contrast, spacing, and a layout that lets the movement breathe. Use this space for references and technical notes.</p></div>
-          <div class="case-panel reveal"><div class="case-list"><div><span>01</span> Rough trace and key poses</div><div><span>02</span> Cleanup and line control</div><div><span>03</span> Final polish and color pass</div></div></div>
-        </div>
-      </section>
 
-      <section class="section">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Quick Links</p>
-          <h2>Jump to other areas</h2>
-        </div>
-        <div class="stack-links">
-          <a href="index.html">Home <span>Featured videos and player</span></a>
-          <a href="3d-rendering.html">3D Rendering <span>Lighting and render tutorials</span></a>
-          <a href="about.html">About <span>Site details and publishing notes</span></a>
-        </div>
+        <div class="video-grid">
+
+          <!-- Card 1 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 1"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Rotoscope</span>
+              <p class="video-card-title">Intro to Rotoscoping</p>
+              <p class="video-card-desc">Learn the fundamentals of frame-by-frame tracing and body movement isolation.</p>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 2"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Cleanup</span>
+              <p class="video-card-title">Line Cleanup Workflow</p>
+              <p class="video-card-desc">Smoothing rough traces and achieving clean, consistent line weight across frames.</p>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 3"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Key Poses</span>
+              <p class="video-card-title">Key Pose Blocking</p>
+              <p class="video-card-desc">Identifying and locking down strong poses before filling in in-betweens.</p>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 4"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Color Pass</span>
+              <p class="video-card-title">Final Color Timing</p>
+              <p class="video-card-desc">Applying flat color fills and a final timing pass over the traced sequence.</p>
+            </div>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 5"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Motion Study</span>
+              <p class="video-card-title">Walk Cycle Breakdown</p>
+              <p class="video-card-desc">Breaking down a reference walk cycle frame by frame for accurate tracing.</p>
+            </div>
+          </article>
+
+          <!-- Card 6 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 6"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Silhouette</span>
+              <p class="video-card-title">Silhouette & Shape Read</p>
+              <p class="video-card-desc">Using strong silhouettes to guide the roto matte and shape clarity at distance.</p>
+            </div>
+          </article>
+
+          <!-- Card 7 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 7"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Workflow</span>
+              <p class="video-card-title">Software Pipeline Overview</p>
+              <p class="video-card-desc">A quick tour of the tools used in a rotoscope production pipeline.</p>
+            </div>
+          </article>
+
+          <!-- Card 8 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 8"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Hair & Fur</span>
+              <p class="video-card-title">Roto on Hair & Fur</p>
+              <p class="video-card-desc">Techniques for handling complex, fine-detail areas like hair and clothing edges.</p>
+            </div>
+          </article>
+
+          <!-- Card 9 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 9"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Speed Ramp</span>
+              <p class="video-card-title">Speed Ramping in Roto</p>
+              <p class="video-card-desc">How changing frame rates and speed ramps affect rotoscope timing and holds.</p>
+            </div>
+          </article>
+
+          <!-- Card 10 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 10"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Compositing</span>
+              <p class="video-card-title">Integrating Roto into Comp</p>
+              <p class="video-card-desc">Passing roto mattes downstream into a compositing pipeline cleanly.</p>
+            </div>
+          </article>
+
+          <!-- Card 11 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 11"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Before & After</span>
+              <p class="video-card-title">Before & After Comparison</p>
+              <p class="video-card-desc">Side-by-side of raw footage versus finished rotoscoped output.</p>
+            </div>
+          </article>
+
+          <!-- Card 12 -->
+          <article class="video-card reveal">
+            <div class="video-card-embed">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                title="Rotoscope Tutorial 12"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-card-body">
+              <span class="video-card-tag">Portfolio</span>
+              <p class="video-card-title">Full Reel Showreel</p>
+              <p class="video-card-desc">A compiled showreel of rotoscope work across multiple productions.</p>
+            </div>
+          </article>
+
+        </div><!-- /video-grid -->
       </section>
     </main>
-    <footer class="footer"><p>Rotoscope section for Multimedia Studio.</p></footer>
+
+    <footer class="footer"><p>Rotoscope section — Multimedia Studio.</p></footer>
     <script src="script.js"></script>
   </body>
 </html>
