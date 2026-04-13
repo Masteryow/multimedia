@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="About Multimedia Studio and GitHub Pages publishing notes." />
+    <title>Multimedia Studio | About</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">M</span><span class="brand-text"><strong>Multimedia</strong><small>3D Rendering / Rotoscope</small></span></a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">Toggle navigation menu</span></button>
+      <nav id="primary-nav" class="nav">
+        <a href="index.html">Home</a>
+        <a href="3d-rendering.html">3D Rendering</a>
+        <a href="rotoscope.html">Rotoscope</a>
+        <a class="active" href="about.html">About</a>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero hero">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">About</p>
+          <h1>A simple portfolio site built for GitHub Pages.</h1>
+          <p class="lede">This site is intentionally static so it can be published as HTML and visited directly by anyone.</p>
+        </div>
+        <div class="hero-card reveal">
+          <div class="status-row"><span class="status-dot"></span>Publishing ready</div>
+          <h2>Static and simple</h2>
+          <p>Keep all files in the repository root and GitHub Pages can serve them without a server.</p>
+          <div class="stats">
+            <div><strong>HTML</strong><span>Pages</span></div>
+            <div><strong>CSS</strong><span>Shared styling</span></div>
+            <div><strong>JS</strong><span>Menu + player</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="about-box reveal">
+          <p class="eyebrow">Quick Links</p>
+          <h2>Fast navigation</h2>
+          <p>This page gives visitors a short explanation of the site and where to go next.</p>
+          <div class="quick-links quick-links-spaced">
+            <a href="index.html">Home</a>
+            <a href="3d-rendering.html">3D Rendering</a>
+            <a href="rotoscope.html">Rotoscope</a>
+            <a href="index.html#featured">Featured Videos</a>
+            <a href="index.html#player">Player</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="page-callout reveal">
+          <strong>GitHub Pages note</strong>
+          <p>Make sure the repository has <code>index.html</code> in the root and GitHub Pages enabled from the branch you want to publish.</p>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><p>About section for Multimedia Studio.</p></footer>
+    <script src="script.js"></script>
+  </body>
+</html>

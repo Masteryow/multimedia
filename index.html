@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A GitHub Pages-ready portfolio site for 3D rendering and rotoscope work with direct video playback." />
+    <title>Multimedia Studio | Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Multimedia Studio home">
+        <span class="brand-mark">M</span>
+        <span class="brand-text">
+          <strong>Multimedia</strong>
+          <small>3D Rendering / Rotoscope</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Toggle navigation menu</span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a class="active" href="index.html">Home</a>
+        <a href="3d-rendering.html">3D Rendering</a>
+        <a href="rotoscope.html">Rotoscope</a>
+        <a href="about.html">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero hero">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Featured Videos</p>
+          <h1>3D rendering and rotoscope tutorials you can publish on GitHub.</h1>
+          <p class="lede">A static HTML hub with featured clips, category sections, and direct video playback, built to feel like a tutorial portal instead of a plain landing page.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#player">Play a video</a>
+            <a class="button button-secondary" href="#links">Quick links</a>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="status-row"><span class="status-dot"></span>Ready to play</div>
+          <h2>Direct playback</h2>
+          <p>Paste a video URL or upload a file, then press play. The player below is designed for demo reels, breakdowns, and motion tests.</p>
+          <div class="stats">
+            <div><strong>4K</strong><span>Display-ready</span></div>
+            <div><strong>MP4</strong><span>Best compatibility</span></div>
+            <div><strong>Web</strong><span>GitHub Pages friendly</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="featured" class="section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Featured Videos</p>
+          <h2>Highlighted clips for 3D rendering and rotoscope work</h2>
+          <p class="lead-tight">Start with the featured clips below, or load your own file in the player. This section mirrors the reference site’s front-page showcase pattern.</p>
+        </div>
+
+        <div class="portal-grid">
+          <article class="portal-card reveal">
+            <span class="card-label">3D Rendering</span>
+            <h3>Lighting pass walkthrough</h3>
+            <p>A compact reel card for showing ambient lighting, reflections, and final composition.</p>
+            <div class="card-foot">
+              <span>Featured clip</span>
+              <button class="button button-secondary" type="button" data-video-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">Play</button>
+            </div>
+          </article>
+
+          <article class="portal-card reveal">
+            <span class="card-label">Rotoscope</span>
+            <h3>Frame-by-frame cleanup</h3>
+            <p>Use this slot for a traced motion study, line cleanup, or a before-and-after comparison.</p>
+            <div class="card-foot">
+              <span>Featured clip</span>
+              <button class="button button-secondary" type="button" data-video-url="https://media.w3.org/2010/05/sintel/trailer_hd.mp4">Play</button>
+            </div>
+          </article>
+
+          <article class="portal-card reveal">
+            <span class="card-label">Behind the scenes</span>
+            <h3>Render breakdown</h3>
+            <p>Show passes, timing, and workflow details in a way people can browse quickly.</p>
+            <div class="card-foot">
+              <span>Featured clip</span>
+              <button class="button button-secondary" type="button" data-video-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">Play</button>
+            </div>
+          </article>
+        </div>
+
+        <div id="player" class="section-heading section-gap-top reveal">
+          <p class="eyebrow">Video playback</p>
+          <h2>Load a clip and watch it inline</h2>
+          <p class="lead-tight">Use a direct video link, or upload a local file while editing the site on your machine.</p>
+        </div>
+
+        <div class="player-grid">
+          <div class="player-panel reveal">
+            <video id="video-player" class="video-frame" controls poster="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?auto=format&fit=crop&w=1200&q=80">
+              <source src="" type="video/mp4" />
+              Your browser does not support the video element.
+            </video>
+
+            <div class="player-form">
+              <label class="field"><span>Video URL</span><input id="video-url" type="url" placeholder="https://example.com/video.mp4" autocomplete="off" /></label>
+              <label class="field"><span>Upload file</span><input id="video-file" type="file" accept="video/*" /></label>
+              <div class="player-actions">
+                <button id="load-url" class="button button-primary" type="button">Load URL</button>
+                <button id="clear-video" class="button button-secondary" type="button">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <aside class="sidebar reveal">
+            <div class="note-card">
+              <h3>Publishing note</h3>
+              <p>GitHub Pages can host this as a static site. If you want a hosted reel, use a direct MP4 link or place the file in the repository.</p>
+            </div>
+
+            <div class="note-card accent">
+              <h3>Recommended formats</h3>
+              <ul>
+                <li>MP4 with H.264</li>
+                <li>WebM for lightweight previews</li>
+                <li>Short, loopable reel clips</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="links" class="section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Quick Links</p>
+          <h2>Browse the site like a tutorial library</h2>
+          <p class="lead-tight">These links mirror the reference page’s shortcut section. They give visitors a fast path to each area of the site.</p>
+        </div>
+
+        <div class="quick-links quick-links-spaced">
+          <a href="index.html">Home</a>
+          <a href="3d-rendering.html">3D Rendering</a>
+          <a href="rotoscope.html">Rotoscope</a>
+          <a href="about.html">About</a>
+          <a href="#featured">Featured Videos</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer"><p>Built for 3D rendering and rotoscope portfolios.</p></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
