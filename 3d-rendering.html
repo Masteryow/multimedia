@@ -911,8 +911,13 @@
         border: 1px solid var(--line);
         border-radius: var(--radius-lg);
         overflow: hidden;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
         transition: border-color 0.2s, transform 0.2s;
         animation: fadeUp 600ms ease both;
       }
@@ -931,14 +936,27 @@
 
       /* Left emoji panel */
       .encyc-left {
+        width: 50%;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
         flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
         gap: 0.5rem;
         padding: 1.4rem 1rem;
         background: rgba(121, 167, 255, 0.05);
         border-right: 1px solid var(--line);
+        box-sizing: border-box;
       }
 
       .encyc-card.is-earth .encyc-left {
@@ -977,9 +995,17 @@
 
       /* Right description panel */
       .encyc-right {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
         padding: 1.2rem 1.3rem;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
+        min-width: 0;
       }
 
       .encyc-desc {
@@ -999,12 +1025,23 @@
         .encyc-grid { grid-template-columns: 1fr; }
 
         .encyc-card {
-          grid-template-columns: 1fr;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+          flex-direction: column;
         }
 
         .encyc-left {
+          width: 100%;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: row;
           flex-direction: row;
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
           justify-content: flex-start;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
           align-items: center;
           gap: 0.8rem;
           padding: 1rem 1.2rem;
