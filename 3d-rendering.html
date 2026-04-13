@@ -992,6 +992,31 @@
       @media (max-width: 960px) {
         .encyc-grid { grid-template-columns: repeat(2, 1fr); }
       }
+
+      @media (max-width: 600px) {
+        .encyc-section { padding-left: 1rem; padding-right: 1rem; }
+        .encyc-grid { grid-template-columns: 1fr; }
+
+        /* Stack card vertically on mobile */
+        .encyc-card {
+          grid-template-columns: 1fr;
+        }
+
+        .encyc-left {
+          flex-direction: row;
+          justify-content: flex-start;
+          gap: 0.8rem;
+          padding: 1rem 1.2rem;
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .encyc-emoji { font-size: 2rem; }
+
+        .encyc-right {
+          padding: 0.9rem 1.2rem 1.1rem;
+        }
+      }
     </style>
 
     <footer class="footer">
