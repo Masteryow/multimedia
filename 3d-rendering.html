@@ -625,10 +625,10 @@
     <style>
       /* ── Age Calculator ── */
       .age-calc-section {
-        padding: 0 2rem 4rem;
-        max-width: 1100px;
-        margin: 0 auto;
+        padding: 0 2.5rem 4rem;
+        max-width: 100%;
         width: 100%;
+        box-sizing: border-box;
       }
 
       .age-calc-header {
@@ -707,11 +707,12 @@
       .age-calc-btn:hover { opacity: 0.85; }
       .age-calc-btn:active { transform: scale(0.97); }
 
-      /* Planet grid — 3 per row */
+      /* Planet grid — 3 per row, full width */
       .planet-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.2rem;
+        gap: 1rem;
+        width: 100%;
       }
 
       .planet-card {
