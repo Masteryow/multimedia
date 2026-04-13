@@ -993,11 +993,11 @@
         .encyc-grid { grid-template-columns: repeat(2, 1fr); }
       }
 
-      @media (max-width: 600px) {
+      /* Tablet + mobile: 1 column, card stacks vertically */
+      @media (max-width: 720px) {
         .encyc-section { padding-left: 1rem; padding-right: 1rem; }
         .encyc-grid { grid-template-columns: 1fr; }
 
-        /* Stack card vertically on mobile */
         .encyc-card {
           grid-template-columns: 1fr;
         }
@@ -1005,6 +1005,7 @@
         .encyc-left {
           flex-direction: row;
           justify-content: flex-start;
+          align-items: center;
           gap: 0.8rem;
           padding: 1rem 1.2rem;
           border-right: none;
@@ -1016,6 +1017,8 @@
         .encyc-right {
           padding: 0.9rem 1.2rem 1.1rem;
         }
+
+        .encyc-desc { font-size: 0.9rem; }
       }
     </style>
 
