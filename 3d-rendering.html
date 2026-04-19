@@ -763,17 +763,12 @@
       .age-calc-btn:hover { opacity: 0.85; }
       .age-calc-btn:active { transform: scale(0.97); }
 
-      /* Planet grid — 3 per row, full width */
+      /* Planet grid — 2 per row, full width */
       .planet-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         width: 100%;
-      }
-
-      /* Earth card spans full row */
-      .planet-card.is-earth {
-        grid-column: 1 / -1;
       }
 
       .planet-card {
@@ -925,18 +920,14 @@
       .pi-key { color: var(--muted); flex-shrink: 0; }
       .pi-val { color: var(--text); font-weight: 600; text-align: right; }
 
-      @media (max-width: 960px) {
-        .planet-grid { grid-template-columns: repeat(2, 1fr); }
-        /* Earth still spans full at 960 */
-        .planet-card.is-earth { grid-column: 1 / -1; }
+      @media (max-width: 600px) {
+        .planet-grid { grid-template-columns: 1fr; }
       }
 
       @media (max-width: 600px) {
         .age-calc-section { padding-left: 1rem; padding-right: 1rem; }
-        .planet-grid { grid-template-columns: 1fr; }
         .planet-card { grid-template-columns: 64px 1fr; }
         .planet-emoji { font-size: 2rem; }
-        .encyc-grid { grid-template-columns: 1fr; }
       }
 
       /* ── Planet Encyclopedia ── */
@@ -1095,7 +1086,7 @@
 
       .encyc-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
       }
 
@@ -1123,7 +1114,6 @@
       .encyc-card.is-earth {
         border-color: var(--accent);
         background: #05090f;
-        grid-column: 1 / -1;
       }
 
       .encyc-card.is-earth:hover { border-color: var(--accent-strong); }
@@ -1242,10 +1232,8 @@
         margin: 0;
       }
 
-      @media (max-width: 960px) {
-        .encyc-grid { grid-template-columns: repeat(2, 1fr); }
-        /* Earth still spans full at 960 */
-        .encyc-card.is-earth { grid-column: 1 / -1; }
+      @media (max-width: 600px) {
+        .encyc-grid { grid-template-columns: 1fr; }
       }
 
       /* Tablet + mobile: 1 column, card stacks vertically */
