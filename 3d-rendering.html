@@ -630,6 +630,48 @@
           <h2>About Each Planet</h2>
           <p>A quick-reference guide to every world in our Solar System and what makes each one unique.</p>
         </div>
+
+        <!-- Sun feature card -->
+        <div class="sun-card reveal">
+          <div class="sun-card-video-wrap">
+            <video src="videos/sun.mp4" autoplay muted loop playsinline></video>
+          </div>
+          <div class="sun-card-body">
+            <div class="sun-card-title-row">
+              <span class="sun-card-emoji">☀️</span>
+              <h3 class="sun-card-name">The Sun</h3>
+              <span class="sun-card-type">Star · G-type</span>
+            </div>
+            <p class="sun-card-desc">The Sun is the star at the center of our Solar System — a nearly perfect sphere of hot plasma that accounts for 99.86% of the total mass of the Solar System. Its core reaches temperatures of 15 million °C, fusing hydrogen into helium and releasing the energy that powers all life on Earth. The Sun's outer atmosphere, the corona, extends millions of kilometres into space and is the source of the solar wind.</p>
+            <div class="sun-card-stats">
+              <div class="sun-stat">
+                <span class="sun-stat-key">Surface Temp</span>
+                <span class="sun-stat-val">~5,500°C</span>
+              </div>
+              <div class="sun-stat">
+                <span class="sun-stat-key">Core Temp</span>
+                <span class="sun-stat-val">~15 million °C</span>
+              </div>
+              <div class="sun-stat">
+                <span class="sun-stat-key">Diameter</span>
+                <span class="sun-stat-val">1.39 million km</span>
+              </div>
+              <div class="sun-stat">
+                <span class="sun-stat-key">Mass</span>
+                <span class="sun-stat-val">1.989 × 10³⁰ kg</span>
+              </div>
+              <div class="sun-stat">
+                <span class="sun-stat-key">Age</span>
+                <span class="sun-stat-val">~4.6 billion yrs</span>
+              </div>
+              <div class="sun-stat">
+                <span class="sun-stat-key">Distance (Earth)</span>
+                <span class="sun-stat-val">149.6 million km</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="encyc-grid" id="encyc-grid"><!-- filled by JS --></div>
       </section>
 
@@ -761,7 +803,16 @@
       }
 
       .planet-card.is-earth .planet-card-side {
-        background: rgba(124, 224, 195, 0.06);
+        background: transparent;
+        padding: 0;
+      }
+
+      /* Earth video in calculator card */
+      .planet-card-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
 
       /* Right content column */
@@ -900,6 +951,133 @@
         margin: 0;
       }
 
+      /* ── Sun feature card ── */
+      .sun-card {
+        display: flex;
+        flex-direction: row;
+        background: linear-gradient(135deg, rgba(255, 160, 50, 0.08) 0%, rgba(255, 100, 20, 0.05) 100%);
+        border: 1px solid rgba(255, 150, 50, 0.35);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        margin-bottom: 1.8rem;
+        min-height: 260px;
+        box-shadow: 0 0 48px rgba(255, 130, 40, 0.12);
+        animation: fadeUp 600ms ease both;
+        transition: border-color 0.2s, transform 0.2s;
+      }
+
+      .sun-card:hover {
+        border-color: rgba(255, 180, 80, 0.6);
+        transform: translateY(-3px);
+      }
+
+      .sun-card-video-wrap {
+        width: 42%;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        border-right: 1px solid rgba(255, 150, 50, 0.25);
+      }
+
+      .sun-card-video-wrap video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .sun-card-body {
+        flex: 1;
+        padding: 2rem 2.2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+        min-width: 0;
+      }
+
+      .sun-card-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .sun-card-emoji {
+        font-size: 2.6rem;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .sun-card-name {
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: #ffcc70;
+        margin: 0;
+        letter-spacing: -0.01em;
+        text-shadow: 0 0 24px rgba(255, 180, 60, 0.5);
+      }
+
+      .sun-card-type {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #ffa040;
+        background: rgba(255, 140, 40, 0.12);
+        border: 1px solid rgba(255, 140, 40, 0.3);
+        border-radius: 99px;
+        padding: 0.15rem 0.65rem;
+        margin-left: 0.2rem;
+        align-self: center;
+      }
+
+      .sun-card-desc {
+        font-size: 0.93rem;
+        color: var(--muted);
+        line-height: 1.75;
+        margin: 0;
+        max-width: 72ch;
+      }
+
+      .sun-card-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+      }
+
+      .sun-stat {
+        background: rgba(255, 140, 40, 0.07);
+        border: 1px solid rgba(255, 140, 40, 0.2);
+        border-radius: var(--radius-md);
+        padding: 0.7rem 0.9rem;
+        text-align: center;
+      }
+
+      .sun-stat-key {
+        font-size: 0.63rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: rgba(255,180,80,0.7);
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+
+      .sun-stat-val {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #ffcc70;
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .sun-card { flex-direction: column; min-height: auto; }
+        .sun-card-video-wrap { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid rgba(255,150,50,0.25); }
+        .sun-card-body { padding: 1.4rem 1.5rem; }
+        .sun-card-stats { grid-template-columns: repeat(2, 1fr); }
+      }
+
       .encyc-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -960,7 +1138,17 @@
       }
 
       .encyc-card.is-earth .encyc-left {
-        background: rgba(124, 224, 195, 0.05);
+        background: transparent;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      /* Earth video inside encyclopedia card */
+      .encyc-earth-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
 
       .encyc-emoji { font-size: 3rem; line-height: 1; display: block; }
@@ -1187,9 +1375,13 @@
           card.className = 'planet-card' + (p.isEarth ? ' is-earth' : '');
           card.style.animationDelay = (i * 60) + 'ms';
 
+          const earthVideoSide = p.isEarth
+            ? `<video class="planet-card-video" src="videos/earth.mp4" autoplay muted loop playsinline></video>`
+            : `<span class="planet-emoji">${p.emoji}</span>`;
+
           card.innerHTML = `
             <div class="planet-card-side">
-              <span class="planet-emoji">${p.emoji}</span>
+              ${earthVideoSide}
             </div>
 
             <div class="planet-card-content">
@@ -1245,12 +1437,12 @@
           const card = document.createElement('div');
           card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '');
           card.style.animationDelay = (i * 70) + 'ms';
+          const encycLeft = p.isEarth
+            ? `<div class="encyc-left"><video class="encyc-earth-video" src="videos/earth.mp4" autoplay muted loop playsinline></video></div>`
+            : `<div class="encyc-left"><span class="encyc-emoji">${p.emoji}</span><p class="encyc-name">${p.name}</p><span class="encyc-type">${p.type}</span></div>`;
+
           card.innerHTML = `
-            <div class="encyc-left">
-              <span class="encyc-emoji">${p.emoji}</span>
-              <p class="encyc-name">${p.name}</p>
-              <span class="encyc-type">${p.type}</span>
-            </div>
+            ${encycLeft}
             <div class="encyc-right">
               <p class="encyc-desc">${p.desc}</p>
             </div>
