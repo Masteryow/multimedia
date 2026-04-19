@@ -771,6 +771,11 @@
         width: 100%;
       }
 
+      /* Earth card spans full row */
+      .planet-card.is-earth {
+        grid-column: 1 / -1;
+      }
+
       .planet-card {
         background: var(--panel);
         border: 1px solid var(--line);
@@ -789,8 +794,8 @@
 
       .planet-card.is-earth {
         border-color: var(--accent);
-        background: rgba(124, 224, 195, 0.04);
-        grid-template-columns: 140px 1fr;
+        background: #05090f;
+        grid-template-columns: 220px 1fr;
       }
 
       /* Left emoji column */
@@ -804,19 +809,23 @@
       }
 
       .planet-card.is-earth .planet-card-side {
-        background: #000c18;
+        background: #05090f;
         padding: 0;
-        min-height: 160px;
+        min-height: 220px;
+        border-right: none;
       }
 
       /* Earth video in calculator card */
       .planet-card-video {
         width: 100%;
         height: 100%;
-        min-height: 160px;
-        object-fit: contain;
+        min-height: 220px;
+        object-fit: cover;
         display: block;
-        background: #000c18;
+      }
+
+      .planet-card.is-earth .planet-card-content {
+        background: #05090f;
       }
 
       /* Right content column */
@@ -918,6 +927,8 @@
 
       @media (max-width: 960px) {
         .planet-grid { grid-template-columns: repeat(2, 1fr); }
+        /* Earth still spans full at 960 */
+        .planet-card.is-earth { grid-column: 1 / -1; }
       }
 
       @media (max-width: 600px) {
@@ -1111,7 +1122,8 @@
 
       .encyc-card.is-earth {
         border-color: var(--accent);
-        background: rgba(124, 224, 195, 0.04);
+        background: #05090f;
+        grid-column: 1 / -1;
       }
 
       .encyc-card.is-earth:hover { border-color: var(--accent-strong); }
@@ -1142,21 +1154,25 @@
       }
 
       .encyc-card.is-earth .encyc-left {
-        background: #000c18;
-        padding: 0.6rem;
+        background: #05090f;
+        padding: 0;
         overflow: hidden;
-        min-height: 180px;
-        align-items: center;
-        justify-content: center;
+        min-height: 240px;
+        width: 45%;
+        border-right: none;
       }
 
       /* Earth video inside encyclopedia card */
       .encyc-earth-video {
         width: 100%;
         height: 100%;
-        max-height: 200px;
-        object-fit: contain;
+        min-height: 240px;
+        object-fit: cover;
         display: block;
+      }
+
+      .encyc-card.is-earth .encyc-right {
+        background: #05090f;
       }
 
       .encyc-emoji { font-size: 3rem; line-height: 1; display: block; }
@@ -1228,6 +1244,8 @@
 
       @media (max-width: 960px) {
         .encyc-grid { grid-template-columns: repeat(2, 1fr); }
+        /* Earth still spans full at 960 */
+        .encyc-card.is-earth { grid-column: 1 / -1; }
       }
 
       /* Tablet + mobile: 1 column, card stacks vertically */
