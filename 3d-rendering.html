@@ -931,6 +931,22 @@
         .planet-emoji { font-size: 2rem; }
       }
 
+      /* Mobile: Earth calculator card stacks vertically */
+      @media (max-width: 720px) {
+        .planet-card.is-earth {
+          grid-template-columns: 1fr;
+        }
+        .planet-card.is-earth .planet-card-side {
+          width: 100%;
+          min-height: 220px;
+          border-right: none;
+          border-bottom: 1px solid rgba(124, 224, 195, 0.2);
+        }
+        .planet-card-video {
+          min-height: 220px;
+        }
+      }
+
       /* ── Planet Encyclopedia ── */
       .encyc-section {
         padding: 0 2rem 4rem;
@@ -1265,6 +1281,21 @@
           padding: 1rem 1.2rem;
           border-right: none;
           border-bottom: 1px solid var(--line);
+        }
+
+        /* Earth encyclopedia card on mobile: full-width video on top */
+        .encyc-card.is-earth .encyc-left {
+          width: 100%;
+          min-height: 220px;
+          padding: 0;
+          border-bottom: 1px solid rgba(124, 224, 195, 0.2);
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .encyc-earth-video {
+          min-height: 220px;
+          max-height: 260px;
         }
 
         .encyc-emoji { font-size: 2rem; }
