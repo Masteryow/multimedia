@@ -790,6 +790,7 @@
       .planet-card.is-earth {
         border-color: var(--accent);
         background: rgba(124, 224, 195, 0.04);
+        grid-template-columns: 140px 1fr;
       }
 
       /* Left emoji column */
@@ -803,16 +804,19 @@
       }
 
       .planet-card.is-earth .planet-card-side {
-        background: transparent;
+        background: #000c18;
         padding: 0;
+        min-height: 160px;
       }
 
       /* Earth video in calculator card */
       .planet-card-video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        min-height: 160px;
+        object-fit: contain;
         display: block;
+        background: #000c18;
       }
 
       /* Right content column */
@@ -1114,7 +1118,7 @@
 
       /* Left emoji panel */
       .encyc-left {
-        width: 50%;
+        width: 42%;
         -ms-flex-negative: 0;
         flex-shrink: 0;
         display: -webkit-box;
@@ -1138,16 +1142,20 @@
       }
 
       .encyc-card.is-earth .encyc-left {
-        background: transparent;
-        padding: 0;
+        background: #000c18;
+        padding: 0.6rem;
         overflow: hidden;
+        min-height: 180px;
+        align-items: center;
+        justify-content: center;
       }
 
       /* Earth video inside encyclopedia card */
       .encyc-earth-video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        max-height: 200px;
+        object-fit: contain;
         display: block;
       }
 
@@ -1190,10 +1198,25 @@
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
         min-width: 0;
+      }
+
+      .encyc-earth-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.2rem;
+      }
+
+      .encyc-earth-header .encyc-name {
+        text-align: left;
       }
 
       .encyc-desc {
@@ -1441,9 +1464,14 @@
             ? `<div class="encyc-left"><video class="encyc-earth-video" src="videos/earth.mp4" autoplay muted loop playsinline></video></div>`
             : `<div class="encyc-left"><span class="encyc-emoji">${p.emoji}</span><p class="encyc-name">${p.name}</p><span class="encyc-type">${p.type}</span></div>`;
 
+          const earthNameRow = p.isEarth
+            ? `<div class="encyc-earth-header"><p class="encyc-name" style="font-size:1rem;margin-bottom:0.25rem;">${p.name}</p><span class="encyc-type">${p.type}</span></div>`
+            : '';
+
           card.innerHTML = `
             ${encycLeft}
             <div class="encyc-right">
+              ${earthNameRow}
               <p class="encyc-desc">${p.desc}</p>
             </div>
           `;
