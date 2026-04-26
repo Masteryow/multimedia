@@ -663,34 +663,39 @@
     </footer>
     <script src="script.js"></script>
     <script>
-      /* ── Hover-to-play for rotoscope video cards ── */
+      /* ── Hover-to-play: grid cards + hero + reference ── */
       (function () {
-        const cards = document.querySelectorAll('.video-card-embed iframe');
 
-        cards.forEach(function (iframe) {
-          // Append enablejsapi + mute so YouTube accepts postMessage commands
-          // (mute=1 is required by browser autoplay policy)
+        function enableHover(iframe, hoverTarget) {
+          if (!iframe || !hoverTarget) return;
           if (!iframe.src.includes('enablejsapi')) {
             iframe.src += '&enablejsapi=1&mute=1';
           }
-
-          const card = iframe.closest('.video-card');
-          if (!card) return;
-
-          card.addEventListener('mouseenter', function () {
+          hoverTarget.addEventListener('mouseenter', function () {
             iframe.contentWindow.postMessage(
-              JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
-              '*'
+              JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*'
             );
           });
-
-          card.addEventListener('mouseleave', function () {
+          hoverTarget.addEventListener('mouseleave', function () {
             iframe.contentWindow.postMessage(
-              JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }),
-              '*'
+              JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*'
             );
           });
+        }
+
+        // 12-card grid
+        document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
+          enableHover(iframe, iframe.closest('.video-card'));
         });
+
+        // Hero featured video
+        var heroIframe = document.querySelector('.featured-embed-wrap iframe');
+        enableHover(heroIframe, document.querySelector('.featured-embed-wrap'));
+
+        // Reference video
+        var refIframe = document.querySelector('.ref-video iframe');
+        enableHover(refIframe, document.querySelector('.ref-card'));
+
       })();
     </script>
   </body>
