@@ -790,6 +790,9 @@
       .planet-card.is-earth {
         border-color: var(--accent);
         background: #05090f;
+      }
+
+      .planet-card.has-video {
         grid-template-columns: 45% 1fr;
       }
 
@@ -803,14 +806,14 @@
         padding: 0.8rem 0;
       }
 
-      .planet-card.is-earth .planet-card-side {
+      .planet-card.has-video .planet-card-side {
         background: #05090f;
         padding: 0;
         min-height: 240px;
         border-right: none;
       }
 
-      /* Earth video in calculator card */
+      /* Planet video in calculator card */
       .planet-card-video {
         width: 100%;
         height: 100%;
@@ -820,7 +823,7 @@
         background: #05090f;
       }
 
-      .planet-card.is-earth .planet-card-content {
+      .planet-card.has-video .planet-card-content {
         background: #05090f;
       }
 
@@ -933,22 +936,25 @@
 
       /* Mobile: Earth calculator card stacks vertically */
       @media (max-width: 720px) {
-        .planet-card.is-earth {
+        .planet-card.has-video {
           display: flex;
           flex-direction: column;
         }
-        .planet-card.is-earth .planet-card-side {
+        .planet-card.has-video .planet-card-side {
           width: 100%;
           min-height: 220px;
           border-right: none;
-          border-bottom: 1px solid rgba(124, 224, 195, 0.2);
+          border-bottom: 1px solid var(--line);
+        }
+        .planet-card.is-earth .planet-card-side {
+          border-bottom-color: rgba(124, 224, 195, 0.2);
         }
         .planet-card-video {
           width: 100%;
           height: 220px;
           object-fit: contain;
         }
-        .planet-card.is-earth .planet-card-content {
+        .planet-card.has-video .planet-card-content {
           width: 100%;
         }
       }
@@ -1166,7 +1172,7 @@
         box-sizing: border-box;
       }
 
-      .encyc-card.is-earth .encyc-left {
+      .encyc-card.has-video .encyc-left {
         background: #05090f;
         padding: 0;
         overflow: hidden;
@@ -1175,7 +1181,8 @@
         border-right: none;
       }
 
-      /* Earth video inside encyclopedia card */
+      /* Planet video inside encyclopedia card */
+      .encyc-planet-video,
       .encyc-earth-video {
         width: 100%;
         height: 100%;
@@ -1184,7 +1191,7 @@
         display: block;
       }
 
-      .encyc-card.is-earth .encyc-right {
+      .encyc-card.has-video .encyc-right {
         background: #05090f;
       }
 
@@ -1289,16 +1296,21 @@
           border-bottom: 1px solid var(--line);
         }
 
-        /* Earth encyclopedia card on mobile: full-width video on top */
-        .encyc-card.is-earth .encyc-left {
+        /* Planet encyclopedia card on mobile: full-width video on top */
+        .encyc-card.has-video .encyc-left {
           width: 100%;
           min-height: 220px;
           padding: 0;
-          border-bottom: 1px solid rgba(124, 224, 195, 0.2);
+          border-bottom: 1px solid var(--line);
           flex-direction: column;
           justify-content: center;
         }
 
+        .encyc-card.is-earth .encyc-left {
+          border-bottom-color: rgba(124, 224, 195, 0.2);
+        }
+
+        .encyc-planet-video,
         .encyc-earth-video {
           min-height: 220px;
           max-height: 260px;
@@ -1324,101 +1336,74 @@
       const PLANETS = [
         {
           name: 'Mercury', emoji: '🪨', type: 'Terrestrial',
-          orbitalYears: 0.2408,
-          orbitalDays: 87.97,
-          tempRange: '-180°C to 430°C',
-          distanceKm: '57.9 million km',
-          dayLength: '58.6 Earth days',
-          gravity: '0.38g',
-          isEarth: false,
+          orbitalYears: 0.2408, orbitalDays: 87.97,
+          tempRange: '-180°C to 430°C', distanceKm: '57.9 million km',
+          dayLength: '58.6 Earth days', gravity: '0.38g',
+          isEarth: false, video: 'mercury.mp4',
           desc: 'The smallest planet and closest to the Sun. With no atmosphere to retain heat, Mercury swings from -180°C at night to 430°C during the day — the most extreme temperature range in the Solar System.'
         },
         {
           name: 'Venus', emoji: '🌕', type: 'Terrestrial',
-          orbitalYears: 0.6152,
-          orbitalDays: 224.7,
-          tempRange: '~465°C (avg)',
-          distanceKm: '108.2 million km',
-          dayLength: '243 Earth days',
-          gravity: '0.91g',
-          isEarth: false,
+          orbitalYears: 0.6152, orbitalDays: 224.7,
+          tempRange: '~465°C (avg)', distanceKm: '108.2 million km',
+          dayLength: '243 Earth days', gravity: '0.91g',
+          isEarth: false, video: 'venus.mp4',
           desc: 'The hottest planet despite not being the closest to the Sun. A thick CO₂ atmosphere traps heat in a runaway greenhouse effect. A day on Venus is longer than its year, and it rotates backwards.'
         },
         {
           name: 'Earth', emoji: '🌍', type: 'Terrestrial',
-          orbitalYears: 1,
-          orbitalDays: 365.25,
-          tempRange: '-89°C to 57°C',
-          distanceKm: '149.6 million km',
-          dayLength: '24 hours',
-          gravity: '1.00g',
-          isEarth: true,
+          orbitalYears: 1, orbitalDays: 365.25,
+          tempRange: '-89°C to 57°C', distanceKm: '149.6 million km',
+          dayLength: '24 hours', gravity: '1.00g',
+          isEarth: true, video: 'earth.mp4',
           desc: 'The only known planet to harbor life. Earth has liquid water, a protective magnetic field, and a nitrogen-oxygen atmosphere that makes complex life possible. It is the densest planet in the Solar System.'
         },
         {
           name: 'Mars', emoji: '🔴', type: 'Terrestrial',
-          orbitalYears: 1.8808,
-          orbitalDays: 686.97,
-          tempRange: '-125°C to 20°C',
-          distanceKm: '227.9 million km',
-          dayLength: '24 hrs 37 min',
-          gravity: '0.38g',
-          isEarth: false,
+          orbitalYears: 1.8808, orbitalDays: 686.97,
+          tempRange: '-125°C to 20°C', distanceKm: '227.9 million km',
+          dayLength: '24 hrs 37 min', gravity: '0.38g',
+          isEarth: false, video: null,
           desc: 'Known as the Red Planet due to iron oxide on its surface. Mars is home to Olympus Mons, the tallest volcano in the Solar System at 22 km high. Evidence suggests it once had liquid water.'
         },
         {
           name: 'Jupiter', emoji: '🟠', type: 'Gas Giant',
-          orbitalYears: 11.862,
-          orbitalDays: 4331,
-          tempRange: '~-110°C (cloud top)',
-          distanceKm: '778.5 million km',
-          dayLength: '9 hrs 56 min',
-          gravity: '2.53g',
-          isEarth: false,
+          orbitalYears: 11.862, orbitalDays: 4331,
+          tempRange: '~-110°C (cloud top)', distanceKm: '778.5 million km',
+          dayLength: '9 hrs 56 min', gravity: '2.53g',
+          isEarth: false, video: 'jupiter.mp4',
           desc: 'The largest planet — more than twice the mass of all other planets combined. Its Great Red Spot is a storm wider than Earth that has been raging for over 350 years. Jupiter has 95 known moons.'
         },
         {
           name: 'Saturn', emoji: '🪐', type: 'Gas Giant',
-          orbitalYears: 29.457,
-          orbitalDays: 10747,
-          tempRange: '~-140°C (cloud top)',
-          distanceKm: '1.43 billion km',
-          dayLength: '10 hrs 42 min',
-          gravity: '1.07g',
-          isEarth: false,
+          orbitalYears: 29.457, orbitalDays: 10747,
+          tempRange: '~-140°C (cloud top)', distanceKm: '1.43 billion km',
+          dayLength: '10 hrs 42 min', gravity: '1.07g',
+          isEarth: false, video: 'saturn.mp4',
           desc: 'Famous for its iconic ring system made of ice and rock particles spanning 282,000 km. Saturn is the least dense planet — it would float on water. It has 146 known moons, including Titan with a thick atmosphere.'
         },
         {
           name: 'Uranus', emoji: '🔵', type: 'Ice Giant',
-          orbitalYears: 84.011,
-          orbitalDays: 30589,
-          tempRange: '~-195°C (cloud top)',
-          distanceKm: '2.87 billion km',
-          dayLength: '17 hrs 14 min',
-          gravity: '0.89g',
-          isEarth: false,
+          orbitalYears: 84.011, orbitalDays: 30589,
+          tempRange: '~-195°C (cloud top)', distanceKm: '2.87 billion km',
+          dayLength: '17 hrs 14 min', gravity: '0.89g',
+          isEarth: false, video: 'uranus.mp4',
           desc: 'An ice giant that rotates on its side with an axial tilt of 98° — likely caused by a massive collision long ago. It is the coldest planetary atmosphere in the Solar System at -224°C.'
         },
         {
           name: 'Neptune', emoji: '🌀', type: 'Ice Giant',
-          orbitalYears: 164.8,
-          orbitalDays: 60182,
-          tempRange: '~-200°C (cloud top)',
-          distanceKm: '4.50 billion km',
-          dayLength: '16 hrs 6 min',
-          gravity: '1.14g',
-          isEarth: false,
+          orbitalYears: 164.8, orbitalDays: 60182,
+          tempRange: '~-200°C (cloud top)', distanceKm: '4.50 billion km',
+          dayLength: '16 hrs 6 min', gravity: '1.14g',
+          isEarth: false, video: 'neptune.mp4',
           desc: 'The windiest planet, with supersonic storms reaching 2,100 km/h. Neptune was the first planet predicted mathematically before being directly observed. Its largest moon Triton orbits in the opposite direction.'
         },
         {
           name: 'Pluto', emoji: '🌑', type: 'Dwarf Planet',
-          orbitalYears: 248.09,
-          orbitalDays: 90560,
-          tempRange: '-233°C to -223°C',
-          distanceKm: '5.91 billion km',
-          dayLength: '6.4 Earth days',
-          gravity: '0.063g',
-          isEarth: false,
+          orbitalYears: 248.09, orbitalDays: 90560,
+          tempRange: '-233°C to -223°C', distanceKm: '5.91 billion km',
+          dayLength: '6.4 Earth days', gravity: '0.063g',
+          isEarth: false, video: 'pluto.mp4',
           desc: 'A dwarf planet in the Kuiper Belt, reclassified from a planet in 2006. It has a heart-shaped nitrogen ice plain called Tombaugh Regio. Pluto has five moons, with Charon being so large the two form a binary system.'
         }
       ];
@@ -1439,11 +1424,11 @@
               : age.toFixed(1);
 
           const card = document.createElement('div');
-          card.className = 'planet-card' + (p.isEarth ? ' is-earth' : '');
+          card.className = 'planet-card' + (p.isEarth ? ' is-earth' : '') + (p.video ? ' has-video' : '');
           card.style.animationDelay = (i * 60) + 'ms';
 
-          const earthVideoSide = p.isEarth
-            ? `<video class="planet-card-video" src="videos/earth.mp4" autoplay muted loop playsinline></video>`
+          const earthVideoSide = p.video
+            ? `<video class="planet-card-video" src="videos/${p.video}" autoplay muted loop playsinline></video>`
             : `<span class="planet-emoji">${p.emoji}</span>`;
 
           card.innerHTML = `
@@ -1502,13 +1487,13 @@
         grid.innerHTML = '';
         PLANETS.forEach((p, i) => {
           const card = document.createElement('div');
-          card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '');
+          card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '') + (p.video ? ' has-video' : '');
           card.style.animationDelay = (i * 70) + 'ms';
-          const encycLeft = p.isEarth
-            ? `<div class="encyc-left"><video class="encyc-earth-video" src="videos/earth.mp4" autoplay muted loop playsinline></video></div>`
+          const encycLeft = p.video
+            ? `<div class="encyc-left"><video class="encyc-planet-video" src="videos/${p.video}" autoplay muted loop playsinline></video></div>`
             : `<div class="encyc-left"><span class="encyc-emoji">${p.emoji}</span><p class="encyc-name">${p.name}</p><span class="encyc-type">${p.type}</span></div>`;
 
-          const earthNameRow = p.isEarth
+          const earthNameRow = p.video
             ? `<div class="encyc-earth-header"><p class="encyc-name" style="font-size:1rem;margin-bottom:0.25rem;">${p.name}</p><span class="encyc-type">${p.type}</span></div>`
             : '';
 
