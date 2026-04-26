@@ -662,5 +662,36 @@
       <span class="footer-copy">&copy; 2026 All rights reserved.</span>
     </footer>
     <script src="script.js"></script>
+    <script>
+      /* ── Hover-to-play for rotoscope video cards ── */
+      (function () {
+        const cards = document.querySelectorAll('.video-card-embed iframe');
+
+        cards.forEach(function (iframe) {
+          // Append enablejsapi + mute so YouTube accepts postMessage commands
+          // (mute=1 is required by browser autoplay policy)
+          if (!iframe.src.includes('enablejsapi')) {
+            iframe.src += '&enablejsapi=1&mute=1';
+          }
+
+          const card = iframe.closest('.video-card');
+          if (!card) return;
+
+          card.addEventListener('mouseenter', function () {
+            iframe.contentWindow.postMessage(
+              JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+              '*'
+            );
+          });
+
+          card.addEventListener('mouseleave', function () {
+            iframe.contentWindow.postMessage(
+              JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }),
+              '*'
+            );
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
