@@ -391,11 +391,15 @@
         <div class="specs-bar" id="specs">
           <div class="spec-item">
             <span class="spec-label">Software</span>
-            <span class="spec-value">Blender</span>
+            <span class="spec-value">Blender 5.1</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Scripting</span>
+            <span class="spec-value">Python (bpy)</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Render Engine</span>
-            <span class="spec-value">Cycles</span>
+            <span class="spec-value">Cycles (GPU)</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">GPU</span>
@@ -437,7 +441,7 @@
         <div class="steps-header reveal">
           <p class="eyebrow">Production Breakdown</p>
           <h2>How it was made — step by step</h2>
-          <p>A walkthrough of the full pipeline from scene setup to final render, done entirely in Blender using the Cycles render engine.</p>
+          <p>A walkthrough of the full pipeline from scene setup to final render, built in Blender 5.1 using the Cycles render engine and automated with a custom Python script via the bpy API.</p>
         </div>
 
         <div class="step-list">
@@ -446,7 +450,7 @@
             <div class="step-number">01</div>
             <div class="step-body">
               <h3>Scene Setup &amp; Reference Gathering</h3>
-              <p>Started by collecting NASA reference images of each planet — surface textures, color palettes, and size ratios. Set up a new Blender scene with a black HDRI background to simulate deep space.</p>
+              <p>Opened Blender 5.1 and configured a new scene with a black HDRI background to simulate deep space. Collected NASA reference images for each planet — surface textures, color palettes, and relative size ratios — to guide the Python script's planet definitions.</p>
               <span class="step-tag">Scene</span>
             </div>
           </div>
@@ -454,9 +458,9 @@
           <div class="step-card reveal">
             <div class="step-number">02</div>
             <div class="step-body">
-              <h3>Planet Modelling &amp; Scaling</h3>
-              <p>Each planet was created as a UV sphere. Scaled using approximate relative sizes (Jupiter ~11× Earth). Rings for Saturn were modelled as a torus and subdivided for smoothness.</p>
-              <span class="step-tag">Modelling</span>
+              <h3>Python Script — Planet Generation</h3>
+              <p>Wrote a Python script using Blender's <code>bpy</code> API to procedurally generate all planets as UV spheres with correct relative scales (Jupiter ~11× Earth). The script automated object naming, placement along orbital distances, and Saturn's ring torus — eliminating repetitive manual work.</p>
+              <span class="step-tag">Scripting</span>
             </div>
           </div>
 
@@ -464,7 +468,7 @@
             <div class="step-number">03</div>
             <div class="step-body">
               <h3>UV Unwrapping &amp; Texture Mapping</h3>
-              <p>Applied spherical UV unwrap to each planet. Imported NASA texture maps (diffuse/albedo) and projected them using Blender's Image Texture node in the Shader Editor. Used a Mapping node to correct stretching at poles.</p>
+              <p>The script applied spherical UV unwraps to each planet programmatically. NASA diffuse/albedo texture maps were loaded via <code>bpy.ops.image.open()</code> and assigned through Image Texture nodes in the Shader Editor, with Mapping nodes to correct polar stretching.</p>
               <span class="step-tag">Texturing</span>
             </div>
           </div>
@@ -473,7 +477,7 @@
             <div class="step-number">04</div>
             <div class="step-body">
               <h3>Materials &amp; Shader Setup</h3>
-              <p>Each planet used a Principled BSDF shader. The Sun used an Emission shader with an orange/yellow color ramp to simulate solar glow. Saturn's rings used a Transparent BSDF mixed with Principled for opacity control.</p>
+              <p>Planet materials used Principled BSDF shaders, configured in the script via node trees. The Sun received a custom Emission shader with a color ramp for solar glow. Saturn's rings used a Transparent BSDF blended with Principled BSDF for semi-transparent opacity.</p>
               <span class="step-tag">Shading</span>
             </div>
           </div>
@@ -482,7 +486,7 @@
             <div class="step-number">05</div>
             <div class="step-body">
               <h3>Lighting — The Sun as a Light Source</h3>
-              <p>Placed a Point Light inside the Sun mesh with high intensity to cast realistic directional shadows on all planets. Added a small amount of ambient world light (0.05 strength) to keep dark sides slightly visible.</p>
+              <p>A Point Light was placed inside the Sun mesh via script with high intensity to cast realistic directional shadows across all planets. A low-strength ambient world light (0.05) was set to keep the dark sides of planets faintly visible without washing out the scene.</p>
               <span class="step-tag">Lighting</span>
             </div>
           </div>
@@ -490,8 +494,8 @@
           <div class="step-card reveal">
             <div class="step-number">06</div>
             <div class="step-body">
-              <h3>Camera Path &amp; Animation</h3>
-              <p>Created a Bezier curve as a camera path orbiting the Solar System. Used a Follow Path constraint on the camera. Each planet was keyframed rotating on its own axis at different speeds to match real orbital periods scaled down.</p>
+              <h3>Python Script — Orbital Animation</h3>
+              <p>The script automated keyframe insertion for each planet's axial rotation and orbital motion using <code>bpy.ops.anim.keyframe_insert()</code>. Orbital speeds were derived from real planetary periods, scaled down proportionally. The camera was constrained to a Bezier curve path for a smooth orbit fly-through.</p>
               <span class="step-tag">Animation</span>
             </div>
           </div>
@@ -500,7 +504,7 @@
             <div class="step-number">07</div>
             <div class="step-body">
               <h3>Star Field Background</h3>
-              <p>Added a star field using a particle system on a large inverted sphere surrounding the scene. Stars used a point material with an Emission shader. Also tested Blender's World shader with a noise texture for an alternative procedural starfield.</p>
+              <p>A procedural star field was generated using Blender's World shader with a Noise Texture driving an Emission background — set up in the script via node group assignments. This avoided the overhead of a particle system while producing a convincing deep-space environment.</p>
               <span class="step-tag">Environment</span>
             </div>
           </div>
@@ -509,7 +513,7 @@
             <div class="step-number">08</div>
             <div class="step-body">
               <h3>Render Settings &amp; GPU Configuration</h3>
-              <p>Set Render Engine to Cycles. Enabled GPU Compute using the RTX 3050 Ti (CUDA). Samples set to 256 for stills and 128 for animation frames. Enabled Denoising (OptiX) to clean up noise without raising sample count.</p>
+              <p>Render engine set to Cycles with GPU Compute enabled for the RTX 3050 Ti (CUDA) — configured programmatically via <code>bpy.context.scene.cycles</code>. Samples set to 256 for stills and 128 for animation frames, with OptiX denoising enabled to reduce noise without increasing sample count.</p>
               <span class="step-tag">Render Setup</span>
             </div>
           </div>
@@ -518,7 +522,7 @@
             <div class="step-number">09</div>
             <div class="step-body">
               <h3>Post-Processing in Blender Compositor</h3>
-              <p>Used Blender's built-in Compositor to add a subtle Bloom (Glare node) around the Sun and bright stars. Applied a slight color grade using Color Balance — cooled down shadows and warmed midtones for a cinematic space look.</p>
+              <p>Used Blender 5.1's Compositor to add a Glare node (Fog Glow) around the Sun and bright stars for a bloom effect. Color Balance node applied a cinematic grade — cooled shadows and warmed midtones. Node layout was partially automated through the Python script.</p>
               <span class="step-tag">Compositing</span>
             </div>
           </div>
@@ -527,7 +531,7 @@
             <div class="step-number">10</div>
             <div class="step-body">
               <h3>Final Export</h3>
-              <p>Rendered as an image sequence (PNG, 1920×1080) then compiled into an MP4 using FFmpeg via Blender's Video Sequence Editor. Output at 24fps with H.264 encoding for web playback.</p>
+              <p>Rendered as a PNG image sequence (1920×1080) and compiled into MP4 using Blender's Video Sequence Editor with FFmpeg / H.264 encoding at 24 fps. The script set output paths and format settings automatically before the render batch was launched.</p>
               <span class="step-tag">Export</span>
             </div>
           </div>
@@ -545,7 +549,7 @@
             <h3>Render Specifications</h3>
             <div class="info-row">
               <span class="info-key">Software</span>
-              <span class="info-val">Blender 4.x</span>
+              <span class="info-val">Blender 5.1</span>
             </div>
             <div class="info-row">
               <span class="info-key">Render Engine</span>
@@ -583,16 +587,20 @@
               <span class="info-key">Output Format</span>
               <span class="info-val">MP4 / H.264</span>
             </div>
+            <div class="info-row">
+              <span class="info-key">Scripting</span>
+              <span class="info-val">Python 3 · bpy API</span>
+            </div>
           </div>
 
           <!-- Project Notes -->
           <div class="info-panel reveal" id="project-notes">
             <h3>Project Notes</h3>
             <p class="info-note">
-              <strong>Project goal:</strong> Recreate a visually accurate Solar System in 3D as a multimedia project, covering modelling, texturing, lighting, animation, and rendering fundamentals.<br><br>
-              <strong>Challenges:</strong> Managing the extreme scale differences between planets while keeping all objects visible in a single scene required creative scaling. The Saturn ring transparency took multiple shader iterations to get right.<br><br>
-              <strong>Learning outcomes:</strong> This project covered the full Blender production pipeline — from mesh creation and UV mapping through to Cycles GPU rendering, compositing, and video export. The OptiX denoiser significantly reduced render time without sacrificing visual quality on the RTX 3050 Ti.<br><br>
-              <strong>Time spent:</strong> Approximately 12–15 hours across modelling, texturing, lighting, and rendering sessions.
+              <strong>Project goal:</strong> Recreate a visually accurate Solar System in 3D using Blender 5.1, automating the scene construction with a custom Python script via the <code>bpy</code> API — covering scripted modelling, texturing, lighting, orbital animation, and GPU rendering.<br><br>
+              <strong>Challenges:</strong> Managing extreme scale differences between planets while keeping all objects visible in one scene required creative proportional scaling in the script. Achieving correct orbital motion via programmatic keyframing — and getting Saturn's ring transparency right through node tree scripting — took the most iteration.<br><br>
+              <strong>Learning outcomes:</strong> Gained hands-on experience with Blender 5.1's Python API (<code>bpy</code>) for procedural scene generation, shader node automation, and render configuration. The project covered the full pipeline from scripted mesh creation through Cycles GPU rendering with OptiX denoising, compositing, and final video export.<br><br>
+              <strong>Time spent:</strong> Approximately 12–15 hours across script development, texturing, lighting tweaks, and rendering sessions.
             </p>
           </div>
 
