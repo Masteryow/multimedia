@@ -416,7 +416,7 @@
         margin-top: 0.1rem;
       }
 
-      .step-content { flex: 1; min-width: 0; }
+      .step-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
       .step-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem; }
       .step-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.65; margin: 0; }
 
@@ -461,12 +461,10 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        margin: 0.9rem 0 0;
+        margin-top: 0.9rem;
         padding: 1.5rem;
-        width: 100%;
         min-height: 160px;
         box-sizing: border-box;
-        align-self: stretch;
         border: 2px dashed rgba(121, 167, 255, 0.3);
         border-radius: var(--radius-md);
         background: rgba(121, 167, 255, 0.03);
