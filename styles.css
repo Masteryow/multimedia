@@ -586,3 +586,53 @@ p { margin: 0; color: var(--text); }
   .quick-links { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ── Scroll buttons ── */
+.scroll-btns {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.scroll-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--accent-2);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s, opacity 0.25s;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  font-family: inherit;
+}
+
+.scroll-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-btn:hover {
+  background: rgba(121, 167, 255, 0.12);
+  border-color: var(--accent-2);
+  transform: translateY(-2px);
+}
+
+.scroll-btn:active {
+  transform: scale(0.93);
+}
+
+@media (max-width: 600px) {
+  .scroll-btns { bottom: 1.2rem; right: 1.2rem; }
+  .scroll-btn { width: 38px; height: 38px; font-size: 1rem; }
+}
+
