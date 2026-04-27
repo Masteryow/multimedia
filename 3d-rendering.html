@@ -620,9 +620,10 @@
         <div class="age-input-row reveal">
           <label class="age-label" for="earth-age">Your age on Earth</label>
           <div class="age-input-wrap">
-            <input id="earth-age" class="age-input" type="number" min="1" max="150" value="25" placeholder="25" />
+            <input id="earth-age" class="age-input" type="number" min="1" max="150" value="25" placeholder="25" autocomplete="off" />
             <button id="calc-btn" class="age-calc-btn">Calculate</button>
           </div>
+          <p class="age-error" id="age-error" role="alert" aria-live="polite"></p>
         </div>
 
         <!-- Planet cards grid -->
@@ -750,6 +751,41 @@
       .age-input:focus {
         outline: none;
         border-color: var(--accent-2);
+      }
+
+      .age-input.is-invalid {
+        border-color: #ff5c7a;
+        background: rgba(255, 92, 122, 0.06);
+        animation: shakeInput 0.35s ease;
+      }
+
+      @keyframes shakeInput {
+        0%   { transform: translateX(0); }
+        20%  { transform: translateX(-6px); }
+        40%  { transform: translateX(6px); }
+        60%  { transform: translateX(-4px); }
+        80%  { transform: translateX(4px); }
+        100% { transform: translateX(0); }
+      }
+
+      .age-error {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #ff5c7a;
+        margin: 0;
+        min-height: 1.2em;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        pointer-events: none;
+      }
+
+      .age-error.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .age-input::-webkit-inner-spin-button,
@@ -1416,9 +1452,39 @@
         }
       ];
 
+      function showError(msg) {
+        const input = document.getElementById('earth-age');
+        const err   = document.getElementById('age-error');
+        input.classList.add('is-invalid');
+        err.textContent = '⚠ ' + msg;
+        err.classList.add('visible');
+        input.addEventListener('input', function clearErr() {
+          input.classList.remove('is-invalid');
+          err.classList.remove('visible');
+          setTimeout(() => { err.textContent = ''; }, 210);
+          input.removeEventListener('input', clearErr);
+        });
+      }
+
       function calcAndRender() {
-        const earthAge = parseFloat(document.getElementById('earth-age').value);
-        if (isNaN(earthAge) || earthAge <= 0) return;
+        const raw = document.getElementById('earth-age').value.trim();
+        const earthAge = parseFloat(raw);
+
+        if (raw === '' || isNaN(earthAge)) {
+          showError('Please enter a valid number.');
+          return;
+        }
+        if (earthAge <= 0) {
+          showError('Age must be greater than 0.');
+          return;
+        }
+        if (earthAge > 150) {
+          showError('Please enter an age of 150 or below.');
+          return;
+        }
+        if (!Number.isInteger(earthAge) && String(raw).includes('.')) {
+          // decimals are fine — just clear any previous error silently
+        }
 
         const grid = document.getElementById('planet-grid');
         grid.innerHTML = '';
