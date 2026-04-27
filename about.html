@@ -686,6 +686,7 @@
         const val = document.getElementById('cf-name').value.trim();
         if (!val) { cfSetError('cf-name', 'err-name', 'Full name is required.'); return false; }
         if (val.length < 2) { cfSetError('cf-name', 'err-name', 'Name must be at least 2 characters.'); return false; }
+        if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s'\-\.]+$/.test(val)) { cfSetError('cf-name', 'err-name', 'Name must contain letters only — no numbers or symbols.'); return false; }
         cfSetValid('cf-name', 'err-name'); return true;
       }
 
