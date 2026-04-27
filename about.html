@@ -607,12 +607,12 @@
             <div class="cf-row">
               <div class="cf-field">
                 <label class="cf-label" for="cf-name">Full Name <span class="cf-req">*</span></label>
-                <input class="cf-input" id="cf-name" type="text" placeholder="e.g. Kelly Roduta" maxlength="80" autocomplete="name" />
+                <input class="cf-input" id="cf-name" name="name" type="text" placeholder="e.g. Kelly Roduta" maxlength="80" autocomplete="name" />
                 <p class="cf-error" id="err-name" role="alert" aria-live="polite"></p>
               </div>
               <div class="cf-field">
                 <label class="cf-label" for="cf-email">Email Address <span class="cf-req">*</span></label>
-                <input class="cf-input" id="cf-email" type="email" placeholder="e.g. kelly@email.com" maxlength="120" autocomplete="email" />
+                <input class="cf-input" id="cf-email" name="email" type="email" placeholder="e.g. kelly@email.com" maxlength="120" autocomplete="email" />
                 <p class="cf-error" id="err-email" role="alert" aria-live="polite"></p>
               </div>
             </div>
@@ -620,14 +620,14 @@
             <!-- Subject -->
             <div class="cf-field">
               <label class="cf-label" for="cf-subject">Subject <span class="cf-req">*</span></label>
-              <input class="cf-input" id="cf-subject" type="text" placeholder="e.g. Feedback on 3D rendering project" maxlength="120" />
+              <input class="cf-input" id="cf-subject" name="subject" type="text" placeholder="e.g. Feedback on 3D rendering project" maxlength="120" />
               <p class="cf-error" id="err-subject" role="alert" aria-live="polite"></p>
             </div>
 
             <!-- Message -->
             <div class="cf-field">
               <label class="cf-label" for="cf-message">Message <span class="cf-req">*</span></label>
-              <textarea class="cf-input cf-textarea" id="cf-message" rows="5" placeholder="Write your message here (at least 20 characters)..." maxlength="1000"></textarea>
+              <textarea class="cf-input cf-textarea" id="cf-message" name="message" rows="5" placeholder="Write your message here (at least 20 characters)..." maxlength="1000"></textarea>
               <div class="cf-meta-row">
                 <p class="cf-error" id="err-message" role="alert" aria-live="polite"></p>
                 <span class="cf-char-count" id="cf-char-count">0 / 1000</span>
@@ -735,26 +735,48 @@
         document.getElementById('cf-char-count').textContent = len + ' / 1000';
       });
 
-      /* Submit */
-      document.getElementById('contact-form').addEventListener('submit', (e) => {
+      /* Submit — sends to Formspree */
+      document.getElementById('contact-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const ok = [validateName(), validateEmail(), validateSubject(), validateMessage()].every(Boolean);
         if (!ok) return;
 
-        /* Simulate success (static site — no server) */
         const btn = document.getElementById('cf-submit');
         btn.textContent = 'Sending…';
         btn.disabled = true;
-        setTimeout(() => {
-          document.getElementById('contact-form').reset();
-          document.getElementById('cf-char-count').textContent = '0 / 1000';
-          ['cf-name','cf-email','cf-subject','cf-message'].forEach(id => cfClear(id, 'err-' + id.replace('cf-','')));
+
+        const data = {
+          name:    document.getElementById('cf-name').value.trim(),
+          email:   document.getElementById('cf-email').value.trim(),
+          subject: document.getElementById('cf-subject').value.trim(),
+          message: document.getElementById('cf-message').value.trim()
+        };
+
+        try {
+          const res = await fetch('https://formspree.io/f/meevwgvd', {
+            method:  'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body:    JSON.stringify(data)
+          });
+
+          if (res.ok) {
+            document.getElementById('contact-form').reset();
+            document.getElementById('cf-char-count').textContent = '0 / 1000';
+            ['cf-name','cf-email','cf-subject','cf-message'].forEach(id => cfClear(id, 'err-' + id.replace('cf-','')));
+            const toast = document.getElementById('cf-toast');
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 5000);
+          } else {
+            const json = await res.json().catch(() => ({}));
+            const msg  = (json.errors && json.errors[0] && json.errors[0].message) || 'Submission failed. Please try again.';
+            alert('⚠ ' + msg);
+          }
+        } catch (err) {
+          alert('⚠ Network error. Please check your connection and try again.');
+        } finally {
           btn.textContent = 'Send Message ✈';
           btn.disabled = false;
-          const toast = document.getElementById('cf-toast');
-          toast.classList.add('visible');
-          setTimeout(() => toast.classList.remove('visible'), 4000);
-        }, 800);
+        }
       });
     </script>
   </body>
