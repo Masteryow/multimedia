@@ -613,17 +613,33 @@
         <div class="age-calc-header reveal">
           <p class="eyebrow">🪐 Interactive Tool</p>
           <h2>Planet Age Calculator</h2>
-          <p>Enter your age in Earth years and see how old you would be on every planet in the Solar System.</p>
+          <p>Enter your age in Earth years — or switch to Date of Birth mode for an exact calculation.</p>
+
+          <!-- Mode toggle -->
+          <div class="calc-mode-toggle" role="group" aria-label="Input mode">
+            <button class="mode-btn active" id="mode-age" aria-pressed="true">Age</button>
+            <button class="mode-btn" id="mode-dob" aria-pressed="false">Date of Birth</button>
+          </div>
         </div>
 
-        <!-- Input -->
-        <div class="age-input-row reveal">
+        <!-- Age input panel -->
+        <div class="age-input-row reveal" id="panel-age">
           <label class="age-label" for="earth-age">Your age on Earth</label>
           <div class="age-input-wrap">
             <input id="earth-age" class="age-input" type="number" min="1" max="150" value="25" placeholder="25" autocomplete="off" />
             <button id="calc-btn" class="age-calc-btn">Calculate</button>
           </div>
           <p class="age-error" id="age-error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- DOB input panel -->
+        <div class="age-input-row reveal" id="panel-dob" style="display:none">
+          <label class="age-label" for="dob-input">Your date of birth</label>
+          <div class="age-input-wrap">
+            <input id="dob-input" class="age-input dob-input" type="date" autocomplete="bday" />
+            <button id="dob-calc-btn" class="age-calc-btn">Calculate</button>
+          </div>
+          <p class="age-error" id="dob-error" role="alert" aria-live="polite"></p>
         </div>
 
         <!-- Planet cards grid -->
@@ -786,6 +802,43 @@
       .age-error.visible {
         opacity: 1;
         transform: translateY(0);
+      }
+
+      /* Mode toggle */
+      .calc-mode-toggle {
+        display: inline-flex;
+        margin-top: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        overflow: hidden;
+        background: var(--panel);
+      }
+
+      .mode-btn {
+        background: none;
+        border: none;
+        padding: 0.38rem 1.1rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: inherit;
+        transition: background 0.18s, color 0.18s;
+        border-radius: 99px;
+      }
+
+      .mode-btn.active {
+        background: var(--accent-2);
+        color: #0a0c12;
+      }
+
+      /* DOB date input */
+      .dob-input {
+        width: auto;
+        min-width: 160px;
+        font-size: 0.97rem;
+        color-scheme: dark;
       }
 
       .age-input::-webkit-inner-spin-button,
@@ -1482,10 +1535,10 @@
           showError('Please enter an age of 150 or below.');
           return;
         }
-        if (!Number.isInteger(earthAge) && String(raw).includes('.')) {
-          // decimals are fine — just clear any previous error silently
-        }
+        calcAndRenderWithAge(earthAge);
+      }
 
+      function calcAndRenderWithAge(earthAge) {
         const grid = document.getElementById('planet-grid');
         grid.innerHTML = '';
 
@@ -1553,6 +1606,67 @@
       document.getElementById('calc-btn').addEventListener('click', calcAndRender);
       document.getElementById('earth-age').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') calcAndRender();
+      });
+
+      /* ── DOB mode ── */
+      function showDobError(msg) {
+        const input = document.getElementById('dob-input');
+        const err   = document.getElementById('dob-error');
+        input.classList.add('is-invalid');
+        err.textContent = '⚠ ' + msg;
+        err.classList.add('visible');
+        input.addEventListener('change', function clearErr() {
+          input.classList.remove('is-invalid');
+          err.classList.remove('visible');
+          setTimeout(() => { err.textContent = ''; }, 210);
+          input.removeEventListener('change', clearErr);
+        });
+      }
+
+      function calcFromDOB() {
+        const val = document.getElementById('dob-input').value;
+        if (!val) {
+          showDobError('Please select your date of birth.');
+          return;
+        }
+        const dob   = new Date(val);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (dob >= today) {
+          showDobError('Date of birth cannot be today or in the future.');
+          return;
+        }
+        const ageMs    = today - dob;
+        const earthAge = ageMs / (1000 * 60 * 60 * 24 * 365.25);
+        if (earthAge > 150) {
+          showDobError('Date of birth is too far in the past (max 150 years).');
+          return;
+        }
+        calcAndRenderWithAge(earthAge);
+      }
+
+      document.getElementById('dob-calc-btn').addEventListener('click', calcFromDOB);
+      document.getElementById('dob-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') calcFromDOB();
+      });
+
+      /* ── Mode toggle ── */
+      document.getElementById('mode-age').addEventListener('click', () => {
+        document.getElementById('panel-age').style.display = '';
+        document.getElementById('panel-dob').style.display = 'none';
+        document.getElementById('mode-age').classList.add('active');
+        document.getElementById('mode-age').setAttribute('aria-pressed', 'true');
+        document.getElementById('mode-dob').classList.remove('active');
+        document.getElementById('mode-dob').setAttribute('aria-pressed', 'false');
+      });
+
+      document.getElementById('mode-dob').addEventListener('click', () => {
+        document.getElementById('panel-dob').style.display = '';
+        document.getElementById('panel-age').style.display = 'none';
+        document.getElementById('mode-dob').classList.add('active');
+        document.getElementById('mode-dob').setAttribute('aria-pressed', 'true');
+        document.getElementById('mode-age').classList.remove('active');
+        document.getElementById('mode-age').setAttribute('aria-pressed', 'false');
       });
 
       function renderEncyclopedia() {

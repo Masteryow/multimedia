@@ -276,6 +276,162 @@
       @media (max-width: 480px) {
         .tools-grid { grid-template-columns: 1fr; }
       }
+
+      /* ── Contact Form ── */
+      .contact-form {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        padding: 2rem 2.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.3rem;
+        max-width: 780px;
+      }
+
+      .cf-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.1rem;
+      }
+
+      @media (max-width: 600px) {
+        .cf-row { grid-template-columns: 1fr; }
+        .contact-form { padding: 1.4rem 1.2rem; }
+      }
+
+      .cf-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .cf-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .cf-req { color: #ff5c7a; }
+
+      .cf-input {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 0.65rem 0.9rem;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: border-color 0.15s, background 0.15s;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .cf-input::placeholder { color: var(--muted); opacity: 0.6; }
+
+      .cf-input:focus {
+        outline: none;
+        border-color: var(--accent-2);
+      }
+
+      .cf-input.is-invalid {
+        border-color: #ff5c7a;
+        background: rgba(255, 92, 122, 0.05);
+        animation: cfShake 0.35s ease;
+      }
+
+      .cf-input.is-valid {
+        border-color: var(--accent);
+      }
+
+      @keyframes cfShake {
+        0%   { transform: translateX(0); }
+        20%  { transform: translateX(-5px); }
+        40%  { transform: translateX(5px); }
+        60%  { transform: translateX(-3px); }
+        80%  { transform: translateX(3px); }
+        100% { transform: translateX(0); }
+      }
+
+      .cf-textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .cf-meta-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .cf-error {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #ff5c7a;
+        margin: 0;
+        min-height: 1em;
+        opacity: 0;
+        transform: translateY(-3px);
+        transition: opacity 0.18s, transform 0.18s;
+        flex: 1;
+      }
+
+      .cf-error.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .cf-char-count {
+        font-size: 0.75rem;
+        color: var(--muted);
+        white-space: nowrap;
+        padding-top: 0.1rem;
+      }
+
+      .cf-submit {
+        align-self: flex-start;
+        background: var(--accent-2);
+        color: #0a0c12;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 0.65rem 1.8rem;
+        font-size: 0.97rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: opacity 0.15s, transform 0.1s;
+        letter-spacing: 0.02em;
+      }
+
+      .cf-submit:hover { opacity: 0.85; }
+      .cf-submit:active { transform: scale(0.97); }
+
+      .cf-toast {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.75rem 1.3rem;
+        background: rgba(124, 224, 195, 0.1);
+        border: 1px solid rgba(124, 224, 195, 0.3);
+        border-radius: var(--radius-lg);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent);
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
+        max-width: 780px;
+      }
+
+      .cf-toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
     </style>
   </head>
   <body>
@@ -435,6 +591,58 @@
           </div>
         </div>
 
+        <hr class="about-divider" />
+
+        <!-- Contact / Feedback Form -->
+        <div id="contact">
+          <div class="home-section-head reveal" style="margin-bottom:1.5rem">
+            <p class="eyebrow">💬 Get in Touch</p>
+            <h2>Send a Message</h2>
+            <p style="color:var(--muted);font-size:0.95rem;max-width:52ch;margin:0.5rem 0 0">Have feedback on the portfolio or a question? Fill in the form below.</p>
+          </div>
+
+          <form class="contact-form reveal" id="contact-form" novalidate autocomplete="off">
+
+            <!-- Row: Name + Email -->
+            <div class="cf-row">
+              <div class="cf-field">
+                <label class="cf-label" for="cf-name">Full Name <span class="cf-req">*</span></label>
+                <input class="cf-input" id="cf-name" type="text" placeholder="e.g. Kelly Roduta" maxlength="80" autocomplete="name" />
+                <p class="cf-error" id="err-name" role="alert" aria-live="polite"></p>
+              </div>
+              <div class="cf-field">
+                <label class="cf-label" for="cf-email">Email Address <span class="cf-req">*</span></label>
+                <input class="cf-input" id="cf-email" type="email" placeholder="e.g. kelly@email.com" maxlength="120" autocomplete="email" />
+                <p class="cf-error" id="err-email" role="alert" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="cf-field">
+              <label class="cf-label" for="cf-subject">Subject <span class="cf-req">*</span></label>
+              <input class="cf-input" id="cf-subject" type="text" placeholder="e.g. Feedback on 3D rendering project" maxlength="120" />
+              <p class="cf-error" id="err-subject" role="alert" aria-live="polite"></p>
+            </div>
+
+            <!-- Message -->
+            <div class="cf-field">
+              <label class="cf-label" for="cf-message">Message <span class="cf-req">*</span></label>
+              <textarea class="cf-input cf-textarea" id="cf-message" rows="5" placeholder="Write your message here (at least 20 characters)..." maxlength="1000"></textarea>
+              <div class="cf-meta-row">
+                <p class="cf-error" id="err-message" role="alert" aria-live="polite"></p>
+                <span class="cf-char-count" id="cf-char-count">0 / 1000</span>
+              </div>
+            </div>
+
+            <button class="cf-submit" type="submit" id="cf-submit">Send Message ✈</button>
+          </form>
+
+          <!-- Success toast -->
+          <div class="cf-toast" id="cf-toast" role="status" aria-live="polite">
+            ✅ Message sent! Thank you for reaching out.
+          </div>
+        </div>
+
       </div>
     </main>
 
@@ -444,5 +652,110 @@
       <span class="footer-copy">&copy; 2026 All rights reserved.</span>
     </footer>
     <script src="script.js"></script>
+    <script>
+      /* ── Contact Form Validation ── */
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function cfSetError(inputId, errId, msg) {
+        const input = document.getElementById(inputId);
+        const err   = document.getElementById(errId);
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+        err.textContent = '⚠ ' + msg;
+        err.classList.add('visible');
+      }
+
+      function cfSetValid(inputId, errId) {
+        const input = document.getElementById(inputId);
+        const err   = document.getElementById(errId);
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        err.classList.remove('visible');
+        setTimeout(() => { if (!err.classList.contains('visible')) err.textContent = ''; }, 200);
+      }
+
+      function cfClear(inputId, errId) {
+        const input = document.getElementById(inputId);
+        const err   = document.getElementById(errId);
+        input.classList.remove('is-invalid', 'is-valid');
+        err.classList.remove('visible');
+        err.textContent = '';
+      }
+
+      function validateName(live) {
+        const val = document.getElementById('cf-name').value.trim();
+        if (!val) { cfSetError('cf-name', 'err-name', 'Full name is required.'); return false; }
+        if (val.length < 2) { cfSetError('cf-name', 'err-name', 'Name must be at least 2 characters.'); return false; }
+        cfSetValid('cf-name', 'err-name'); return true;
+      }
+
+      function validateEmail(live) {
+        const val = document.getElementById('cf-email').value.trim();
+        if (!val) { cfSetError('cf-email', 'err-email', 'Email address is required.'); return false; }
+        if (!EMAIL_RE.test(val)) { cfSetError('cf-email', 'err-email', 'Please enter a valid email address.'); return false; }
+        cfSetValid('cf-email', 'err-email'); return true;
+      }
+
+      function validateSubject() {
+        const val = document.getElementById('cf-subject').value.trim();
+        if (!val) { cfSetError('cf-subject', 'err-subject', 'Subject is required.'); return false; }
+        if (val.length < 5) { cfSetError('cf-subject', 'err-subject', 'Subject must be at least 5 characters.'); return false; }
+        cfSetValid('cf-subject', 'err-subject'); return true;
+      }
+
+      function validateMessage() {
+        const val = document.getElementById('cf-message').value.trim();
+        if (!val) { cfSetError('cf-message', 'err-message', 'Message is required.'); return false; }
+        if (val.length < 20) { cfSetError('cf-message', 'err-message', `Message too short (${val.length}/20 characters minimum).`); return false; }
+        cfSetValid('cf-message', 'err-message'); return true;
+      }
+
+      /* Live blur validation */
+      document.getElementById('cf-name').addEventListener('blur', validateName);
+      document.getElementById('cf-email').addEventListener('blur', validateEmail);
+      document.getElementById('cf-subject').addEventListener('blur', validateSubject);
+      document.getElementById('cf-message').addEventListener('blur', validateMessage);
+
+      /* Clear invalid state on input */
+      ['cf-name','cf-email','cf-subject','cf-message'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+          const el = document.getElementById(id);
+          if (el.classList.contains('is-invalid')) {
+            el.classList.remove('is-invalid');
+            const errId = 'err-' + id.replace('cf-','');
+            const err = document.getElementById(errId);
+            if (err) { err.classList.remove('visible'); }
+          }
+        });
+      });
+
+      /* Character counter */
+      document.getElementById('cf-message').addEventListener('input', () => {
+        const len = document.getElementById('cf-message').value.length;
+        document.getElementById('cf-char-count').textContent = len + ' / 1000';
+      });
+
+      /* Submit */
+      document.getElementById('contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const ok = [validateName(), validateEmail(), validateSubject(), validateMessage()].every(Boolean);
+        if (!ok) return;
+
+        /* Simulate success (static site — no server) */
+        const btn = document.getElementById('cf-submit');
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+        setTimeout(() => {
+          document.getElementById('contact-form').reset();
+          document.getElementById('cf-char-count').textContent = '0 / 1000';
+          ['cf-name','cf-email','cf-subject','cf-message'].forEach(id => cfClear(id, 'err-' + id.replace('cf-','')));
+          btn.textContent = 'Send Message ✈';
+          btn.disabled = false;
+          const toast = document.getElementById('cf-toast');
+          toast.classList.add('visible');
+          setTimeout(() => toast.classList.remove('visible'), 4000);
+        }, 800);
+      });
+    </script>
   </body>
 </html>
