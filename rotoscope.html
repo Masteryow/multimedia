@@ -102,6 +102,37 @@
         border: none;
       }
 
+      /* Transparent blocker over the YouTube iframe — prevents manual play.
+         Removed by JS once the "Play Both" button is pressed. */
+      .yt-blocker {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        cursor: not-allowed;
+        background: transparent;
+      }
+      .yt-blocker::after {
+        content: '\25B6\FE0F  Use "Play Both" to start';
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(10,12,18,0.82);
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-family: inherit;
+        white-space: nowrap;
+        padding: 0.3rem 0.8rem;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+      }
+      .yt-blocker:hover::after {
+        opacity: 1;
+      }
+
       /* Reference column inside hero */
       .ref-embed-wrap {
         width: 100%;
@@ -690,6 +721,8 @@
               Final Output
             </span>
             <div class="featured-embed-wrap">
+              <!-- Blocker: removed once Play Both is clicked -->
+              <div class="yt-blocker" id="yt-blocker"></div>
               <iframe
                 id="featured-video"
                 src="https://www.youtube.com/embed/4qgXLTbteww?rel=0&modestbranding=1&enablejsapi=1"
@@ -1230,7 +1263,10 @@
         function startSync() {
           if (syncStarted) return;
           syncStarted = true;
-          /* Hide overlay */
+          /* Remove the click-blocker so YouTube controls work after sync starts */
+          var blocker = document.getElementById('yt-blocker');
+          if (blocker) blocker.remove();
+          /* Hide the Play Both bar */
           if (overlay) overlay.classList.add('hidden');
           /* Show unmute toggle */
           if (unmuteBtn) unmuteBtn.style.display = 'flex';
