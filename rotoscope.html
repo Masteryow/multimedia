@@ -1444,7 +1444,34 @@
           });
         }
 
-        /* Cards open the lightbox on hover — playback is manual inside the lightbox */
+        /* ── Card YT players — open lightbox when user clicks play ── */
+        var cardPlayers  = [];
+        var czmOpening   = false;   /* guard against state-change loops */
+
+        document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
+          var card  = iframe.closest('.video-card');
+          var week  = card ? ((card.querySelector('.video-card-week')  || {}).textContent || '') : '';
+          var title = card ? ((card.querySelector('.video-card-title') || {}).textContent || '') : '';
+          var videoBase = iframe.src.split('?')[0]; /* capture before YT modifies src */
+
+          (function (base, w, t) {
+            var cp = new YT.Player(iframe, {
+              events: {
+                onStateChange: function (e) {
+                  if (e.data === YT.PlayerState.PLAYING && !czmOpening) {
+                    czmOpening = true;
+                    cp.pauseVideo(); /* pause card — only one YT player active */
+                    if (typeof window.openCardLightbox === 'function') {
+                      window.openCardLightbox(base + '?rel=0&modestbranding=1', w, t);
+                    }
+                    setTimeout(function () { czmOpening = false; }, 800);
+                  }
+                }
+              }
+            });
+            cardPlayers.push(cp);
+          })(videoBase, week, title);
+        });
       }
 
       /* YouTube state change → update button label only (no individual control) */
@@ -1485,65 +1512,24 @@
         var czmBackdrop = document.getElementById('czm-backdrop');
         if (!czm || !czmIframe) return;
 
-        var closeTimer  = null;
-        var srcTimer    = null;
+        var srcTimer = null;
 
-        function openLightbox(iframeSrc, week, title) {
-          /* Cancel any pending close */
-          clearTimeout(closeTimer);
+        /* Called by card players when user presses play */
+        window.openCardLightbox = function (src, week, title) {
           clearTimeout(srcTimer);
-
-          var base    = iframeSrc.split('?')[0];
-          var autoSrc = base + '?rel=0&modestbranding=1';
-
-          /* Only reload if a different video */
-          if (czmIframe.src !== autoSrc) czmIframe.src = autoSrc;
+          if (czmIframe.src !== src) czmIframe.src = src;
           if (czmWeek)  czmWeek.textContent  = week  || '';
           if (czmTitle) czmTitle.textContent = title || '';
-
           czm.classList.add('visible');
           czm.setAttribute('aria-hidden', 'false');
-        }
-
-        function scheduleClose() {
-          /* Delay gives the mouse time to travel from card → lightbox */
-          closeTimer = setTimeout(function () {
-            czm.classList.remove('visible');
-            czm.setAttribute('aria-hidden', 'true');
-            /* Clear src after fade-out */
-            srcTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
-          }, 250);
-        }
+        };
 
         function closeLightbox() {
-          clearTimeout(closeTimer);
           czm.classList.remove('visible');
           czm.setAttribute('aria-hidden', 'true');
           srcTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
         }
 
-        /* Attach to each of the 12 cards */
-        document.querySelectorAll('.video-card').forEach(function (card) {
-          var iframe = card.querySelector('.video-card-embed iframe');
-          if (!iframe) return;
-          var week  = (card.querySelector('.video-card-week')  || {}).textContent || '';
-          var title = (card.querySelector('.video-card-title') || {}).textContent || '';
-
-          card.addEventListener('mouseenter', function () {
-            openLightbox(iframe.src, week, title);
-          });
-          /* Schedule close — cancelled if mouse enters lightbox in time */
-          card.addEventListener('mouseleave', scheduleClose);
-        });
-
-        /* Mouse enters lightbox → cancel pending close */
-        czm.addEventListener('mouseenter', function () {
-          clearTimeout(closeTimer);
-        });
-        /* Mouse leaves lightbox → schedule close */
-        czm.addEventListener('mouseleave', scheduleClose);
-
-        /* Explicit close actions */
         if (czmClose)    czmClose.addEventListener('click',    closeLightbox);
         if (czmBackdrop) czmBackdrop.addEventListener('click', closeLightbox);
         document.addEventListener('keydown', function (e) {
