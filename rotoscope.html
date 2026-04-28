@@ -112,13 +112,14 @@
         aspect-ratio: 16 / 9;
         position: relative;
         background: #000;
+        cursor: pointer;
       }
 
-      .ref-embed-wrap iframe {
+      .ref-embed-wrap video {
         width: 100%;
         height: 100%;
         display: block;
-        border: none;
+        object-fit: cover;
       }
 
       /* Disclaimer strip below comparison grid */
@@ -636,20 +637,20 @@
             </div>
           </div>
 
-          <!-- Reference Video -->
+          <!-- Reference Video (local MP4 — plays simultaneously with YouTube final) -->
           <div class="comparison-col">
             <span class="comparison-label cl-ref">
               <span class="cl-dot"></span>
               Reference Video
             </span>
             <div class="ref-embed-wrap">
-              <iframe
+              <video
                 id="ref-video-hero"
-                src="https://www.youtube.com/embed/Aym1eH7nMPw?rel=0&modestbranding=1&enablejsapi=1"
+                src="videos/reference_video.mp4"
                 title="Rotoscope Reference — How to Rotoscope"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
+                preload="metadata"
+                controls
+              ></video>
             </div>
           </div>
 
@@ -1106,27 +1107,56 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
-      /* ══ Comparison video sync (YT IFrame API) ══ */
-      var playerOutput = null;
-      var playerRef    = null;
+      /* ══ Comparison video sync ══
+         Final output  → YouTube IFrame API (playerOutput)
+         Reference     → local <video> element (refVideo)
+         Two YouTube iframes cannot both play at the same time in most
+         browsers, so the reference is served as a local MP4 instead.
+      */
+
+      var playerOutput = null;              // YT.Player for the final video
+      var refVideo     = null;              // native <video> for the reference
       var syncing      = false;
 
+      /* ── YouTube IFrame API ready ── */
       function onYouTubeIframeAPIReady() {
 
         playerOutput = new YT.Player('featured-video', {
           events: { onStateChange: onOutputStateChange }
         });
 
-        playerRef = new YT.Player('ref-video-hero', {
-          events: { onStateChange: onRefStateChange }
-        });
+        /* Grab the local reference video element */
+        refVideo = document.getElementById('ref-video-hero');
 
-        /* Hover-to-play for comparison wrappers */
-        bindHover(document.querySelector('.featured-embed-wrap'), function () { return playerOutput; });
-        bindHover(document.querySelector('.ref-embed-wrap'),      function () { return playerRef; });
+        /* Sync: when the reference video plays/pauses, mirror to the YT player */
+        if (refVideo) {
+          refVideo.addEventListener('play', function () {
+            if (syncing || !playerOutput) return;
+            syncing = true;
+            try {
+              if (playerOutput.getPlayerState() !== YT.PlayerState.PLAYING)
+                playerOutput.playVideo();
+            } finally {
+              setTimeout(function () { syncing = false; }, 600);
+            }
+          });
 
-        /* Hover-to-play for 12-card grid via postMessage
-           (iframes already have enablejsapi=1&mute=1 in their src) */
+          refVideo.addEventListener('pause', function () {
+            if (syncing || !playerOutput) return;
+            syncing = true;
+            try {
+              if (playerOutput.getPlayerState() === YT.PlayerState.PLAYING)
+                playerOutput.pauseVideo();
+            } finally {
+              setTimeout(function () { syncing = false; }, 600);
+            }
+          });
+        }
+
+        /* Hover-to-play for the YouTube (final output) wrapper */
+        bindHoverYT(document.querySelector('.featured-embed-wrap'), function () { return playerOutput; });
+
+        /* Hover-to-play for 12-card grid via postMessage */
         document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
           var card = iframe.closest('.video-card');
           if (!card) return;
@@ -1143,39 +1173,23 @@
         });
       }
 
-      /* Output → Reference */
+      /* Output (YouTube) → Reference (local video) */
       function onOutputStateChange(e) {
-        if (syncing || !playerRef) return;
+        if (syncing || !refVideo) return;
         syncing = true;
         try {
           if (e.data === YT.PlayerState.PLAYING) {
-            if (playerRef.getPlayerState() !== YT.PlayerState.PLAYING) playerRef.playVideo();
+            if (refVideo.paused) refVideo.play();
           } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-            if (playerRef.getPlayerState() === YT.PlayerState.PLAYING) playerRef.pauseVideo();
-          }
-        } finally {
-          // Reset after the mirror player's state-change event has had time to fire & be ignored
-          setTimeout(function () { syncing = false; }, 600);
-        }
-      }
-
-      /* Reference → Output */
-      function onRefStateChange(e) {
-        if (syncing || !playerOutput) return;
-        syncing = true;
-        try {
-          if (e.data === YT.PlayerState.PLAYING) {
-            if (playerOutput.getPlayerState() !== YT.PlayerState.PLAYING) playerOutput.playVideo();
-          } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-            if (playerOutput.getPlayerState() === YT.PlayerState.PLAYING) playerOutput.pauseVideo();
+            if (!refVideo.paused) refVideo.pause();
           }
         } finally {
           setTimeout(function () { syncing = false; }, 600);
         }
       }
 
-      /* Hover helper that calls player API methods directly */
-      function bindHover(wrapper, getPlayer) {
+      /* Hover helper for YouTube wrapper */
+      function bindHoverYT(wrapper, getPlayer) {
         if (!wrapper) return;
         wrapper.addEventListener('mouseenter', function () {
           var p = getPlayer();
