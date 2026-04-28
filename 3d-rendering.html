@@ -749,6 +749,36 @@
       }
     }
 
+    /* ── Hero download button ── */
+    .hero-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1rem;
+      padding: 0.52rem 1.3rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: #0a0c12;
+      background: var(--accent-2);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: opacity 0.15s, transform 0.12s;
+      position: relative;
+    }
+
+    .hero-dl-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+    }
+
+    .hero-dl-btn:active {
+      transform: scale(0.96);
+    }
+
     /* ── Project Downloads section ── */
     .downloads-section {
       padding: 0 2rem 4rem;
@@ -1324,6 +1354,9 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </div>
+      <a class="hero-dl-btn" href="blender/SolarSystem.blend" download title="Download the full Solar System Blender project">
+        <span>⬇</span> Download Solar System .blend
+      </a>
 
       <!-- Specs bar -->
       <div class="specs-bar" id="specs">
@@ -1364,14 +1397,14 @@
         <a class="scroll-pill" href="#project-notes">
           <span class="scroll-pill-icon">📝</span> Project Notes
         </a>
-        <a class="scroll-pill" href="#downloads">
-          <span class="scroll-pill-icon">⬇️</span> Download Files
-        </a>
         <a class="scroll-pill" href="#age-calc">
           <span class="scroll-pill-icon">🪐</span> Planet Age Calculator
         </a>
         <a class="scroll-pill" href="#planet-encyc">
           <span class="scroll-pill-icon">🌌</span> Planet Encyclopedia
+        </a>
+        <a class="scroll-pill" href="#downloads">
+          <span class="scroll-pill-icon">⬇️</span> Download Files
         </a>
       </div>
 
@@ -1579,17 +1612,6 @@
       </div>
     </section>
 
-    <!-- ── PROJECT DOWNLOADS ── -->
-    <section class="downloads-section" id="downloads">
-      <div class="downloads-header reveal">
-        <p class="eyebrow">⬇️ Project Files</p>
-        <h2>Download Blender Files</h2>
-        <p>Download the original <code>.blend</code> project files for each planet model — open them directly in Blender 5.1 or later.</p>
-      </div>
-      <div class="dl-grid" id="dl-grid">
-        <!-- filled by JS -->
-      </div>
-    </section>
 
     <!-- ── PLANET AGE CALCULATOR ── -->
     <section class="age-calc-section" id="age-calc">
@@ -1687,6 +1709,18 @@
       </div>
 
       <div class="encyc-grid" id="encyc-grid"><!-- filled by JS --></div>
+    </section>
+
+    <!-- ── PROJECT DOWNLOADS ── -->
+    <section class="downloads-section" id="downloads">
+      <div class="downloads-header reveal">
+        <p class="eyebrow">⬇️ Project Files</p>
+        <h2>Download Blender Files</h2>
+        <p>Download the original <code>.blend</code> project files for each planet model — open them directly in Blender 5.1 or later.</p>
+      </div>
+      <div class="dl-grid" id="dl-grid">
+        <!-- filled by JS -->
+      </div>
     </section>
 
   </main>
