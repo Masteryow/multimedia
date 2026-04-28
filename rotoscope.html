@@ -700,6 +700,102 @@
         .workflow-section { padding: 0 1rem; }
         .workflow-inner { padding: 1.2rem 1.2rem 1.5rem; }
       }
+
+      /* ── Card zoom lightbox ── */
+      .czm {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9900;
+        align-items: center;
+        justify-content: center;
+        animation: czm-in 0.22s ease;
+      }
+      .czm.visible { display: flex; }
+
+      @keyframes czm-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      .czm-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(5, 7, 14, 0.82);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .czm-wrap {
+        position: relative;
+        z-index: 1;
+        width: min(860px, 90vw);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        animation: czm-pop 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+      }
+
+      @keyframes czm-pop {
+        from { transform: scale(0.88); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+
+      .czm-video {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 1.5px solid rgba(124, 224, 195, 0.35);
+        box-shadow:
+          0 32px 80px rgba(0, 0, 0, 0.8),
+          0 0 60px rgba(124, 224, 195, 0.08);
+      }
+
+      .czm-video iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+
+      .czm-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .czm-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .czm-week {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .czm-close {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        font-family: inherit;
+        padding: 0.3rem 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        flex-shrink: 0;
+      }
+      .czm-close:hover { background: rgba(255,255,255,0.14); color: var(--text); }
     </style>
   </head>
   <body>
@@ -1375,6 +1471,81 @@
           toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
       })();
+
+      /* ── Card zoom lightbox ── */
+      (function () {
+        var czm         = document.getElementById('czm');
+        var czmIframe   = document.getElementById('czm-iframe');
+        var czmWeek     = document.getElementById('czm-week');
+        var czmTitle    = document.getElementById('czm-title');
+        var czmClose    = document.getElementById('czm-close');
+        var czmBackdrop = document.getElementById('czm-backdrop');
+        if (!czm || !czmIframe) return;
+
+        var hideTimer = null;
+
+        function openLightbox(iframeSrc, week, title) {
+          clearTimeout(hideTimer);
+          var base    = iframeSrc.split('?')[0];
+          var autoSrc = base + '?rel=0&modestbranding=1&autoplay=1&mute=1';
+          czmIframe.src = autoSrc;
+          if (czmWeek)  czmWeek.textContent  = week  || '';
+          if (czmTitle) czmTitle.textContent = title || '';
+          czm.classList.add('visible');
+          czm.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeLightbox() {
+          czm.classList.remove('visible');
+          czm.setAttribute('aria-hidden', 'true');
+          hideTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
+        }
+
+        /* Attach to each of the 12 cards */
+        document.querySelectorAll('.video-card').forEach(function (card) {
+          var iframe = card.querySelector('.video-card-embed iframe');
+          if (!iframe) return;
+          var week  = (card.querySelector('.video-card-week')  || {}).textContent || '';
+          var title = (card.querySelector('.video-card-title') || {}).textContent || '';
+
+          card.addEventListener('mouseenter', function () {
+            openLightbox(iframe.src, week, title);
+          });
+          card.addEventListener('mouseleave', function (e) {
+            if (e.relatedTarget && czm.contains(e.relatedTarget)) return;
+            closeLightbox();
+          });
+        });
+
+        /* Keep open while hovering the lightbox itself */
+        czm.addEventListener('mouseleave', function (e) {
+          if (e.relatedTarget && czm.contains(e.relatedTarget)) return;
+          closeLightbox();
+        });
+
+        if (czmClose)    czmClose.addEventListener('click',    closeLightbox);
+        if (czmBackdrop) czmBackdrop.addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeLightbox();
+        });
+      })();
     </script>
+
+    <!-- Card zoom lightbox -->
+    <div class="czm" id="czm" role="dialog" aria-modal="true" aria-label="Video preview" aria-hidden="true">
+      <div class="czm-backdrop" id="czm-backdrop"></div>
+      <div class="czm-wrap">
+        <div class="czm-video">
+          <iframe id="czm-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="czm-meta">
+          <div>
+            <p class="czm-week" id="czm-week"></p>
+            <p class="czm-title" id="czm-title"></p>
+          </div>
+          <button class="czm-close" id="czm-close">× Close</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
