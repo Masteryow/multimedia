@@ -749,30 +749,130 @@
       }
     }
 
-    /* ── Download button ── */
-    .dl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 0.6rem;
-      padding: 0.42rem 0.95rem;
-      font-size: 0.78rem;
+    /* ── Project Downloads section ── */
+    .downloads-section {
+      padding: 0 2rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .downloads-header {
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      margin-bottom: 2rem;
+    }
+
+    .downloads-header h2 {
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
       font-weight: 700;
-      letter-spacing: 0.04em;
+      margin: 0 0 0.4rem;
+    }
+
+    .downloads-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 55ch;
+      margin: 0;
+    }
+
+    .dl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    .dl-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      transition: border-color 0.2s, transform 0.18s;
+      animation: fadeUp 500ms ease both;
+    }
+
+    .dl-card:hover {
+      border-color: var(--accent-2);
+      transform: translateY(-3px);
+    }
+
+    .dl-card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .dl-card-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .dl-card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+
+    .dl-card-name {
+      font-size: 0.97rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dl-card-type {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
       color: var(--accent-2);
-      background: rgba(121, 167, 255, 0.08);
-      border: 1px solid rgba(121, 167, 255, 0.28);
+      background: rgba(121, 167, 255, 0.1);
+      border: 1px solid rgba(121, 167, 255, 0.22);
       border-radius: 99px;
-      cursor: pointer;
-      text-decoration: none;
-      font-family: inherit;
-      transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+      padding: 0.1rem 0.5rem;
       align-self: flex-start;
     }
 
+    .dl-card-file {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'Courier New', monospace;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 0.28rem 0.6rem;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.52rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: #0a0c12;
+      background: var(--accent-2);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: opacity 0.15s, transform 0.12s;
+      margin-top: auto;
+    }
+
     .dl-btn:hover {
-      background: rgba(121, 167, 255, 0.18);
-      border-color: var(--accent-2);
+      opacity: 0.88;
       transform: translateY(-1px);
     }
 
@@ -780,28 +880,26 @@
       transform: scale(0.96);
     }
 
-    .dl-btn.is-earth-dl {
-      color: var(--accent);
-      background: rgba(124, 224, 195, 0.08);
-      border-color: rgba(124, 224, 195, 0.28);
-    }
-
-    .dl-btn.is-earth-dl:hover {
-      background: rgba(124, 224, 195, 0.18);
-      border-color: var(--accent);
-    }
-
     .dl-btn-icon {
-      font-size: 0.9rem;
+      font-size: 1rem;
       line-height: 1;
     }
 
-    /* Encyc download row */
-    .encyc-dl-row {
-      margin-top: 0.55rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    @media (max-width: 860px) {
+      .dl-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .dl-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .downloads-section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
     }
 
     @media (max-width: 720px) {
@@ -1266,6 +1364,9 @@
         <a class="scroll-pill" href="#project-notes">
           <span class="scroll-pill-icon">📝</span> Project Notes
         </a>
+        <a class="scroll-pill" href="#downloads">
+          <span class="scroll-pill-icon">⬇️</span> Download Files
+        </a>
         <a class="scroll-pill" href="#age-calc">
           <span class="scroll-pill-icon">🪐</span> Planet Age Calculator
         </a>
@@ -1475,6 +1576,18 @@
           </p>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ── PROJECT DOWNLOADS ── -->
+    <section class="downloads-section" id="downloads">
+      <div class="downloads-header reveal">
+        <p class="eyebrow">⬇️ Project Files</p>
+        <h2>Download Blender Files</h2>
+        <p>Download the original <code>.blend</code> project files for each planet model — open them directly in Blender 5.1 or later.</p>
+      </div>
+      <div class="dl-grid" id="dl-grid">
+        <!-- filled by JS -->
       </div>
     </section>
 
@@ -1722,10 +1835,6 @@
           ? `<video class="planet-card-video" src="videos/${p.video}" autoplay muted loop playsinline></video>`
           : `<span class="planet-emoji">${p.emoji}</span>`;
 
-        const dlBtnCalc = p.blendFile
-          ? `<a class="dl-btn${p.isEarth ? ' is-earth-dl' : ''}" href="${p.blendFile}" download title="Download ${p.name}.blend Blender project file"><span class="dl-btn-icon">⬇</span> Download .blend</a>`
-          : '';
-
         card.innerHTML = `
             <div class="planet-card-side">
               ${earthVideoSide}
@@ -1765,7 +1874,6 @@
                   <span class="pi-val">${p.gravity}</span>
                 </div>
               </div>
-              ${dlBtnCalc}
             </div>
           `;
         grid.appendChild(card);
@@ -1854,18 +1962,40 @@
           ? `<div class="encyc-earth-header"><p class="encyc-name" style="font-size:1rem;margin-bottom:0.25rem;">${p.name}</p><span class="encyc-type">${p.type}</span></div>`
           : '';
 
-        const dlBtnEncyc = p.blendFile
-          ? `<div class="encyc-dl-row"><a class="dl-btn${p.isEarth ? ' is-earth-dl' : ''}" href="${p.blendFile}" download title="Download ${p.name}.blend Blender project file"><span class="dl-btn-icon">⬇</span> Download .blend</a></div>`
-          : '';
-
         card.innerHTML = `
             ${encycLeft}
             <div class="encyc-right">
               ${earthNameRow}
               <p class="encyc-desc">${p.desc}</p>
-              ${dlBtnEncyc}
             </div>
           `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderDownloads() {
+      const grid = document.getElementById('dl-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      PLANETS.forEach((p, i) => {
+        if (!p.blendFile) return;
+        const card = document.createElement('div');
+        card.className = 'dl-card reveal';
+        card.style.animationDelay = (i * 50) + 'ms';
+        const fileName = p.blendFile.split('/').pop();
+        card.innerHTML = `
+          <div class="dl-card-top">
+            <span class="dl-card-emoji">${p.emoji}</span>
+            <div class="dl-card-meta">
+              <p class="dl-card-name">${p.name}</p>
+              <span class="dl-card-type">${p.type}</span>
+            </div>
+          </div>
+          <span class="dl-card-file">${fileName}</span>
+          <a class="dl-btn" href="${p.blendFile}" download title="Download ${fileName}">
+            <span class="dl-btn-icon">⬇</span> Download .blend
+          </a>
+        `;
         grid.appendChild(card);
       });
     }
@@ -1873,6 +2003,7 @@
     // Run on load
     calcAndRender();
     renderEncyclopedia();
+    renderDownloads();
   </script>
 </body>
 
