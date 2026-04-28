@@ -915,6 +915,75 @@
       line-height: 1;
     }
 
+    /* ── Download All button ── */
+    .dl-all-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .dl-all-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.62rem 1.5rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent-2);
+      background: rgba(121, 167, 255, 0.08);
+      border: 1.5px solid var(--accent-2);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.18s, color 0.18s, transform 0.12s;
+    }
+
+    .dl-all-btn:hover {
+      background: rgba(121, 167, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .dl-all-btn:active {
+      transform: scale(0.97);
+    }
+
+    .dl-all-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .dl-all-spin {
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+      font-style: normal;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .dl-all-progress {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent-2);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .dl-all-progress.visible {
+      opacity: 1;
+    }
+
+    .dl-all-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
     @media (max-width: 860px) {
       .dl-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1718,6 +1787,13 @@
         <h2>Download Blender Files</h2>
         <p>Each download is a <code>.zip</code> archive containing the <code>.blend</code> project file and its accompanying Python (<code>.py</code>) script — open in Blender 5.1 or later.</p>
       </div>
+      <div class="dl-all-bar reveal">
+        <button class="dl-all-btn" id="dl-all-btn" onclick="downloadAll()">
+          <span id="dl-all-icon">⬇️</span> Download All Planets
+        </button>
+        <span class="dl-all-progress" id="dl-all-progress"></span>
+      </div>
+      <p class="dl-all-note reveal">📌 Your browser may ask you to allow multiple downloads — click <strong>Allow</strong> when prompted.</p>
       <div class="dl-grid" id="dl-grid">
         <!-- filled by JS -->
       </div>
@@ -2032,6 +2108,46 @@
         `;
         grid.appendChild(card);
       });
+    }
+
+    function downloadAll() {
+      const files = PLANETS.filter(p => p.blendFile);
+      const btn = document.getElementById('dl-all-btn');
+      const icon = document.getElementById('dl-all-icon');
+      const progress = document.getElementById('dl-all-progress');
+
+      btn.disabled = true;
+      icon.className = 'dl-all-spin';
+      icon.textContent = '⧗';
+      progress.classList.add('visible');
+
+      let i = 0;
+      function next() {
+        if (i >= files.length) {
+          // Done
+          btn.disabled = false;
+          icon.className = '';
+          icon.textContent = '✔️';
+          progress.textContent = `All ${files.length} files queued!`;
+          setTimeout(() => {
+            icon.textContent = '⬇️';
+            progress.classList.remove('visible');
+            setTimeout(() => { progress.textContent = ''; }, 220);
+          }, 3000);
+          return;
+        }
+        const p = files[i];
+        progress.textContent = `Downloading ${i + 1} / ${files.length}…`;
+        const a = document.createElement('a');
+        a.href = p.blendFile;
+        a.download = p.blendFile.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        i++;
+        setTimeout(next, 650);
+      }
+      next();
     }
 
     // Run on load
