@@ -628,7 +628,7 @@
             <div class="featured-embed-wrap">
               <iframe
                 id="featured-video"
-                src="https://www.youtube.com/embed/4qgXLTbteww?rel=0&modestbranding=1"
+                src="https://www.youtube.com/embed/4qgXLTbteww?rel=0&modestbranding=1&enablejsapi=1"
                 title="Rotoscope Featured Video — Final Output"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
@@ -645,7 +645,7 @@
             <div class="ref-embed-wrap">
               <iframe
                 id="ref-video-hero"
-                src="https://www.youtube.com/embed/Aym1eH7nMPw?rel=0&modestbranding=1"
+                src="https://www.youtube.com/embed/Aym1eH7nMPw?rel=0&modestbranding=1&enablejsapi=1"
                 title="Rotoscope Reference — How to Rotoscope"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
@@ -1101,41 +1101,95 @@
       <span class="footer-copy">&copy; 2026 All rights reserved.</span>
     </footer>
     <script src="script.js"></script>
-    <script>
-      /* ── Hover-to-play: grid cards + hero + reference ── */
-      (function () {
 
-        function enableHover(iframe, hoverTarget) {
-          if (!iframe || !hoverTarget) return;
+    <!-- YouTube IFrame API (loads async, fires onYouTubeIframeAPIReady) -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+      /* ════════════════════════════════════════════════════
+         Comparison video sync via YouTube IFrame API
+         Both videos mirror each other's play / pause / end
+      ════════════════════════════════════════════════════ */
+      var playerOutput = null;   // Final Output
+      var playerRef    = null;   // Reference
+      var syncing      = false;  // guard against infinite loops
+
+      function onYouTubeIframeAPIReady() {
+
+        playerOutput = new YT.Player('featured-video', {
+          events: { onStateChange: onOutputStateChange }
+        });
+
+        playerRef = new YT.Player('ref-video-hero', {
+          events: { onStateChange: onRefStateChange }
+        });
+
+        // Hover-to-play for the comparison column wrappers
+        bindHoverSync(
+          document.querySelector('.featured-embed-wrap'),
+          function () { return playerOutput; }
+        );
+        bindHoverSync(
+          document.querySelector('.ref-embed-wrap'),
+          function () { return playerRef; }
+        );
+
+        // Hover-to-play for the 12-card grid (lightweight postMessage)
+        document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
           if (!iframe.src.includes('enablejsapi')) {
             iframe.src += '&enablejsapi=1&mute=1';
           }
-          hoverTarget.addEventListener('mouseenter', function () {
+          var card = iframe.closest('.video-card');
+          if (!card) return;
+          card.addEventListener('mouseenter', function () {
             iframe.contentWindow.postMessage(
               JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*'
             );
           });
-          hoverTarget.addEventListener('mouseleave', function () {
+          card.addEventListener('mouseleave', function () {
             iframe.contentWindow.postMessage(
               JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*'
             );
           });
-        }
-
-        // 12-card grid
-        document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
-          enableHover(iframe, iframe.closest('.video-card'));
         });
+      }
 
-        // Hero featured video
-        var heroIframe = document.querySelector('.featured-embed-wrap iframe');
-        enableHover(heroIframe, document.querySelector('.featured-embed-wrap'));
+      /* Sync: Output → Reference */
+      function onOutputStateChange(e) {
+        if (syncing || !playerRef) return;
+        syncing = true;
+        if (e.data === YT.PlayerState.PLAYING) {
+          if (playerRef.getPlayerState() !== YT.PlayerState.PLAYING) playerRef.playVideo();
+        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+          if (playerRef.getPlayerState() === YT.PlayerState.PLAYING) playerRef.pauseVideo();
+        }
+        syncing = false;
+      }
 
-        // Reference video (hero comparison column)
-        var refIframe = document.querySelector('#ref-video-hero');
-        enableHover(refIframe, refIframe ? refIframe.closest('.ref-embed-wrap') : null);
+      /* Sync: Reference → Output */
+      function onRefStateChange(e) {
+        if (syncing || !playerOutput) return;
+        syncing = true;
+        if (e.data === YT.PlayerState.PLAYING) {
+          if (playerOutput.getPlayerState() !== YT.PlayerState.PLAYING) playerOutput.playVideo();
+        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+          if (playerOutput.getPlayerState() === YT.PlayerState.PLAYING) playerOutput.pauseVideo();
+        }
+        syncing = false;
+      }
 
-      })();
+      /* Hover helper for comparison wrappers */
+      function bindHoverSync(wrapper, getPlayer) {
+        if (!wrapper) return;
+        wrapper.addEventListener('mouseenter', function () {
+          var p = getPlayer();
+          if (p && typeof p.playVideo === 'function') p.playVideo();
+        });
+        wrapper.addEventListener('mouseleave', function () {
+          var p = getPlayer();
+          if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
+        });
+      }
 
       /* ── Workflow accordion toggle ── */
       (function () {
