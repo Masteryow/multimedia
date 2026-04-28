@@ -121,33 +121,28 @@
         object-fit: cover;
       }
 
-      /* ── Sync overlay button ("Play Both") ── */
-      .sync-overlay {
-        position: absolute;
-        inset: 0;
+      /* ── Sync bar ("Play Both" button below the two videos) ── */
+      .sync-bar {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        background: rgba(0,0,0,0.52);
-        backdrop-filter: blur(2px);
-        z-index: 10;
-        transition: opacity 0.3s;
-        cursor: pointer;
+        gap: 0.45rem;
+        margin: 1rem auto 0;
+        width: 100%;
+        max-width: 1200px;
       }
-      .sync-overlay.hidden { display: none; }
+      .sync-bar.hidden { display: none; }
 
       .sync-play-btn {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 0.6rem;
         background: linear-gradient(135deg, var(--accent), #4fc3a1);
         color: #0a0c12;
         border: none;
         border-radius: 99px;
-        padding: 0.65rem 1.5rem;
-        font-size: 0.92rem;
+        padding: 0.65rem 2rem;
+        font-size: 0.95rem;
         font-weight: 700;
         font-family: inherit;
         cursor: pointer;
@@ -155,15 +150,15 @@
         transition: transform 0.15s, box-shadow 0.15s;
       }
       .sync-play-btn:hover {
-        transform: scale(1.05);
+        transform: scale(1.04);
         box-shadow: 0 6px 28px rgba(124,224,195,0.5);
       }
       .sync-play-btn svg { width:18px; height:18px; fill:currentColor; flex-shrink:0; }
 
       .sync-hint {
         font-size: 0.75rem;
-        color: rgba(255,255,255,0.55);
-        letter-spacing: 0.05em;
+        color: var(--muted);
+        letter-spacing: 0.04em;
       }
 
       /* Unmute toggle pill */
@@ -713,15 +708,6 @@
             </span>
             <div class="ref-embed-wrap" id="ref-wrap">
 
-              <!-- Overlay: click to start both videos in sync -->
-              <div class="sync-overlay" id="sync-overlay">
-                <button class="sync-play-btn" id="sync-play-btn" aria-label="Play both videos in sync">
-                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  Play Both
-                </button>
-                <span class="sync-hint">Plays final output &amp; reference together</span>
-              </div>
-
               <video
                 id="ref-video-hero"
                 src="videos/reference_video.mp4"
@@ -742,6 +728,15 @@
           </div>
 
         </div><!-- /comparison-grid -->
+
+        <!-- Play Both sync button (centered below both videos) -->
+        <div class="sync-bar" id="sync-overlay">
+          <button class="sync-play-btn" id="sync-play-btn" aria-label="Play both videos in sync">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            &#9654;&ensp;Play Both
+          </button>
+          <span class="sync-hint">Starts the final output &amp; reference video together</span>
+        </div>
 
         <!-- Disclaimer / Credits strip -->
         <div class="comparison-disclaimer">
