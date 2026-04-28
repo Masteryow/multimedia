@@ -1482,23 +1482,41 @@
         var czmBackdrop = document.getElementById('czm-backdrop');
         if (!czm || !czmIframe) return;
 
-        var hideTimer = null;
+        var closeTimer  = null;
+        var srcTimer    = null;
 
         function openLightbox(iframeSrc, week, title) {
-          clearTimeout(hideTimer);
+          /* Cancel any pending close */
+          clearTimeout(closeTimer);
+          clearTimeout(srcTimer);
+
           var base    = iframeSrc.split('?')[0];
           var autoSrc = base + '?rel=0&modestbranding=1&autoplay=1&mute=1';
-          czmIframe.src = autoSrc;
+
+          /* Only reload if a different video */
+          if (czmIframe.src !== autoSrc) czmIframe.src = autoSrc;
           if (czmWeek)  czmWeek.textContent  = week  || '';
           if (czmTitle) czmTitle.textContent = title || '';
+
           czm.classList.add('visible');
           czm.setAttribute('aria-hidden', 'false');
         }
 
+        function scheduleClose() {
+          /* Delay gives the mouse time to travel from card → lightbox */
+          closeTimer = setTimeout(function () {
+            czm.classList.remove('visible');
+            czm.setAttribute('aria-hidden', 'true');
+            /* Clear src after fade-out */
+            srcTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
+          }, 250);
+        }
+
         function closeLightbox() {
+          clearTimeout(closeTimer);
           czm.classList.remove('visible');
           czm.setAttribute('aria-hidden', 'true');
-          hideTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
+          srcTimer = setTimeout(function () { czmIframe.src = ''; }, 350);
         }
 
         /* Attach to each of the 12 cards */
@@ -1511,18 +1529,18 @@
           card.addEventListener('mouseenter', function () {
             openLightbox(iframe.src, week, title);
           });
-          card.addEventListener('mouseleave', function (e) {
-            if (e.relatedTarget && czm.contains(e.relatedTarget)) return;
-            closeLightbox();
-          });
+          /* Schedule close — cancelled if mouse enters lightbox in time */
+          card.addEventListener('mouseleave', scheduleClose);
         });
 
-        /* Keep open while hovering the lightbox itself */
-        czm.addEventListener('mouseleave', function (e) {
-          if (e.relatedTarget && czm.contains(e.relatedTarget)) return;
-          closeLightbox();
+        /* Mouse enters lightbox → cancel pending close */
+        czm.addEventListener('mouseenter', function () {
+          clearTimeout(closeTimer);
         });
+        /* Mouse leaves lightbox → schedule close */
+        czm.addEventListener('mouseleave', scheduleClose);
 
+        /* Explicit close actions */
         if (czmClose)    czmClose.addEventListener('click',    closeLightbox);
         if (czmBackdrop) czmBackdrop.addEventListener('click', closeLightbox);
         document.addEventListener('keydown', function (e) {
