@@ -1330,6 +1330,23 @@
       <span class="footer-credit">Made by: Kelly Laurence Q. Roduta, BSIT-S-2A</span>
       <span class="footer-copy">&copy; 2026 All rights reserved.</span>
     </footer>
+    <!-- Card zoom lightbox (must be in DOM before scripts run) -->
+    <div class="czm" id="czm" role="dialog" aria-modal="true" aria-label="Video preview" aria-hidden="true">
+      <div class="czm-backdrop" id="czm-backdrop"></div>
+      <div class="czm-wrap">
+        <div class="czm-video">
+          <iframe id="czm-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="czm-meta">
+          <div>
+            <p class="czm-week" id="czm-week"></p>
+            <p class="czm-title" id="czm-title"></p>
+          </div>
+          <button class="czm-close" id="czm-close">× Close</button>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
 
     <!-- YouTube IFrame API -->
@@ -1549,21 +1566,5 @@
       })();
     </script>
 
-    <!-- Card zoom lightbox -->
-    <div class="czm" id="czm" role="dialog" aria-modal="true" aria-label="Video preview" aria-hidden="true">
-      <div class="czm-backdrop" id="czm-backdrop"></div>
-      <div class="czm-wrap">
-        <div class="czm-video">
-          <iframe id="czm-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="czm-meta">
-          <div>
-            <p class="czm-week" id="czm-week"></p>
-            <p class="czm-title" id="czm-title"></p>
-          </div>
-          <button class="czm-close" id="czm-close">× Close</button>
-        </div>
-      </div>
-    </div>
   </body>
 </html>
