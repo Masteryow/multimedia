@@ -749,6 +749,61 @@
       }
     }
 
+    /* ── Download button ── */
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+      padding: 0.42rem 0.95rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent-2);
+      background: rgba(121, 167, 255, 0.08);
+      border: 1px solid rgba(121, 167, 255, 0.28);
+      border-radius: 99px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+      align-self: flex-start;
+    }
+
+    .dl-btn:hover {
+      background: rgba(121, 167, 255, 0.18);
+      border-color: var(--accent-2);
+      transform: translateY(-1px);
+    }
+
+    .dl-btn:active {
+      transform: scale(0.96);
+    }
+
+    .dl-btn.is-earth-dl {
+      color: var(--accent);
+      background: rgba(124, 224, 195, 0.08);
+      border-color: rgba(124, 224, 195, 0.28);
+    }
+
+    .dl-btn.is-earth-dl:hover {
+      background: rgba(124, 224, 195, 0.18);
+      border-color: var(--accent);
+    }
+
+    .dl-btn-icon {
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+
+    /* Encyc download row */
+    .encyc-dl-row {
+      margin-top: 0.55rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     @media (max-width: 720px) {
       .planet-card.has-video {
         display: flex;
@@ -1537,6 +1592,7 @@
         tempRange: '-180°C to 430°C', distanceKm: '57.9 million km',
         dayLength: '58.6 Earth days', gravity: '0.38g',
         isEarth: false, video: 'mercury.mp4',
+        blendFile: 'blender/Mercury.blend',
         desc: 'The smallest planet and closest to the Sun. With no atmosphere to retain heat, Mercury swings from -180°C at night to 430°C during the day — the most extreme temperature range in the Solar System.'
       },
       {
@@ -1545,6 +1601,7 @@
         tempRange: '~465°C (avg)', distanceKm: '108.2 million km',
         dayLength: '243 Earth days', gravity: '0.91g',
         isEarth: false, video: 'venus.mp4',
+        blendFile: 'blender/Venus.blend',
         desc: 'The hottest planet despite not being the closest to the Sun. A thick CO₂ atmosphere traps heat in a runaway greenhouse effect. A day on Venus is longer than its year, and it rotates backwards.'
       },
       {
@@ -1553,6 +1610,7 @@
         tempRange: '-89°C to 57°C', distanceKm: '149.6 million km',
         dayLength: '24 hours', gravity: '1.00g',
         isEarth: true, video: 'earth.mp4',
+        blendFile: 'blender/Earth.blend',
         desc: 'The only known planet to harbor life. Earth has liquid water, a protective magnetic field, and a nitrogen-oxygen atmosphere that makes complex life possible. It is the densest planet in the Solar System.'
       },
       {
@@ -1561,6 +1619,7 @@
         tempRange: '-125°C to 20°C', distanceKm: '227.9 million km',
         dayLength: '24 hrs 37 min', gravity: '0.38g',
         isEarth: false, /* video: 'mars.mp4', */
+        blendFile: 'blender/Mars.blend',
         desc: 'Known as the Red Planet due to iron oxide on its surface. Mars is home to Olympus Mons, the tallest volcano in the Solar System at 22 km high. Evidence suggests it once had liquid water.'
       },
       {
@@ -1569,6 +1628,7 @@
         tempRange: '~-110°C (cloud top)', distanceKm: '778.5 million km',
         dayLength: '9 hrs 56 min', gravity: '2.53g',
         isEarth: false, /* video: 'jupiter.mp4', */
+        blendFile: 'blender/Jupiter.blend',
         desc: 'The largest planet — more than twice the mass of all other planets combined. Its Great Red Spot is a storm wider than Earth that has been raging for over 350 years. Jupiter has 95 known moons.'
       },
       {
@@ -1577,6 +1637,7 @@
         tempRange: '~-140°C (cloud top)', distanceKm: '1.43 billion km',
         dayLength: '10 hrs 42 min', gravity: '1.07g',
         isEarth: false, /* video: 'saturn.mp4', */
+        blendFile: 'blender/Saturn.blend',
         desc: 'Famous for its iconic ring system made of ice and rock particles spanning 282,000 km. Saturn is the least dense planet — it would float on water. It has 146 known moons, including Titan with a thick atmosphere.'
       },
       {
@@ -1585,6 +1646,7 @@
         tempRange: '~-195°C (cloud top)', distanceKm: '2.87 billion km',
         dayLength: '17 hrs 14 min', gravity: '0.89g',
         isEarth: false, /* video: 'uranus.mp4', */
+        blendFile: 'blender/Uranus.blend',
         desc: 'An ice giant that rotates on its side with an axial tilt of 98° — likely caused by a massive collision long ago. It is the coldest planetary atmosphere in the Solar System at -224°C.'
       },
       {
@@ -1593,6 +1655,7 @@
         tempRange: '~-200°C (cloud top)', distanceKm: '4.50 billion km',
         dayLength: '16 hrs 6 min', gravity: '1.14g',
         isEarth: false, /* video: 'neptune.mp4', */
+        blendFile: 'blender/Neptune.blend',
         desc: 'The windiest planet, with supersonic storms reaching 2,100 km/h. Neptune was the first planet predicted mathematically before being directly observed. Its largest moon Triton orbits in the opposite direction.'
       },
       {
@@ -1601,6 +1664,7 @@
         tempRange: '-233°C to -223°C', distanceKm: '5.91 billion km',
         dayLength: '6.4 Earth days', gravity: '0.063g',
         isEarth: false, /* video: 'pluto.mp4', */
+        blendFile: 'blender/Pluto.blend',
         desc: 'A dwarf planet in the Kuiper Belt, reclassified from a planet in 2006. It has a heart-shaped nitrogen ice plain called Tombaugh Regio. Pluto has five moons, with Charon being so large the two form a binary system.'
       }
     ];
@@ -1658,6 +1722,10 @@
           ? `<video class="planet-card-video" src="videos/${p.video}" autoplay muted loop playsinline></video>`
           : `<span class="planet-emoji">${p.emoji}</span>`;
 
+        const dlBtnCalc = p.blendFile
+          ? `<a class="dl-btn${p.isEarth ? ' is-earth-dl' : ''}" href="${p.blendFile}" download title="Download ${p.name}.blend Blender project file"><span class="dl-btn-icon">⬇</span> Download .blend</a>`
+          : '';
+
         card.innerHTML = `
             <div class="planet-card-side">
               ${earthVideoSide}
@@ -1697,6 +1765,7 @@
                   <span class="pi-val">${p.gravity}</span>
                 </div>
               </div>
+              ${dlBtnCalc}
             </div>
           `;
         grid.appendChild(card);
@@ -1785,11 +1854,16 @@
           ? `<div class="encyc-earth-header"><p class="encyc-name" style="font-size:1rem;margin-bottom:0.25rem;">${p.name}</p><span class="encyc-type">${p.type}</span></div>`
           : '';
 
+        const dlBtnEncyc = p.blendFile
+          ? `<div class="encyc-dl-row"><a class="dl-btn${p.isEarth ? ' is-earth-dl' : ''}" href="${p.blendFile}" download title="Download ${p.name}.blend Blender project file"><span class="dl-btn-icon">⬇</span> Download .blend</a></div>`
+          : '';
+
         card.innerHTML = `
             ${encycLeft}
             <div class="encyc-right">
               ${earthNameRow}
               <p class="encyc-desc">${p.desc}</p>
+              ${dlBtnEncyc}
             </div>
           `;
         grid.appendChild(card);
