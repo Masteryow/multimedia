@@ -48,15 +48,49 @@
         max-width: 52ch;
       }
 
-      /* Featured video embed */
+      /* ── Side-by-side comparison videos ── */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto 1.6rem;
+      }
+
+      .comparison-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .comparison-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .comparison-label .cl-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .comparison-label.cl-output .cl-dot { background: var(--accent); }
+      .comparison-label.cl-ref    .cl-dot { background: var(--accent-2); }
+
       .featured-embed-wrap {
         width: 100%;
-        max-width: 960px;
-        margin: 0 auto;
         border-radius: var(--radius-xl);
         overflow: hidden;
         border: 1px solid var(--line);
-        box-shadow: 0 0 60px rgba(124, 224, 195, 0.08);
+        box-shadow: 0 0 40px rgba(124, 224, 195, 0.08);
         aspect-ratio: 16 / 9;
         position: relative;
       }
@@ -66,6 +100,83 @@
         height: 100%;
         display: block;
         border: none;
+      }
+
+      /* Reference column inside hero */
+      .ref-embed-wrap {
+        width: 100%;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 1px solid rgba(121, 167, 255, 0.25);
+        box-shadow: 0 0 40px rgba(121, 167, 255, 0.07);
+        aspect-ratio: 16 / 9;
+        position: relative;
+        background: #000;
+      }
+
+      .ref-embed-wrap iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border: none;
+      }
+
+      /* Disclaimer strip below comparison grid */
+      .comparison-disclaimer {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(121, 167, 255, 0.05);
+        border: 1px solid rgba(121, 167, 255, 0.15);
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.4rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 2.4rem;
+        align-items: flex-start;
+      }
+
+      .disclaimer-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+        margin-bottom: 0.25rem;
+      }
+
+      .disclaimer-block {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        flex: 1;
+      }
+
+      .disclaimer-text {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .disclaimer-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem 1.2rem;
+        margin-top: 0.5rem;
+      }
+
+      .disclaimer-row {
+        display: flex;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+      }
+
+      .disclaimer-role { color: var(--muted); min-width: 72px; flex-shrink: 0; }
+      .disclaimer-val  { color: var(--text); font-weight: 500; }
+
+      @media (max-width: 860px) {
+        .comparison-grid { grid-template-columns: 1fr; }
       }
 
       /* Video grid section */
@@ -499,21 +610,84 @@
     </header>
 
     <main>
-      <!-- ── HERO: Featured Video ── -->
+      <!-- ── HERO: Featured Video + Reference Video (side by side) ── -->
       <section class="roto-hero">
         <span class="roto-hero-label">Multimedia Studio</span>
         <h1>ROTOSCOPE</h1>
-        <p class="roto-hero-sub">Frame-by-frame trace, cleanup, and motion studies — watch them play directly below.</p>
+        <p class="roto-hero-sub">Frame-by-frame trace, cleanup, and motion studies — compare the final output against the reference source below.</p>
 
-        <div class="featured-embed-wrap">
-          <iframe
-            id="featured-video"
-            src="https://www.youtube.com/embed/4qgXLTbteww?rel=0&modestbranding=1"
-            title="Rotoscope Featured Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-        </div>
+        <!-- Two-column comparison -->
+        <div class="comparison-grid">
+
+          <!-- Final Output -->
+          <div class="comparison-col">
+            <span class="comparison-label cl-output">
+              <span class="cl-dot"></span>
+              Final Output
+            </span>
+            <div class="featured-embed-wrap">
+              <iframe
+                id="featured-video"
+                src="https://www.youtube.com/embed/4qgXLTbteww?rel=0&modestbranding=1"
+                title="Rotoscope Featured Video — Final Output"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Reference Video -->
+          <div class="comparison-col">
+            <span class="comparison-label cl-ref">
+              <span class="cl-dot"></span>
+              Reference Video
+            </span>
+            <div class="ref-embed-wrap">
+              <iframe
+                id="ref-video-hero"
+                src="https://www.youtube.com/embed/Aym1eH7nMPw?rel=0&modestbranding=1"
+                title="Rotoscope Reference — How to Rotoscope"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+        </div><!-- /comparison-grid -->
+
+        <!-- Disclaimer / Credits strip -->
+        <div class="comparison-disclaimer">
+          <div class="disclaimer-block">
+            <p class="disclaimer-title">About the Reference</p>
+            <p class="disclaimer-text">
+              This video serves as the primary reference used for completing the rotoscope exercises in this course.
+              It covers the essential workflow for isolating subjects frame-by-frame, refining edges,
+              and integrating rotoscoped layers into a compositing pipeline using Adobe After Effects.
+            </p>
+          </div>
+          <div class="disclaimer-block">
+            <p class="disclaimer-title">Credits</p>
+            <div class="disclaimer-meta">
+              <div class="disclaimer-row">
+                <span class="disclaimer-role">Source</span>
+                <span class="disclaimer-val">YouTube — <a href="https://www.youtube.com/watch?v=Aym1eH7nMPw" target="_blank" rel="noopener" style="color:var(--accent-2);text-decoration:none;">youtube.com/watch?v=Aym1eH7nMPw</a></span>
+              </div>
+              <div class="disclaimer-row">
+                <span class="disclaimer-role">Technique</span>
+                <span class="disclaimer-val">Rotoscoping / Frame-by-frame Isolation</span>
+              </div>
+              <div class="disclaimer-row">
+                <span class="disclaimer-role">Software</span>
+                <span class="disclaimer-val">Adobe After Effects</span>
+              </div>
+              <div class="disclaimer-row">
+                <span class="disclaimer-role">Used for</span>
+                <span class="disclaimer-val">Weeks 1–12 Rotoscope Exercises</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- /comparison-disclaimer -->
+
       </section>
 
       <!-- ── 12-Card Video Gallery ── -->
@@ -918,56 +1092,7 @@
         </div>
       </section>
 
-      <!-- ── Reference Video ── -->
-      <section class="ref-section">
-        <div class="ref-header">
-          <h2>Reference Video</h2>
-          <span class="ref-badge">Source material</span>
-        </div>
-
-        <div class="ref-card reveal">
-          <!-- Video -->
-          <div class="ref-video">
-            <iframe
-              src="https://www.youtube.com/embed/Aym1eH7nMPw?rel=0&modestbranding=1"
-              title="Rotoscope Reference — How to Rotoscope"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
-
-          <!-- Info & Credits -->
-          <div class="ref-info">
-            <span class="ref-info-label">Reference Material</span>
-            <h3>How to Rotoscope in After Effects</h3>
-            <p>
-              This video serves as the primary reference used for completing the rotoscope exercises in this course.
-              It covers the essential workflow for isolating subjects frame-by-frame, refining edges,
-              and integrating rotoscoped layers into a compositing pipeline using Adobe After Effects.
-            </p>
-
-            <div class="ref-credits">
-              <span class="ref-credits-label">Credits</span>
-              <div class="ref-credit-row">
-                <span class="ref-credit-role">Source</span>
-                <span class="ref-credit-name">YouTube — <a href="https://www.youtube.com/watch?v=Aym1eH7nMPw" target="_blank" rel="noopener" style="color:var(--accent-2);text-decoration:none;">youtube.com/watch?v=Aym1eH7nMPw</a></span>
-              </div>
-              <div class="ref-credit-row">
-                <span class="ref-credit-role">Technique</span>
-                <span class="ref-credit-name">Rotoscoping / Frame-by-frame Isolation</span>
-              </div>
-              <div class="ref-credit-row">
-                <span class="ref-credit-role">Software</span>
-                <span class="ref-credit-name">Adobe After Effects</span>
-              </div>
-              <div class="ref-credit-row">
-                <span class="ref-credit-role">Used for</span>
-                <span class="ref-credit-name">Weeks 1–12 Rotoscope Exercises</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- Reference section removed: now integrated into hero comparison grid above -->
     </main>
 
     <footer class="footer">
@@ -1006,9 +1131,9 @@
         var heroIframe = document.querySelector('.featured-embed-wrap iframe');
         enableHover(heroIframe, document.querySelector('.featured-embed-wrap'));
 
-        // Reference video
-        var refIframe = document.querySelector('.ref-video iframe');
-        enableHover(refIframe, document.querySelector('.ref-card'));
+        // Reference video (hero comparison column)
+        var refIframe = document.querySelector('#ref-video-hero');
+        enableHover(refIframe, refIframe ? refIframe.closest('.ref-embed-wrap') : null);
 
       })();
 
