@@ -746,7 +746,6 @@
                 src="videos/reference_video.mp4"
                 title="Rotoscope Reference — How to Rotoscope"
                 preload="metadata"
-                controls
                 muted
                 playsinline
               ></video>
@@ -762,13 +761,13 @@
 
         </div><!-- /comparison-grid -->
 
-        <!-- Play Both sync button (centered below both videos) -->
+        <!-- Sync toggle button (always visible — controls both videos) -->
         <div class="sync-bar" id="sync-overlay">
-          <button class="sync-play-btn" id="sync-play-btn" aria-label="Play both videos in sync">
+          <button class="sync-play-btn" id="sync-play-btn" aria-label="Sync and play both videos">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            &#9654;&ensp;Play Both
+            <span id="sync-btn-label">Sync &amp; Play</span>
           </button>
-          <span class="sync-hint">Starts the final output &amp; reference video together</span>
+          <span class="sync-hint">Controls both videos together at the same timestamp</span>
         </div>
 
         <!-- Disclaimer / Credits strip -->
@@ -1224,25 +1223,33 @@
     <script>
       /* ══════════════════════════════════════════════════════
          COMPARISON VIDEO SYNC
-         ─ Final output  : YouTube IFrame API  (playerOutput)
-         ─ Reference     : local <video> element (refVideo)
+         ─ Final output  : YouTube IFrame API  (playerOutput) — always blocked
+         ─ Reference     : local <video> element (refVideo)   — no native controls
+         ─ Control       : Sync button only (always visible)
 
-         WHY local video?
-         Browsers enforce "one active YouTube player at a time".
-         The reference is served as a local MP4 so both can play
-         simultaneously.
-
-         WHY muted?
-         Browsers block video.play() called outside a direct user
-         gesture (e.g. from a YouTube postMessage callback).
-         Muted videos bypass this restriction. An unmute toggle
-         is provided for users who want the reference audio.
+         On every button click:
+           ─ if PLAYING  → pause both
+           ─ if PAUSED   → sync reference timestamp to YouTube, play both
       ══════════════════════════════════════════════════════ */
 
       var playerOutput = null;   // YT.Player for the final video
       var refVideo     = null;   // native <video> for the reference
       var syncing      = false;
-      var syncStarted  = false;  // true once the user has clicked "Play Both"
+
+      /* Update the Sync button label & icon */
+      function updateSyncBtn(isPlaying) {
+        var btn   = document.getElementById('sync-play-btn');
+        var label = document.getElementById('sync-btn-label');
+        var icon  = btn ? btn.querySelector('svg') : null;
+        if (!btn || !label || !icon) return;
+        if (isPlaying) {
+          label.textContent = 'Pause Both';
+          icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        } else {
+          label.textContent = 'Sync & Play';
+          icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        }
+      }
 
       /* ── YouTube IFrame API callback ── */
       function onYouTubeIframeAPIReady() {
@@ -1253,41 +1260,50 @@
 
         refVideo = document.getElementById('ref-video-hero');
 
-        /* ── "Play Both" overlay button ── */
-        var overlay   = document.getElementById('sync-overlay');
+        /* ── Sync toggle button ── */
         var playBtn   = document.getElementById('sync-play-btn');
         var unmuteBtn = document.getElementById('unmute-btn');
         var unmuteIcon  = document.getElementById('unmute-icon');
         var unmuteLabel = document.getElementById('unmute-label');
 
-        function startSync() {
-          if (syncStarted) return;
-          syncStarted = true;
-          /* Remove the click-blocker so YouTube controls work after sync starts */
-          var blocker = document.getElementById('yt-blocker');
-          if (blocker) blocker.remove();
-          /* Hide the Play Both bar */
-          if (overlay) overlay.classList.add('hidden');
-          /* Show unmute toggle */
-          if (unmuteBtn) unmuteBtn.style.display = 'flex';
-          /* Play both — reference is muted so browser allows it */
-          if (playerOutput && typeof playerOutput.playVideo === 'function')
-            playerOutput.playVideo();
-          if (refVideo) {
-            var p = refVideo.play();
-            if (p && p.catch) p.catch(function () {});
-          }
-        }
+        if (playBtn) {
+          playBtn.addEventListener('click', function () {
+            if (!playerOutput) return;
+            var state     = playerOutput.getPlayerState();
+            var isPlaying = (state === YT.PlayerState.PLAYING ||
+                             state === YT.PlayerState.BUFFERING);
 
-        if (playBtn)  playBtn.addEventListener('click',  startSync);
-        if (overlay)  overlay.addEventListener('click',  startSync);
+            if (isPlaying) {
+              /* ── Pause both ── */
+              syncing = true;
+              playerOutput.pauseVideo();
+              if (refVideo && !refVideo.paused) refVideo.pause();
+              setTimeout(function () { syncing = false; }, 600);
+              updateSyncBtn(false);
+            } else {
+              /* ── Sync timestamps then play both ── */
+              var ytTime = (typeof playerOutput.getCurrentTime === 'function')
+                           ? (playerOutput.getCurrentTime() || 0) : 0;
+              if (refVideo) refVideo.currentTime = ytTime;
+              syncing = true;
+              playerOutput.playVideo();
+              if (refVideo) {
+                var p = refVideo.play();
+                if (p && p.catch) p.catch(function () {});
+              }
+              setTimeout(function () { syncing = false; }, 600);
+              updateSyncBtn(true);
+              /* Show unmute button on first play */
+              if (unmuteBtn) unmuteBtn.style.display = 'flex';
+            }
+          });
+        }
 
         /* Unmute / re-mute the reference video */
         if (unmuteBtn && refVideo) {
           unmuteBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             refVideo.muted = !refVideo.muted;
-            /* swap icon between speaker-off and speaker-on */
             var muted = refVideo.muted;
             unmuteLabel.textContent = muted ? 'Unmute Ref' : 'Mute Ref';
             unmuteIcon.innerHTML = muted
@@ -1296,35 +1312,7 @@
           });
         }
 
-        /* Mirror reference play/pause → YouTube */
-        if (refVideo) {
-          refVideo.addEventListener('play', function () {
-            if (syncing || !playerOutput) return;
-            syncing = true;
-            try {
-              if (playerOutput.getPlayerState() !== YT.PlayerState.PLAYING)
-                playerOutput.playVideo();
-            } finally {
-              setTimeout(function () { syncing = false; }, 600);
-            }
-          });
-
-          refVideo.addEventListener('pause', function () {
-            if (syncing || !playerOutput) return;
-            syncing = true;
-            try {
-              var state = playerOutput.getPlayerState();
-              if (state === YT.PlayerState.PLAYING) playerOutput.pauseVideo();
-            } finally {
-              setTimeout(function () { syncing = false; }, 600);
-            }
-          });
-        }
-
-        /* Hover-to-play for the YouTube (final output) wrapper */
-        bindHoverYT(document.querySelector('.featured-embed-wrap'), function () { return playerOutput; });
-
-        /* Hover-to-play for 12-card grid via postMessage */
+        /* Hover-to-play for 12-card gallery grid via postMessage */
         document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
           var card = iframe.closest('.video-card');
           if (!card) return;
@@ -1341,43 +1329,20 @@
         });
       }
 
-      /* YouTube state change → mirror to reference local video */
+      /* YouTube state change → update button label only (no individual control) */
       function onOutputStateChange(e) {
-        if (syncing || !refVideo) return;
-        syncing = true;
-        try {
-          if (e.data === YT.PlayerState.PLAYING) {
-            /* Also hide overlay once the user interacts with the YouTube player directly */
-            var overlay = document.getElementById('sync-overlay');
-            if (overlay && !overlay.classList.contains('hidden')) {
-              overlay.classList.add('hidden');
-              syncStarted = true;
-              var unmuteBtn = document.getElementById('unmute-btn');
-              if (unmuteBtn) unmuteBtn.style.display = 'flex';
-            }
-            if (refVideo.paused) {
-              var p = refVideo.play();
-              if (p && p.catch) p.catch(function () {});
-            }
-          } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-            if (!refVideo.paused) refVideo.pause();
+        if (syncing) return;
+        if (e.data === YT.PlayerState.PLAYING) {
+          updateSyncBtn(true);
+        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+          updateSyncBtn(false);
+          /* Mirror pause to reference just in case */
+          if (refVideo && !refVideo.paused) {
+            syncing = true;
+            refVideo.pause();
+            setTimeout(function () { syncing = false; }, 600);
           }
-        } finally {
-          setTimeout(function () { syncing = false; }, 600);
         }
-      }
-
-      /* Hover-to-play helper for YouTube wrapper */
-      function bindHoverYT(wrapper, getPlayer) {
-        if (!wrapper) return;
-        wrapper.addEventListener('mouseenter', function () {
-          var p = getPlayer();
-          if (p && typeof p.playVideo === 'function') p.playVideo();
-        });
-        wrapper.addEventListener('mouseleave', function () {
-          var p = getPlayer();
-          if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
-        });
       }
 
       /* ── Workflow accordion ── */
