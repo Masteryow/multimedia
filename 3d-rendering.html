@@ -1354,8 +1354,8 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </div>
-      <a class="hero-dl-btn" href="blender/SolarSystem.blend" download title="Download the full Solar System Blender project">
-        <span>⬇</span> Download Solar System .blend
+      <a class="hero-dl-btn" href="blender/SolarSystem.zip" download title="Download the full Solar System Blender project + Python scripts">
+        <span>⬇</span> Download Solar System .zip
       </a>
 
       <!-- Specs bar -->
@@ -1716,7 +1716,7 @@
       <div class="downloads-header reveal">
         <p class="eyebrow">⬇️ Project Files</p>
         <h2>Download Blender Files</h2>
-        <p>Download the original <code>.blend</code> project files for each planet model — open them directly in Blender 5.1 or later.</p>
+        <p>Each download is a <code>.zip</code> archive containing the <code>.blend</code> project file and its accompanying Python (<code>.py</code>) script — open in Blender 5.1 or later.</p>
       </div>
       <div class="dl-grid" id="dl-grid">
         <!-- filled by JS -->
@@ -1739,7 +1739,7 @@
         tempRange: '-180°C to 430°C', distanceKm: '57.9 million km',
         dayLength: '58.6 Earth days', gravity: '0.38g',
         isEarth: false, video: 'mercury.mp4',
-        blendFile: 'blender/Mercury.blend',
+        blendFile: 'blender/Mercury.zip',
         desc: 'The smallest planet and closest to the Sun. With no atmosphere to retain heat, Mercury swings from -180°C at night to 430°C during the day — the most extreme temperature range in the Solar System.'
       },
       {
@@ -1748,7 +1748,7 @@
         tempRange: '~465°C (avg)', distanceKm: '108.2 million km',
         dayLength: '243 Earth days', gravity: '0.91g',
         isEarth: false, video: 'venus.mp4',
-        blendFile: 'blender/Venus.blend',
+        blendFile: 'blender/Venus.zip',
         desc: 'The hottest planet despite not being the closest to the Sun. A thick CO₂ atmosphere traps heat in a runaway greenhouse effect. A day on Venus is longer than its year, and it rotates backwards.'
       },
       {
@@ -1757,7 +1757,7 @@
         tempRange: '-89°C to 57°C', distanceKm: '149.6 million km',
         dayLength: '24 hours', gravity: '1.00g',
         isEarth: true, video: 'earth.mp4',
-        blendFile: 'blender/Earth.blend',
+        blendFile: 'blender/Earth.zip',
         desc: 'The only known planet to harbor life. Earth has liquid water, a protective magnetic field, and a nitrogen-oxygen atmosphere that makes complex life possible. It is the densest planet in the Solar System.'
       },
       {
@@ -1766,7 +1766,7 @@
         tempRange: '-125°C to 20°C', distanceKm: '227.9 million km',
         dayLength: '24 hrs 37 min', gravity: '0.38g',
         isEarth: false, /* video: 'mars.mp4', */
-        blendFile: 'blender/Mars.blend',
+        blendFile: 'blender/Mars.zip',
         desc: 'Known as the Red Planet due to iron oxide on its surface. Mars is home to Olympus Mons, the tallest volcano in the Solar System at 22 km high. Evidence suggests it once had liquid water.'
       },
       {
@@ -1775,7 +1775,7 @@
         tempRange: '~-110°C (cloud top)', distanceKm: '778.5 million km',
         dayLength: '9 hrs 56 min', gravity: '2.53g',
         isEarth: false, /* video: 'jupiter.mp4', */
-        blendFile: 'blender/Jupiter.blend',
+        blendFile: 'blender/Jupiter.zip',
         desc: 'The largest planet — more than twice the mass of all other planets combined. Its Great Red Spot is a storm wider than Earth that has been raging for over 350 years. Jupiter has 95 known moons.'
       },
       {
@@ -1784,7 +1784,7 @@
         tempRange: '~-140°C (cloud top)', distanceKm: '1.43 billion km',
         dayLength: '10 hrs 42 min', gravity: '1.07g',
         isEarth: false, /* video: 'saturn.mp4', */
-        blendFile: 'blender/Saturn.blend',
+        blendFile: 'blender/Saturn.zip',
         desc: 'Famous for its iconic ring system made of ice and rock particles spanning 282,000 km. Saturn is the least dense planet — it would float on water. It has 146 known moons, including Titan with a thick atmosphere.'
       },
       {
@@ -1793,7 +1793,7 @@
         tempRange: '~-195°C (cloud top)', distanceKm: '2.87 billion km',
         dayLength: '17 hrs 14 min', gravity: '0.89g',
         isEarth: false, /* video: 'uranus.mp4', */
-        blendFile: 'blender/Uranus.blend',
+        blendFile: 'blender/Uranus.zip',
         desc: 'An ice giant that rotates on its side with an axial tilt of 98° — likely caused by a massive collision long ago. It is the coldest planetary atmosphere in the Solar System at -224°C.'
       },
       {
@@ -1802,7 +1802,7 @@
         tempRange: '~-200°C (cloud top)', distanceKm: '4.50 billion km',
         dayLength: '16 hrs 6 min', gravity: '1.14g',
         isEarth: false, /* video: 'neptune.mp4', */
-        blendFile: 'blender/Neptune.blend',
+        blendFile: 'blender/Neptune.zip',
         desc: 'The windiest planet, with supersonic storms reaching 2,100 km/h. Neptune was the first planet predicted mathematically before being directly observed. Its largest moon Triton orbits in the opposite direction.'
       },
       {
@@ -1811,7 +1811,7 @@
         tempRange: '-233°C to -223°C', distanceKm: '5.91 billion km',
         dayLength: '6.4 Earth days', gravity: '0.063g',
         isEarth: false, /* video: 'pluto.mp4', */
-        blendFile: 'blender/Pluto.blend',
+        blendFile: 'blender/Pluto.zip',
         desc: 'A dwarf planet in the Kuiper Belt, reclassified from a planet in 2006. It has a heart-shaped nitrogen ice plain called Tombaugh Regio. Pluto has five moons, with Charon being so large the two form a binary system.'
       }
     ];
@@ -2027,7 +2027,7 @@
           </div>
           <span class="dl-card-file">${fileName}</span>
           <a class="dl-btn" href="${p.blendFile}" download title="Download ${fileName}">
-            <span class="dl-btn-icon">⬇</span> Download .blend
+            <span class="dl-btn-icon">⬇</span> Download .zip
           </a>
         `;
         grid.appendChild(card);
