@@ -112,7 +112,6 @@
         aspect-ratio: 16 / 9;
         position: relative;
         background: #000;
-        cursor: pointer;
       }
 
       .ref-embed-wrap video {
@@ -121,6 +120,75 @@
         display: block;
         object-fit: cover;
       }
+
+      /* ── Sync overlay button ("Play Both") ── */
+      .sync-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: rgba(0,0,0,0.52);
+        backdrop-filter: blur(2px);
+        z-index: 10;
+        transition: opacity 0.3s;
+        cursor: pointer;
+      }
+      .sync-overlay.hidden { display: none; }
+
+      .sync-play-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: linear-gradient(135deg, var(--accent), #4fc3a1);
+        color: #0a0c12;
+        border: none;
+        border-radius: 99px;
+        padding: 0.65rem 1.5rem;
+        font-size: 0.92rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(124,224,195,0.35);
+        transition: transform 0.15s, box-shadow 0.15s;
+      }
+      .sync-play-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 28px rgba(124,224,195,0.5);
+      }
+      .sync-play-btn svg { width:18px; height:18px; fill:currentColor; flex-shrink:0; }
+
+      .sync-hint {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.55);
+        letter-spacing: 0.05em;
+      }
+
+      /* Unmute toggle pill */
+      .unmute-btn {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.6rem;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(10,12,18,0.75);
+        border: 1px solid rgba(121,167,255,0.3);
+        border-radius: 99px;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--accent-2);
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+        backdrop-filter: blur(4px);
+      }
+      .unmute-btn:hover { background: rgba(121,167,255,0.12); border-color: var(--accent-2); }
+      .unmute-btn svg { width:13px; height:13px; fill:currentColor; }
 
       /* Disclaimer strip below comparison grid */
       .comparison-disclaimer {
@@ -643,14 +711,33 @@
               <span class="cl-dot"></span>
               Reference Video
             </span>
-            <div class="ref-embed-wrap">
+            <div class="ref-embed-wrap" id="ref-wrap">
+
+              <!-- Overlay: click to start both videos in sync -->
+              <div class="sync-overlay" id="sync-overlay">
+                <button class="sync-play-btn" id="sync-play-btn" aria-label="Play both videos in sync">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Play Both
+                </button>
+                <span class="sync-hint">Plays final output &amp; reference together</span>
+              </div>
+
               <video
                 id="ref-video-hero"
                 src="videos/reference_video.mp4"
                 title="Rotoscope Reference — How to Rotoscope"
                 preload="metadata"
                 controls
+                muted
+                playsinline
               ></video>
+
+              <!-- Unmute toggle (appears after sync starts) -->
+              <button class="unmute-btn" id="unmute-btn" aria-label="Toggle mute on reference video" style="display:none">
+                <svg id="unmute-icon" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-3-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 19L19 20.27 20.27 19 5.27 3 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                <span id="unmute-label">Unmute Ref</span>
+              </button>
+
             </div>
           </div>
 
@@ -1107,28 +1194,78 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
-      /* ══ Comparison video sync ══
-         Final output  → YouTube IFrame API (playerOutput)
-         Reference     → local <video> element (refVideo)
-         Two YouTube iframes cannot both play at the same time in most
-         browsers, so the reference is served as a local MP4 instead.
-      */
+      /* ══════════════════════════════════════════════════════
+         COMPARISON VIDEO SYNC
+         ─ Final output  : YouTube IFrame API  (playerOutput)
+         ─ Reference     : local <video> element (refVideo)
 
-      var playerOutput = null;              // YT.Player for the final video
-      var refVideo     = null;              // native <video> for the reference
+         WHY local video?
+         Browsers enforce "one active YouTube player at a time".
+         The reference is served as a local MP4 so both can play
+         simultaneously.
+
+         WHY muted?
+         Browsers block video.play() called outside a direct user
+         gesture (e.g. from a YouTube postMessage callback).
+         Muted videos bypass this restriction. An unmute toggle
+         is provided for users who want the reference audio.
+      ══════════════════════════════════════════════════════ */
+
+      var playerOutput = null;   // YT.Player for the final video
+      var refVideo     = null;   // native <video> for the reference
       var syncing      = false;
+      var syncStarted  = false;  // true once the user has clicked "Play Both"
 
-      /* ── YouTube IFrame API ready ── */
+      /* ── YouTube IFrame API callback ── */
       function onYouTubeIframeAPIReady() {
 
         playerOutput = new YT.Player('featured-video', {
           events: { onStateChange: onOutputStateChange }
         });
 
-        /* Grab the local reference video element */
         refVideo = document.getElementById('ref-video-hero');
 
-        /* Sync: when the reference video plays/pauses, mirror to the YT player */
+        /* ── "Play Both" overlay button ── */
+        var overlay   = document.getElementById('sync-overlay');
+        var playBtn   = document.getElementById('sync-play-btn');
+        var unmuteBtn = document.getElementById('unmute-btn');
+        var unmuteIcon  = document.getElementById('unmute-icon');
+        var unmuteLabel = document.getElementById('unmute-label');
+
+        function startSync() {
+          if (syncStarted) return;
+          syncStarted = true;
+          /* Hide overlay */
+          if (overlay) overlay.classList.add('hidden');
+          /* Show unmute toggle */
+          if (unmuteBtn) unmuteBtn.style.display = 'flex';
+          /* Play both — reference is muted so browser allows it */
+          if (playerOutput && typeof playerOutput.playVideo === 'function')
+            playerOutput.playVideo();
+          if (refVideo) {
+            var p = refVideo.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+        }
+
+        if (playBtn)  playBtn.addEventListener('click',  startSync);
+        if (overlay)  overlay.addEventListener('click',  startSync);
+
+        /* Unmute / re-mute the reference video */
+        if (unmuteBtn && refVideo) {
+          unmuteBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            refVideo.muted = !refVideo.muted;
+            /* swap icon between speaker-off and speaker-on */
+            var muted = refVideo.muted;
+            unmuteLabel.textContent = muted ? 'Unmute Ref' : 'Mute Ref';
+            unmuteIcon.innerHTML = muted
+              ? '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-3-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 19L19 20.27 20.27 19 5.27 3 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'
+              : '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+          });
+        }
+
+        /* Mirror reference play/pause → YouTube */
         if (refVideo) {
           refVideo.addEventListener('play', function () {
             if (syncing || !playerOutput) return;
@@ -1145,8 +1282,8 @@
             if (syncing || !playerOutput) return;
             syncing = true;
             try {
-              if (playerOutput.getPlayerState() === YT.PlayerState.PLAYING)
-                playerOutput.pauseVideo();
+              var state = playerOutput.getPlayerState();
+              if (state === YT.PlayerState.PLAYING) playerOutput.pauseVideo();
             } finally {
               setTimeout(function () { syncing = false; }, 600);
             }
@@ -1173,13 +1310,24 @@
         });
       }
 
-      /* Output (YouTube) → Reference (local video) */
+      /* YouTube state change → mirror to reference local video */
       function onOutputStateChange(e) {
         if (syncing || !refVideo) return;
         syncing = true;
         try {
           if (e.data === YT.PlayerState.PLAYING) {
-            if (refVideo.paused) refVideo.play();
+            /* Also hide overlay once the user interacts with the YouTube player directly */
+            var overlay = document.getElementById('sync-overlay');
+            if (overlay && !overlay.classList.contains('hidden')) {
+              overlay.classList.add('hidden');
+              syncStarted = true;
+              var unmuteBtn = document.getElementById('unmute-btn');
+              if (unmuteBtn) unmuteBtn.style.display = 'flex';
+            }
+            if (refVideo.paused) {
+              var p = refVideo.play();
+              if (p && p.catch) p.catch(function () {});
+            }
           } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
             if (!refVideo.paused) refVideo.pause();
           }
@@ -1188,7 +1336,7 @@
         }
       }
 
-      /* Hover helper for YouTube wrapper */
+      /* Hover-to-play helper for YouTube wrapper */
       function bindHoverYT(wrapper, getPlayer) {
         if (!wrapper) return;
         wrapper.addEventListener('mouseenter', function () {
