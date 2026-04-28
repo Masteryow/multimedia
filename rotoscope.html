@@ -1444,21 +1444,7 @@
           });
         }
 
-        /* Hover-to-play for 12-card gallery grid via postMessage */
-        document.querySelectorAll('.video-card-embed iframe').forEach(function (iframe) {
-          var card = iframe.closest('.video-card');
-          if (!card) return;
-          card.addEventListener('mouseenter', function () {
-            iframe.contentWindow.postMessage(
-              JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*'
-            );
-          });
-          card.addEventListener('mouseleave', function () {
-            iframe.contentWindow.postMessage(
-              JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*'
-            );
-          });
-        });
+        /* Cards open the lightbox on hover — playback is manual inside the lightbox */
       }
 
       /* YouTube state change → update button label only (no individual control) */
@@ -1508,7 +1494,7 @@
           clearTimeout(srcTimer);
 
           var base    = iframeSrc.split('?')[0];
-          var autoSrc = base + '?rel=0&modestbranding=1&autoplay=1&mute=1';
+          var autoSrc = base + '?rel=0&modestbranding=1';
 
           /* Only reload if a different video */
           if (czmIframe.src !== autoSrc) czmIframe.src = autoSrc;
