@@ -1385,6 +1385,49 @@
         font-size: 0.9rem;
       }
     }
+
+    /* ── Orrery ── */
+    .orrery-section { padding: 0 2rem 4rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+    .orrery-controls { display: flex; align-items: center; gap: 1.4rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+    .orrery-ctrl-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .orrery-speed-group { display: flex; align-items: center; gap: 0.6rem; }
+    .orrery-speed-btns { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; background: var(--panel); }
+    .orrery-speed-btn { background: none; border: none; padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; }
+    .orrery-speed-btn.active { background: var(--accent-2); color: #0a0c12; }
+    .orrery-pause-btn { background: rgba(121,167,255,0.08); border: 1px solid var(--accent-2); border-radius: var(--radius-md); color: var(--accent-2); padding: 0.35rem 1rem; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .orrery-pause-btn:hover { background: rgba(121,167,255,0.18); }
+    .orrery-canvas-wrap { position: relative; background: #030508; border: 1px solid var(--line); border-radius: var(--radius-xl); overflow: hidden; }
+    #orrery-canvas { display: block; width: 100%; height: auto; }
+    .orrery-tip { position: absolute; background: rgba(8,12,24,0.95); border: 1px solid var(--accent-2); border-radius: var(--radius-md); padding: 0.5rem 0.8rem; font-size: 0.78rem; color: var(--text); pointer-events: none; opacity: 0; transition: opacity 0.12s; white-space: nowrap; z-index: 10; backdrop-filter: blur(6px); }
+    .orrery-tip.show { opacity: 1; }
+    .orrery-tip-name { font-weight: 700; color: var(--accent-2); display: block; margin-bottom: 0.15rem; }
+    .orrery-tip-fact { color: var(--muted); display: block; }
+
+    /* ── Weight Calculator ── */
+    .weight-section { padding: 0 2rem 4rem; max-width: 1280px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+    .weight-unit-pill { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; background: var(--panel); margin-top: 1rem; }
+    .weight-unit-btn { background: none; border: none; padding: 0.35rem 1.1rem; font-size: 0.82rem; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; border-radius: 99px; }
+    .weight-unit-btn.active { background: var(--accent); color: #0a0c12; }
+
+    /* ── Render Estimator ── */
+    .est-section { padding: 0 2rem 4rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+    .est-form { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.5rem; }
+    .est-field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .est-select { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 0.6rem 0.9rem; color: var(--text); font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: border-color 0.15s; cursor: pointer; min-width: 190px; color-scheme: dark; }
+    .est-select:focus { outline: none; border-color: var(--accent-2); }
+    .est-result { background: var(--panel); border: 1px solid var(--accent-2); border-radius: var(--radius-lg); padding: 1.4rem 1.6rem; animation: fadeUp 0.3s ease; }
+    .est-result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1rem; }
+    .est-stat { text-align: center; background: rgba(121,167,255,0.05); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 0.8rem; }
+    .est-stat-label { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .est-stat-value { display: block; font-size: 1.5rem; font-weight: 800; color: var(--accent-2); line-height: 1.1; }
+    .est-note { font-size: 0.78rem; color: var(--muted); margin: 0; line-height: 1.6; }
+    @media (max-width: 600px) { .est-result-grid { grid-template-columns: 1fr; } .est-form { flex-direction: column; } }
+
+    /* ── Planet Filter ── */
+    .encyc-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .filter-pill { background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 0.32rem 1rem; font-size: 0.78rem; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; transition: all 0.15s; letter-spacing: 0.04em; }
+    .filter-pill:hover { border-color: var(--accent-2); color: var(--accent-2); }
+    .filter-pill.active { background: var(--accent-2); border-color: var(--accent-2); color: #0a0c12; }
   </style>
 </head>
 
@@ -1469,11 +1512,20 @@
         <a class="scroll-pill" href="#project-notes">
           <span class="scroll-pill-icon">📝</span> Project Notes
         </a>
+        <a class="scroll-pill" href="#orrery">
+          <span class="scroll-pill-icon">🔭</span> Solar System Orrery
+        </a>
         <a class="scroll-pill" href="#age-calc">
           <span class="scroll-pill-icon">🪐</span> Planet Age Calculator
         </a>
+        <a class="scroll-pill" href="#weight-calc">
+          <span class="scroll-pill-icon">⚖️</span> Weight Calculator
+        </a>
         <a class="scroll-pill" href="#planet-encyc">
           <span class="scroll-pill-icon">🌌</span> Planet Encyclopedia
+        </a>
+        <a class="scroll-pill" href="#render-est">
+          <span class="scroll-pill-icon">⏱️</span> Render Estimator
         </a>
         <a class="scroll-pill" href="#downloads">
           <span class="scroll-pill-icon">⬇️</span> Download Files
@@ -1686,6 +1738,32 @@
     </section>
 
 
+    <!-- ── ORRERY ── -->
+    <section class="orrery-section" id="orrery">
+      <hr class="info-divider">
+      <div class="reveal" style="margin-bottom:1.5rem">
+        <p class="eyebrow">🔭 Interactive Visualizer</p>
+        <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin:0 0 0.5rem">Live Solar System Orrery</h2>
+        <p style="color:var(--muted);font-size:0.97rem;max-width:55ch;margin:0">Watch the planets orbit the Sun in real time — hover any planet for a quick fact.</p>
+      </div>
+      <div class="orrery-controls reveal">
+        <div class="orrery-speed-group">
+          <span class="orrery-ctrl-label">Speed</span>
+          <div class="orrery-speed-btns">
+            <button class="orrery-speed-btn" data-spd="0.5">0.5×</button>
+            <button class="orrery-speed-btn active" data-spd="1">1×</button>
+            <button class="orrery-speed-btn" data-spd="3">3×</button>
+            <button class="orrery-speed-btn" data-spd="10">10×</button>
+          </div>
+        </div>
+        <button class="orrery-pause-btn" id="orrery-pause">⏸ Pause</button>
+      </div>
+      <div class="orrery-canvas-wrap reveal">
+        <canvas id="orrery-canvas"></canvas>
+        <div class="orrery-tip" id="orrery-tip"><span class="orrery-tip-name" id="orrery-tip-name"></span><span class="orrery-tip-fact" id="orrery-tip-fact"></span></div>
+      </div>
+    </section>
+
     <!-- ── PLANET AGE CALCULATOR ── -->
     <section class="age-calc-section" id="age-calc">
       <hr class="info-divider">
@@ -1728,12 +1806,42 @@
       </div>
     </section>
 
+    <!-- ── WEIGHT CALCULATOR ── -->
+    <section class="weight-section" id="weight-calc">
+      <hr class="info-divider">
+      <div class="age-calc-header reveal">
+        <p class="eyebrow">⚖️ Interactive Tool</p>
+        <h2>Planet Weight Calculator</h2>
+        <p>Enter your weight on Earth — see how much you'd weigh on every other world.</p>
+        <div class="weight-unit-pill" role="group" aria-label="Weight unit">
+          <button class="weight-unit-btn active" id="wunit-kg" aria-pressed="true">kg</button>
+          <button class="weight-unit-btn" id="wunit-lbs" aria-pressed="false">lbs</button>
+        </div>
+      </div>
+      <div class="age-input-row reveal">
+        <label class="age-label" for="earth-weight">Your weight on Earth</label>
+        <div class="age-input-wrap">
+          <input id="earth-weight" class="age-input" type="number" min="1" max="999" value="60" placeholder="60" autocomplete="off">
+          <button id="weight-calc-btn" class="age-calc-btn">Calculate</button>
+        </div>
+        <p class="age-error" id="weight-error" role="alert" aria-live="polite"></p>
+      </div>
+      <div class="planet-grid" id="weight-planet-grid"></div>
+    </section>
+
     <!-- ── PLANET ENCYCLOPEDIA ── -->
     <section class="encyc-section" id="planet-encyc">
       <div class="encyc-header reveal">
         <p class="eyebrow">🌌 Planet Encyclopedia</p>
         <h2>About Each Planet</h2>
         <p>A quick-reference guide to every world in our Solar System and what makes each one unique.</p>
+        <div class="encyc-filter" role="group" aria-label="Filter by planet type">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="Terrestrial">🪨 Terrestrial</button>
+          <button class="filter-pill" data-filter="Gas Giant">🟠 Gas Giant</button>
+          <button class="filter-pill" data-filter="Ice Giant">🔵 Ice Giant</button>
+          <button class="filter-pill" data-filter="Dwarf Planet">🌑 Dwarf Planet</button>
+        </div>
       </div>
 
       <!-- Sun feature card -->
@@ -1782,6 +1890,49 @@
       </div>
 
       <div class="encyc-grid" id="encyc-grid"><!-- filled by JS --></div>
+    </section>
+
+    <!-- ── RENDER TIME ESTIMATOR ── -->
+    <section class="est-section" id="render-est">
+      <hr class="info-divider">
+      <div class="reveal" style="margin-bottom:1.5rem">
+        <p class="eyebrow">⏱️ Interactive Tool</p>
+        <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin:0 0 0.5rem">Render Time Estimator</h2>
+        <p style="color:var(--muted);font-size:0.97rem;max-width:55ch;margin:0">Estimate render time for your own Blender project, benchmarked against this machine's <strong style="color:var(--text)">RTX 3050 Ti</strong> (Cycles GPU).</p>
+      </div>
+      <div class="est-form reveal">
+        <div class="est-field">
+          <label class="age-label" for="est-frames">Total Frames</label>
+          <input id="est-frames" class="age-input" type="number" min="1" max="100000" value="240" placeholder="240">
+        </div>
+        <div class="est-field">
+          <label class="age-label" for="est-quality">Sample Count</label>
+          <select id="est-quality" class="est-select">
+            <option value="0.5">Fast — 128 samples</option>
+            <option value="1" selected>Standard — 256 samples</option>
+            <option value="2">High — 512 samples</option>
+            <option value="4">Ultra — 1024 samples</option>
+          </select>
+        </div>
+        <div class="est-field">
+          <label class="age-label" for="est-res">Resolution</label>
+          <select id="est-res" class="est-select">
+            <option value="0.44">HD — 1280×720</option>
+            <option value="1" selected>Full HD — 1920×1080</option>
+            <option value="2.25">2K — 2560×1440</option>
+            <option value="4">4K — 3840×2160</option>
+          </select>
+        </div>
+        <button id="est-btn" class="age-calc-btn">Estimate</button>
+      </div>
+      <div class="est-result" id="est-result" style="display:none">
+        <div class="est-result-grid">
+          <div class="est-stat"><span class="est-stat-label">Per Frame</span><span class="est-stat-value" id="est-per-frame">—</span></div>
+          <div class="est-stat"><span class="est-stat-label">Total Time</span><span class="est-stat-value" id="est-total">—</span></div>
+          <div class="est-stat"><span class="est-stat-label">At 24 fps =</span><span class="est-stat-value" id="est-duration">—</span></div>
+        </div>
+        <p class="est-note">📌 Benchmark: ~4 min/frame at Full HD, 256 samples on RTX 3050 Ti (Cycles GPU, OptiX denoising). Actual times vary by scene complexity.</p>
+      </div>
     </section>
 
     <!-- ── PROJECT DOWNLOADS ── -->
@@ -2069,6 +2220,7 @@
       PLANETS.forEach((p, i) => {
         const card = document.createElement('div');
         card.className = 'encyc-card' + (p.isEarth ? ' is-earth' : '') + (p.video ? ' has-video' : '');
+        card.dataset.type = p.type;
         card.style.animationDelay = (i * 70) + 'ms';
         const encycLeft = p.video
           ? `<div class="encyc-left"><video class="encyc-planet-video" src="videos/${p.video}" autoplay muted loop playsinline></video></div>`
@@ -2160,6 +2312,216 @@
     calcAndRender();
     renderEncyclopedia();
     renderDownloads();
+
+    /* ── WEIGHT CALCULATOR ── */
+    const GRAVITY = { Mercury:0.378,Venus:0.907,Earth:1,Mars:0.377,Jupiter:2.528,Saturn:1.065,Uranus:0.886,Neptune:1.137,Pluto:0.063 };
+    let weightUnit = 'kg';
+    document.getElementById('wunit-kg').addEventListener('click', () => { weightUnit='kg'; document.getElementById('wunit-kg').classList.add('active'); document.getElementById('wunit-lbs').classList.remove('active'); document.getElementById('earth-weight').placeholder='60'; });
+    document.getElementById('wunit-lbs').addEventListener('click', () => { weightUnit='lbs'; document.getElementById('wunit-lbs').classList.add('active'); document.getElementById('wunit-kg').classList.remove('active'); document.getElementById('earth-weight').placeholder='132'; });
+    function calcWeight() {
+      const raw = parseFloat(document.getElementById('earth-weight').value);
+      const err = document.getElementById('weight-error');
+      if (!raw || raw <= 0 || raw > 999) { err.textContent='⚠ Enter a valid weight (1–999).'; err.classList.add('visible'); return; }
+      err.classList.remove('visible');
+      const grid = document.getElementById('weight-planet-grid');
+      grid.innerHTML = '';
+      PLANETS.forEach((p, i) => {
+        const g = GRAVITY[p.name] || 1;
+        const w = (raw * g).toFixed(1);
+        const unit = weightUnit;
+        const card = document.createElement('div');
+        card.className = 'planet-card' + (p.isEarth ? ' is-earth' : '');
+        card.style.animationDelay = (i * 55) + 'ms';
+        card.innerHTML = `<div class="planet-card-side"><span class="planet-emoji">${p.emoji}</span></div>
+          <div class="planet-card-content">
+            <div class="planet-card-top"><p class="planet-name">${p.name}</p><span class="planet-type">${p.type}</span></div>
+            <div class="planet-age-badge"><span class="planet-age-label">Your weight on ${p.name}</span><span class="planet-age-value">${w}</span><span class="planet-age-unit">${unit}</span></div>
+            <div class="planet-info"><div class="planet-info-row"><span class="pi-key">Surface gravity</span><span class="pi-val">${g}g</span></div><div class="planet-info-row"><span class="pi-key">vs Earth</span><span class="pi-val">${g >= 1 ? '+' : ''}${((g-1)*100).toFixed(0)}%</span></div></div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+    document.getElementById('weight-calc-btn').addEventListener('click', calcWeight);
+    document.getElementById('earth-weight').addEventListener('keydown', e => { if (e.key === 'Enter') calcWeight(); });
+
+    /* ── PLANET FILTER ── */
+    document.querySelectorAll('.filter-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('#encyc-grid .encyc-card').forEach(card => {
+          card.style.display = (f === 'all' || card.dataset.type === f) ? '' : 'none';
+        });
+      });
+    });
+
+    /* ── RENDER TIME ESTIMATOR ── */
+    function fmtTime(mins) {
+      if (mins < 60) return Math.round(mins) + ' min';
+      const h = Math.floor(mins / 60), m = Math.round(mins % 60);
+      if (h < 24) return h + 'h ' + m + 'm';
+      const d = Math.floor(h / 24), hr = h % 24;
+      return d + 'd ' + hr + 'h';
+    }
+    document.getElementById('est-btn').addEventListener('click', () => {
+      const frames = parseInt(document.getElementById('est-frames').value) || 0;
+      const qMul = parseFloat(document.getElementById('est-quality').value);
+      const rMul = parseFloat(document.getElementById('est-res').value);
+      if (frames < 1) return;
+      const perFrame = 4 * qMul * rMul;
+      const total = perFrame * frames;
+      const vidSecs = frames / 24;
+      const vidFmt = vidSecs < 60 ? vidSecs.toFixed(1) + 's clip' : Math.floor(vidSecs/60) + 'm ' + Math.round(vidSecs%60) + 's clip';
+      document.getElementById('est-per-frame').textContent = fmtTime(perFrame);
+      document.getElementById('est-total').textContent = fmtTime(total);
+      document.getElementById('est-duration').textContent = vidFmt;
+      const r = document.getElementById('est-result');
+      r.style.display = 'block';
+      r.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    /* ── SOLAR SYSTEM ORRERY ── */
+    (function() {
+      const canvas = document.getElementById('orrery-canvas');
+      const ctx = canvas.getContext('2d');
+      const tip = document.getElementById('orrery-tip');
+      const tipName = document.getElementById('orrery-tip-name');
+      const tipFact = document.getElementById('orrery-tip-fact');
+      const OP = [
+        { name:'Mercury', color:'#b0b8c8', r:3.5, orbit:68,  period:0.2408, fact:'Surface: −180 °C to 430 °C' },
+        { name:'Venus',   color:'#e8c87a', r:5.5, orbit:100, period:0.6152, fact:'Hottest planet — avg 465 °C' },
+        { name:'Earth',   color:'#5bc8f5', r:6,   orbit:135, period:1,      fact:'Only known life-bearing world' },
+        { name:'Mars',    color:'#e0613a', r:4.5, orbit:170, period:1.881,  fact:'Home to Olympus Mons (22 km)' },
+        { name:'Jupiter', color:'#d4a46a', r:14,  orbit:220, period:11.86,  fact:'Largest planet — 95 known moons' },
+        { name:'Saturn',  color:'#ead99a', r:11,  orbit:262, period:29.46,  fact:'Rings span 282,000 km wide', rings:true },
+        { name:'Uranus',  color:'#7ecfc8', r:8.5, orbit:297, period:84.01,  fact:'Rotates on its side — 98° tilt' },
+        { name:'Neptune', color:'#4b8fd9', r:8,   orbit:328, period:164.8,  fact:'Winds up to 2,100 km/h' },
+        { name:'Pluto',   color:'#a08878', r:2.5, orbit:354, period:248.1,  fact:'Heart-shaped nitrogen ice plain' },
+      ];
+      // Seed star positions once
+      const STARS = Array.from({length:180}, () => ({ x: Math.random(), y: Math.random(), s: Math.random()*1.5+0.3, a: Math.random()*0.6+0.2 }));
+      let angles = OP.map(() => Math.random() * Math.PI * 2);
+      let speed = 1, paused = false, hovered = -1, lastT = 0, animId;
+
+      function resize() {
+        const w = canvas.parentElement.clientWidth;
+        canvas.width = w; canvas.height = Math.round(w * 0.62);
+      }
+      resize();
+      window.addEventListener('resize', () => { resize(); });
+
+      function draw(ts) {
+        const dt = Math.min(ts - lastT, 80); lastT = ts;
+        const W = canvas.width, H = canvas.height;
+        const cx = W/2, cy = H/2;
+        const sc = Math.min(W, H) / 790;
+        ctx.clearRect(0, 0, W, H);
+
+        // BG
+        const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.7);
+        bg.addColorStop(0,'#0a0e1c'); bg.addColorStop(1,'#030508');
+        ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+        // Stars
+        STARS.forEach(s => {
+          ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.s, 0, Math.PI*2);
+          ctx.fillStyle=`rgba(255,255,255,${s.a})`; ctx.fill();
+        });
+
+        // Orbits
+        OP.forEach(p => {
+          ctx.beginPath(); ctx.arc(cx,cy,p.orbit*sc,0,Math.PI*2);
+          ctx.strokeStyle='rgba(121,167,255,0.07)'; ctx.lineWidth=1; ctx.stroke();
+        });
+
+        // Sun glow
+        const sg = ctx.createRadialGradient(cx,cy,0,cx,cy,55*sc);
+        sg.addColorStop(0,'rgba(255,230,120,0.9)'); sg.addColorStop(0.35,'rgba(255,160,40,0.6)'); sg.addColorStop(1,'transparent');
+        ctx.beginPath(); ctx.arc(cx,cy,55*sc,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+        // Sun body
+        const sb = ctx.createRadialGradient(cx,cy,0,cx,cy,22*sc);
+        sb.addColorStop(0,'#fffbe0'); sb.addColorStop(0.5,'#ffd060'); sb.addColorStop(1,'#ff9020');
+        ctx.beginPath(); ctx.arc(cx,cy,22*sc,0,Math.PI*2); ctx.fillStyle=sb; ctx.fill();
+
+        // Update angles
+        if (!paused) OP.forEach((p,i) => { angles[i] += (dt/1000)*speed*(Math.PI*2/(p.period*12)); });
+
+        // Planets
+        OP.forEach((p,i) => {
+          const px = cx + Math.cos(angles[i])*p.orbit*sc;
+          const py = cy + Math.sin(angles[i])*p.orbit*sc;
+          const pr = p.r*sc;
+          // Saturn rings
+          if (p.rings) {
+            ctx.save(); ctx.translate(px,py); ctx.rotate(0.4); ctx.scale(1,0.3);
+            ctx.beginPath(); ctx.arc(0,0,pr*2.3,0,Math.PI*2);
+            ctx.strokeStyle='rgba(234,217,154,0.55)'; ctx.lineWidth=pr*1.1; ctx.stroke();
+            ctx.restore();
+          }
+          // Hover glow
+          if (hovered===i) {
+            const hg = ctx.createRadialGradient(px,py,0,px,py,pr*4);
+            hg.addColorStop(0,p.color+'55'); hg.addColorStop(1,'transparent');
+            ctx.beginPath(); ctx.arc(px,py,pr*4,0,Math.PI*2); ctx.fillStyle=hg; ctx.fill();
+          }
+          // Body
+          const pg = ctx.createRadialGradient(px-pr*0.3,py-pr*0.3,0,px,py,pr);
+          pg.addColorStop(0,'#fff'); pg.addColorStop(0.15,p.color); pg.addColorStop(1,shadeColor(p.color,-40));
+          ctx.beginPath(); ctx.arc(px,py,pr,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill();
+        });
+        animId = requestAnimationFrame(draw);
+      }
+
+      function shadeColor(hex, pct) {
+        const n = parseInt(hex.replace('#',''),16), r=Math.max(0,Math.min(255,(n>>16)+pct)), g=Math.max(0,Math.min(255,(n>>8&0xff)+pct)), b=Math.max(0,Math.min(255,(n&0xff)+pct));
+        return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+      }
+
+      // Hover detection
+      canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = (e.clientX - rect.left)*(canvas.width/rect.width);
+        const my = (e.clientY - rect.top)*(canvas.height/rect.height);
+        const cx2 = canvas.width/2, cy2 = canvas.height/2;
+        const sc2 = Math.min(canvas.width, canvas.height)/790;
+        hovered = -1;
+        OP.forEach((p,i) => {
+          const px = cx2 + Math.cos(angles[i])*p.orbit*sc2;
+          const py = cy2 + Math.sin(angles[i])*p.orbit*sc2;
+          const d = Math.hypot(mx-px, my-py);
+          if (d < Math.max(p.r*sc2*2.5, 12)) hovered = i;
+        });
+        if (hovered >= 0) {
+          const p = OP[hovered];
+          tipName.textContent = p.name; tipFact.textContent = p.fact;
+          const bRect = canvas.parentElement.getBoundingClientRect();
+          let lx = e.clientX - bRect.left + 14, ly = e.clientY - bRect.top - 10;
+          if (lx + 200 > bRect.width) lx -= 220;
+          tip.style.left = lx + 'px'; tip.style.top = ly + 'px';
+          tip.classList.add('show'); canvas.style.cursor='pointer';
+        } else { tip.classList.remove('show'); canvas.style.cursor='default'; }
+      });
+      canvas.addEventListener('mouseleave', () => { hovered=-1; tip.classList.remove('show'); });
+
+      // Controls
+      document.querySelectorAll('.orrery-speed-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.orrery-speed-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active'); speed = parseFloat(btn.dataset.spd);
+        });
+      });
+      const pauseBtn = document.getElementById('orrery-pause');
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
+      });
+
+      lastT = performance.now();
+      animId = requestAnimationFrame(draw);
+    })();
+
+    /* ── TYPE-FILTER READY — data-type set in renderEncyclopedia above ── */
   </script>
 </body>
 
