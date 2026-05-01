@@ -2432,6 +2432,11 @@
         { name:'Neptune', color:'#4b8fd9', r:8,   orbit:328, period:164.8,  fact:'Winds up to 2,100 km/h' },
         { name:'Pluto',   color:'#a08878', r:2.5, orbit:354, period:248.1,  fact:'Heart-shaped nitrogen ice plain' },
       ];
+      const SUN_DATA = {
+        name: 'The Sun', type: 'Star · G-type', emoji: '☀️', video: 'sun.mp4',
+        desc: 'The Sun is the star at the center of our Solar System — a nearly perfect sphere of hot plasma that accounts for 99.86% of the total mass of the Solar System. Its core reaches temperatures of 15 million °C, fusing hydrogen into helium and releasing energy that powers all life on Earth.',
+        stats: [['Surface Temp','∼5,500°C'],['Core Temp','∼15 million °C'],['Diameter','1.39 million km'],['Mass','1.989 × 10³⁰ kg'],['Age','∼4.6 billion yrs'],['Distance (Earth)','149.6 million km']]
+      };
       // Seed star positions once
       const STARS = Array.from({length:180}, () => ({ x: Math.random(), y: Math.random(), s: Math.random()*1.5+0.3, a: Math.random()*0.6+0.2 }));
       let angles = OP.map(() => Math.random() * Math.PI * 2);
@@ -2522,28 +2527,35 @@
       let lastHovered = -1;
 
       function showOPC(i) {
-        const op = OP[i];
-        const pd = PLANETS.find(p => p.name === op.name);
-        if (!pd) return;
-        opcName.textContent = pd.name;
-        opcType.textContent = pd.type;
-        opcDesc.textContent = pd.desc;
-        opcStats.innerHTML = [
-          ['Orbital Period', pd.orbitalDays.toLocaleString() + ' days'],
-          ['Temperature', pd.tempRange],
-          ['Distance from Sun', pd.distanceKm],
-          ['Day Length', pd.dayLength],
-          ['Gravity', pd.gravity],
-          ['Type', pd.type]
-        ].map(([k,v]) => `<div class="opc-stat"><span class="opc-stat-k">${k}</span><span class="opc-stat-v">${v}</span></div>`).join('');
-        if (pd.video) {
-          opcVideo.src = 'videos/' + pd.video;
+        let name, type, emoji, video, desc, statsRows;
+        if (i === -1) {
+          // Sun
+          ({ name, type, emoji, video, desc } = SUN_DATA);
+          statsRows = SUN_DATA.stats;
+        } else {
+          const op = OP[i];
+          const pd = PLANETS.find(p => p.name === op.name);
+          if (!pd) return;
+          name = pd.name; type = pd.type; emoji = pd.emoji; video = pd.video ? 'videos/' + pd.video : null; desc = pd.desc;
+          statsRows = [['Orbital Period', pd.orbitalDays.toLocaleString() + ' days'],['Temperature', pd.tempRange],['Distance from Sun', pd.distanceKm],['Day Length', pd.dayLength],['Gravity', pd.gravity],['Type', pd.type]];
+        }
+        opcName.textContent = name;
+        opcType.textContent = type;
+        opcDesc.textContent = desc;
+        opcStats.innerHTML = statsRows.map(([k,v]) => `<div class="opc-stat"><span class="opc-stat-k">${k}</span><span class="opc-stat-v">${v}</span></div>`).join('');
+        // Try video, fallback to emoji
+        const vidSrc = i === -1 ? 'videos/' + SUN_DATA.video : (video || null);
+        const testVid = new Image();
+        opcVideo.onerror = () => { opcVideo.style.display='none'; opcEmoji.style.display='flex'; opcEmoji.textContent=emoji; };
+        opcVideo.onloadeddata = () => { opcEmoji.style.display='none'; };
+        if (vidSrc) {
+          opcVideo.src = vidSrc;
           opcVideo.style.display = 'block';
           opcEmoji.style.display = 'none';
         } else {
           opcVideo.style.display = 'none';
           opcEmoji.style.display = 'flex';
-          opcEmoji.textContent = pd.emoji;
+          opcEmoji.textContent = emoji;
         }
         opcWrap.classList.add('show');
       }
@@ -2555,6 +2567,20 @@
         const cx2 = canvas.width/2, cy2 = canvas.height/2;
         const sc2 = Math.min(canvas.width, canvas.height)/790;
         hovered = -1;
+        // Check Sun hover first (center of canvas)
+        const sunR = 22 * sc2;
+        const dSun = Math.hypot(mx - cx2, my - cy2);
+        if (dSun < sunR * 2.2) {
+          hovered = -1;
+          tipName.textContent = 'The Sun'; tipFact.textContent = 'Contains 99.86% of the Solar System\'s mass';
+          const bRect = canvas.parentElement.getBoundingClientRect();
+          let lx = e.clientX - bRect.left + 14, ly = e.clientY - bRect.top - 10;
+          if (lx + 200 > bRect.width) lx -= 220;
+          tip.style.left = lx + 'px'; tip.style.top = ly + 'px';
+          tip.classList.add('show'); canvas.style.cursor = 'pointer';
+          if (lastHovered !== -999) { lastHovered = -999; showOPC(-1); }
+          return;
+        }
         OP.forEach((p,i) => {
           const px = cx2 + Math.cos(angles[i])*p.orbit*sc2;
           const py = cy2 + Math.sin(angles[i])*p.orbit*sc2;
