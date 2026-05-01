@@ -1430,9 +1430,11 @@
     .filter-pill.active { background: var(--accent-2); border-color: var(--accent-2); color: #0a0c12; }
 
     /* ── Orrery Planet Card ── */
-    .opc-wrap { margin-top: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
-    .opc-wrap.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .opc-card { display: grid; grid-template-columns: 42% 1fr; background: var(--panel); border: 1px solid var(--accent-2); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 40px rgba(121,167,255,0.12); }
+    .opc-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(3,5,8,0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; box-sizing: border-box; }
+    .opc-wrap.show { opacity: 1; pointer-events: auto; }
+    .opc-card { display: grid; grid-template-columns: 42% 1fr; background: var(--panel); border: 1px solid var(--accent-2); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 60px rgba(121,167,255,0.18); max-width: 820px; width: 100%; position: relative; animation: czm-pop 0.28s cubic-bezier(0.34,1.4,0.64,1); }
+    .opc-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--muted); font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; z-index: 10; line-height: 1; }
+    .opc-close:hover { background: rgba(255,255,255,0.18); color: var(--text); }
     .opc-media { position: relative; min-height: 260px; background: #05090f; }
     .opc-video { width: 100%; height: 100%; object-fit: cover; display: block; }
     .opc-emoji-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
@@ -1446,6 +1448,7 @@
     .opc-stat-k { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
     .opc-stat-v { display: block; font-size: 0.9rem; font-weight: 700; color: var(--text); }
     @media (max-width: 720px) { .opc-card { grid-template-columns: 1fr; } .opc-media { min-height: 200px; } .opc-stats { grid-template-columns: repeat(2,1fr); } }
+    @keyframes czm-pop { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 
@@ -1762,7 +1765,7 @@
       <div class="reveal" style="margin-bottom:1.5rem">
         <p class="eyebrow">🔭 Interactive Visualizer</p>
         <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin:0 0 0.5rem">Live Solar System Orrery</h2>
-        <p style="color:var(--muted);font-size:0.97rem;max-width:55ch;margin:0">Watch the planets orbit the Sun in real time — hover any planet for a quick fact.</p>
+        <p style="color:var(--muted);font-size:0.97rem;max-width:55ch;margin:0">Watch the planets orbit the Sun — hover any planet or the Sun to view its rendered video and info.</p>
       </div>
       <div class="orrery-controls reveal">
         <div class="orrery-speed-group">
@@ -1779,19 +1782,20 @@
       <div class="orrery-canvas-wrap reveal">
         <canvas id="orrery-canvas"></canvas>
         <div class="orrery-tip" id="orrery-tip"><span class="orrery-tip-name" id="orrery-tip-name"></span><span class="orrery-tip-fact" id="orrery-tip-fact"></span></div>
-      </div>
-      <!-- Planet info card (shows on hover) -->
-      <div class="opc-wrap" id="opc-wrap">
-        <div class="opc-card">
-          <div class="opc-media" id="opc-media">
-            <video class="opc-video" id="opc-video" autoplay muted loop playsinline style="display:none"></video>
-            <div class="opc-emoji-fallback" id="opc-emoji"></div>
-          </div>
-          <div class="opc-body">
-            <div class="opc-eyebrow"><span class="opc-type-badge" id="opc-type"></span></div>
-            <h3 class="opc-name" id="opc-name"></h3>
-            <p class="opc-desc" id="opc-desc"></p>
-            <div class="opc-stats" id="opc-stats"></div>
+        <!-- Planet info overlay (shown on hover, close to dismiss) -->
+        <div class="opc-wrap" id="opc-wrap">
+          <div class="opc-card">
+            <button class="opc-close" id="opc-close" aria-label="Close">&#x2715;</button>
+            <div class="opc-media" id="opc-media">
+              <video class="opc-video" id="opc-video" autoplay muted loop playsinline style="display:none"></video>
+              <div class="opc-emoji-fallback" id="opc-emoji"></div>
+            </div>
+            <div class="opc-body">
+              <div class="opc-eyebrow"><span class="opc-type-badge" id="opc-type"></span></div>
+              <h3 class="opc-name" id="opc-name"></h3>
+              <p class="opc-desc" id="opc-desc"></p>
+              <div class="opc-stats" id="opc-stats"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2601,6 +2605,20 @@
         }
       });
       canvas.addEventListener('mouseleave', () => { hovered=-1; tip.classList.remove('show'); });
+      // Close button — hides overlay and resets so next hover works
+      document.getElementById('opc-close').addEventListener('click', () => {
+        opcWrap.classList.remove('show');
+        lastHovered = -1;
+        opcVideo.pause();
+      });
+      // Click backdrop to close
+      opcWrap.addEventListener('click', e => {
+        if (e.target === opcWrap) {
+          opcWrap.classList.remove('show');
+          lastHovered = -1;
+          opcVideo.pause();
+        }
+      });
 
       // Controls
       document.querySelectorAll('.orrery-speed-btn').forEach(btn => {
