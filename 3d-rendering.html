@@ -1428,6 +1428,24 @@
     .filter-pill { background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 0.32rem 1rem; font-size: 0.78rem; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; transition: all 0.15s; letter-spacing: 0.04em; }
     .filter-pill:hover { border-color: var(--accent-2); color: var(--accent-2); }
     .filter-pill.active { background: var(--accent-2); border-color: var(--accent-2); color: #0a0c12; }
+
+    /* ── Orrery Planet Card ── */
+    .opc-wrap { margin-top: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
+    .opc-wrap.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .opc-card { display: grid; grid-template-columns: 42% 1fr; background: var(--panel); border: 1px solid var(--accent-2); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 40px rgba(121,167,255,0.12); }
+    .opc-media { position: relative; min-height: 260px; background: #05090f; }
+    .opc-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .opc-emoji-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+    .opc-body { padding: 1.8rem 2rem; display: flex; flex-direction: column; gap: 0.9rem; justify-content: center; }
+    .opc-eyebrow { display: flex; align-items: center; gap: 0.5rem; }
+    .opc-type-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-2); background: rgba(121,167,255,0.1); border: 1px solid rgba(121,167,255,0.25); border-radius: 99px; padding: 0.12rem 0.65rem; }
+    .opc-name { font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+    .opc-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin: 0; }
+    .opc-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.6rem; margin-top: 0.3rem; }
+    .opc-stat { background: rgba(121,167,255,0.06); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 0.6rem 0.8rem; }
+    .opc-stat-k { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .opc-stat-v { display: block; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    @media (max-width: 720px) { .opc-card { grid-template-columns: 1fr; } .opc-media { min-height: 200px; } .opc-stats { grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 
@@ -1761,6 +1779,21 @@
       <div class="orrery-canvas-wrap reveal">
         <canvas id="orrery-canvas"></canvas>
         <div class="orrery-tip" id="orrery-tip"><span class="orrery-tip-name" id="orrery-tip-name"></span><span class="orrery-tip-fact" id="orrery-tip-fact"></span></div>
+      </div>
+      <!-- Planet info card (shows on hover) -->
+      <div class="opc-wrap" id="opc-wrap">
+        <div class="opc-card">
+          <div class="opc-media" id="opc-media">
+            <video class="opc-video" id="opc-video" autoplay muted loop playsinline style="display:none"></video>
+            <div class="opc-emoji-fallback" id="opc-emoji"></div>
+          </div>
+          <div class="opc-body">
+            <div class="opc-eyebrow"><span class="opc-type-badge" id="opc-type"></span></div>
+            <h3 class="opc-name" id="opc-name"></h3>
+            <p class="opc-desc" id="opc-desc"></p>
+            <div class="opc-stats" id="opc-stats"></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2479,6 +2512,42 @@
       }
 
       // Hover detection
+      const opcWrap = document.getElementById('opc-wrap');
+      const opcVideo = document.getElementById('opc-video');
+      const opcEmoji = document.getElementById('opc-emoji');
+      const opcName = document.getElementById('opc-name');
+      const opcType = document.getElementById('opc-type');
+      const opcDesc = document.getElementById('opc-desc');
+      const opcStats = document.getElementById('opc-stats');
+      let lastHovered = -1;
+
+      function showOPC(i) {
+        const op = OP[i];
+        const pd = PLANETS.find(p => p.name === op.name);
+        if (!pd) return;
+        opcName.textContent = pd.name;
+        opcType.textContent = pd.type;
+        opcDesc.textContent = pd.desc;
+        opcStats.innerHTML = [
+          ['Orbital Period', pd.orbitalDays.toLocaleString() + ' days'],
+          ['Temperature', pd.tempRange],
+          ['Distance from Sun', pd.distanceKm],
+          ['Day Length', pd.dayLength],
+          ['Gravity', pd.gravity],
+          ['Type', pd.type]
+        ].map(([k,v]) => `<div class="opc-stat"><span class="opc-stat-k">${k}</span><span class="opc-stat-v">${v}</span></div>`).join('');
+        if (pd.video) {
+          opcVideo.src = 'videos/' + pd.video;
+          opcVideo.style.display = 'block';
+          opcEmoji.style.display = 'none';
+        } else {
+          opcVideo.style.display = 'none';
+          opcEmoji.style.display = 'flex';
+          opcEmoji.textContent = pd.emoji;
+        }
+        opcWrap.classList.add('show');
+      }
+
       canvas.addEventListener('mousemove', e => {
         const rect = canvas.getBoundingClientRect();
         const mx = (e.clientX - rect.left)*(canvas.width/rect.width);
@@ -2500,7 +2569,10 @@
           if (lx + 200 > bRect.width) lx -= 220;
           tip.style.left = lx + 'px'; tip.style.top = ly + 'px';
           tip.classList.add('show'); canvas.style.cursor='pointer';
-        } else { tip.classList.remove('show'); canvas.style.cursor='default'; }
+          if (hovered !== lastHovered) { lastHovered = hovered; showOPC(hovered); }
+        } else {
+          tip.classList.remove('show'); canvas.style.cursor='default';
+        }
       });
       canvas.addEventListener('mouseleave', () => { hovered=-1; tip.classList.remove('show'); });
 
